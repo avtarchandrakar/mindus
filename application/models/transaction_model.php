@@ -1946,8 +1946,6 @@ public function GetState()
           $data['pos_id'] = get_cookie("ae_pos_id");
           $data['company_id'] = get_cookie("ae_company_id");
           $itemcode=$this->input->post("itemcode");
-          $item_name=$this->input->post("item_name");
-
           $qtymt=$this->input->post("qtymt");
           // $specification=$this->input->post("specification");
           $rate=$this->input->post("rate");
@@ -2020,7 +2018,7 @@ public function GetState()
 
 
 
-            $zipped = array_map(null,$itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit,$item_name);
+            $zipped = array_map(null,$itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit);
             foreach($zipped as $tuple) {
             if($tuple[0]!='' && ($tuple[1]!=0 || $tuple[1]!=''))
             {
@@ -2036,7 +2034,6 @@ public function GetState()
                 "orderid_gen"=>$tuple[5],
                 "remark"=>$tuple[7],
                 "unit"=>$tuple[8],
-                "item_name"=>$tuple[9],
                 "company_id"=>get_cookie('ae_company_id')
                 );
               $this->db->insert($tableName2,$data2);
@@ -2063,7 +2060,7 @@ public function GetState()
 
           $this->db->where('billno',$id);
           $this->db->delete($tableName2); // delete trans 2
-          $zipped = array_map(null, $itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit,$item_name);
+          $zipped = array_map(null, $itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit);
           foreach($zipped as $tuple) {
               $data2=array(
                 "billno"=>$id,
@@ -2077,8 +2074,6 @@ public function GetState()
                 "orderid_gen"=>$tuple[5],
                  "remark"=>$tuple[7],
                  "unit"=>$tuple[8],
-                "item_name"=>$tuple[9],
-                 
                 "company_id"=>get_cookie('ae_company_id')            
                 );
               $this->db->insert($tableName2,$data2);
