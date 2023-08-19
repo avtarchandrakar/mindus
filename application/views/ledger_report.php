@@ -1,0 +1,512 @@
+    <style type="text/css">
+    font{
+        margin-left:12px; 
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .right{
+        text-align: right;
+    }
+    .voucherform{
+        overflow: hidden;
+    }
+    .tb_col
+    {
+        padding:5px;
+        border:1px solid black;
+    }
+    </style>   
+
+<!-- Bootstrap modal -->
+<div class="modal fade" id="modal_form" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title"></h3>
+            </div>
+            <div class="modal-body form">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+    <!-- New Voucher -->
+    <div class="modal fade" id="newvoucher">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">New Voucher</h4>
+          </div>
+          <div class="modal-body">
+            <div class="voucherform"></div>
+
+          </div>
+          <div class="modal-footer hidden">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- End Voucher -->
+    
+    <div id="data-list">
+            <!-- <button class="btn btn-xs btn-primary" onclick="ShowForm(); BlankForm();  return false;">
+                ADD NEW
+            </button> -->
+            <br />
+            <!-- <div class="loading"></div>
+            <div id="data-list-table">
+            
+            </div> -->
+    </div>
+    <div id="data-form2" style="display:none;">
+
+        <div class="widget-box">
+        <div class="widget-header"> 
+            <h4 class="widget-title">Ledger Report</h4>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main">
+        <form action="#" class="form-horizontal form-input" id="userform2" method="post" role="form">
+        <input type="hidden" value="add" name="status" id="status" class="form-control" />
+        <input type="hidden" value="" name="sno" id="sno" class="form-control" />
+        <input id="p_modify" type="hidden" value="<?=$p_modify?>" /> 
+        <!-- <input type="hidden" name="type" id="type" value="branch" /> -->
+        <div class="form-group">
+        <table class="table">
+         <tr>
+          <td>From</td><td><input tabindex="1001" type="text"  name="from" id="from" placeholder="From" class="cdate col-xs-8 col-sm-8" list="0"/></td>
+          <td>To</td><td><input tabindex="1002" type="text"  name="to" id="to" placeholder="To" class="cdate col-xs-8 col-sm-8" list="0"/></td>
+          <td>Show</td><td>
+            <select name="report_type" tabindex="1003" id="report_type">
+                <option>Group Wise</option>
+                <option>Color Wise</option>
+            </select>
+          </td>
+          <td>Clear Date</td><td>
+            <select name="clear_date" tabindex="1004" id="clear_date">
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+          </td>
+          <td>Ledger</td><td><input tabindex="1005" type="text"  name="lname" id="lname" placeholder="Ledger Name" class="ledgerinfo col-xs-10 col-sm-12" list="0" onkeyup="GetParty();return false;" /><input type="hidden" id="party_id"></td>
+          <td><button tabindex="1006" type="button" id="btn_show" class="btn btn-primary" onclick="GetRpt();">Show</button></td>
+          <td>
+            <div style="float:right;display:none;" id="del">
+                <button class="btn btn-xs btn-primary deleteselected" onclick="DeleteSelected();return false;">
+                    Delete
+                </button>
+            </div>
+          </td>
+         </tr>
+        </table>
+        </div>
+        <div class="stud_detail form-group"></div>
+
+        <div class="space-4"></div>
+
+
+
+        <div class="loading"></div>
+
+        <div class="hr hr-24"></div>
+        </form>
+        <form action="#" class="form-horizontal form-input" enctype="multipart/form-data"  method="post" role="form" id="transForm">
+           <div class="form-group">
+                    <div class="transferbtn" style="display: none;">
+                        <div class="col-sm-8"></div>
+                        <div class="col-sm-2">
+                             
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-danger" onclick="deletetransaction();" > <i class="fa fa-trash"></i> Delete <span class="tcount"></span></button>
+                        </div>
+                    </div>
+                </div>
+        <!-- <div class="loading"></div> -->
+            <?php if($p_list==1){ ?>
+            <div id="data-list-table">
+            <?php }?>
+            
+            </div>
+        </form>
+    </div>
+
+        <script type="text/javascript">
+            var scroll;
+            function ShowForm() {
+                $('#data-list').fadeOut(500, function () {
+                    $('#data-form2').fadeIn(500);
+//                    $("[tabindex='1']").focus();
+                });
+            }
+            function BlankForm() {
+                $("#userform2").find('input:text,input:hidden').val('');
+                $("#userform2").find('#status').val('add');
+                $("#userform2").find('#type').val('branch');
+                $('#userform2').validationEngine('hideAll');
+            }
+            function ShowList() {
+                $('#data-form2').fadeOut(500, function () {
+                    $('#data-list').fadeIn(500);
+                    GetList();
+                });
+            }
+            function GetRpt() {
+                from=$('#from').val();
+                to=$('#to').val();
+                lname=$('#lname').val();
+                l_id=$('#party_id').val();
+                type=$('#type').val();
+                report_type=$('#report_type').val();
+                p_modify=$('#p_modify').val();
+                clear_date=$('#clear_date').val();
+                data ="from="+from+'&to='+to+'&l_id='+l_id+'&type='+type+'&report_type='+report_type+'&clear_date='+clear_date;
+                $(".loading").show();
+                $.ajax({
+                    url: "<?php echo base_url();?>index.php/transactionController/ledger_report",
+                    type: "GET",
+                    data: data,
+                    cache: false,
+                    success: function (html) {
+                        $("#data-list-table").html(html);
+//                        $('#from').select();
+                        $(".loading").hide();
+                        $('.show').show();
+                        $('.hide').remove();
+                        //Set Enter Value
+                        $('#from').val(from);
+                        $('#to').val(to);
+                        $('#lname').val(lname);
+                        $('#type').val(type);
+                        $('#l_id').val(l_id);
+//                        $('#from').focus();
+
+
+                        $("input[type='checkbox'].chk").change(function(){
+                            var a = $("input[type='checkbox'].chk");
+                            var b = a.filter(":checked").length;
+                            if(b == 0){
+                                $("#del").hide();
+                                $(".deleteselected").html("Delete");
+                            }
+                            else
+                            {
+                                $("#del").show();
+                                $(".deleteselected").html("Delete  ("+b+")");
+                            }
+                        });
+                         if(p_modify!=1)
+                        {
+                            $('.btn_modify').css('visibility','hidden');
+                        }
+
+                    }
+                });
+            }
+            function ShowPrint(){
+                from=$('#from').val();
+                to=$('#to').val();
+                l_id=$('#party_id').val();
+                lname=$('#lname').val();
+                report_type=$('#report_type').val();
+                clear_date=$('#clear_date').val();
+                window.open($('#baseurl').val()+'index.php/transactionController/ledger_report_print/'+from+'/'+to+'/'+l_id+'/'+lname+'/'+report_type+'/'+clear_date,'_blank');
+            }
+            //M-1 :
+                function GetParty(){
+                $(".ledgerinfo").autocomplete({
+                    source: urlstr +"index.php/helperController/get_partyinfo_cmpt",
+                    minLength: 1,
+                    focus: function (event, ui) {
+                    $(event.target).val(ui.item.label);             
+                    $('#party_id').val(ui.item.id);
+                    return false;
+                    },
+                    select: function (event, ui) {
+                    $(event.target).val(ui.item.label);
+                    $('#party_id').val(ui.item.id);
+                    return false;
+                    },
+                });
+             }
+            //M-2
+      //       function GetLedger(){
+      //        $(".partyinfo").autocomplete({
+            //         source: urlstr +"index.php/helperController/get_partyinfo_cmpt",
+            //         minLength: 1,
+            //         focus: function (event, ui) {
+            //         $(event.target).val(ui.item.label);              
+         //            $('#party_id').val(ui.item.id);
+            //         return false;
+            //         },
+            //         select: function (event, ui) {
+            //         $(event.target).val(ui.item.label);
+            //         $('#l_id').val(ui.item.id);
+            //         return false;
+            //      },
+            //     });
+            // }
+            $(document).ready(function () {
+                $('.cdate').datepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    dateFormat: 'dd-mm-yy'
+                });
+
+                $('#modal_form').on('hidden.bs.modal', function(){
+                    //$(this).removeData('bs.modal');
+                    GetRpt();
+                    $(window).scrollTop(scroll);
+                });
+
+                MoveTextBox('.form-input');
+                $("#data-list").hide();
+                $("#data-form2").show();
+                // GetList();
+                GetParty();
+//                $('#from').focus();
+                $('.cdate').mask("99-99-9999");
+                $('.cdate').val(getCurDate());
+                $('#from').val("01-04-2021");
+                $("#userform2").validationEngine();
+
+            });
+
+
+            function GetRecord(vtype,ID) {
+                $('#modal_form').modal('show');
+                if(vtype.toUpperCase()=="SALES")
+                {
+                    scroll = $(window).scrollTop();
+                    $.ajax({
+                        url: "<?php echo base_url();?>index.php/formController/sales_form",
+                        type: "GET",
+                        cache: false,
+                        success: function (html) {
+                            $(".modal-body").html(html);
+                            MoveTextBox('.form-input');
+                            GetPreviousRecord(ID);
+    //                      $('.cdate').val(getCurDate());
+                            $(".cdate").mask("99-99-9999");
+                            $(".loading").hide();
+                            $(window).scrollTop(scroll);
+
+                        }
+                    });             
+                }
+                if(vtype.toUpperCase()=="PURCHASE")
+                {
+                    scroll = $(window).scrollTop();
+                    $.ajax({
+                        url: "<?php echo base_url();?>index.php/formController/purchase_form",
+                        type: "GET",
+                        cache: false,
+                        success: function (html) {
+                            $(".modal-body").html(html);
+                            MoveTextBox('.form-input');
+                            GetPreviousRecord(ID);
+    //                      $('.cdate').val(getCurDate());
+                            $(".cdate").mask("99-99-9999");
+                            $(".loading").hide();
+                            $(window).scrollTop(scroll);
+
+                        }
+                    });             
+                }
+                if(vtype.toUpperCase()=="RECEIPT")
+                {
+                    scroll = $(window).scrollTop();
+                    $.ajax({
+                        url: "<?php echo base_url();?>index.php/formController/receipt_form",
+                        type: "GET",
+                        cache: false,
+                        success: function (html) {
+                            $(".modal-body").html(html);
+                            MoveTextBox('.form-input');
+                            GetPreviousRecord(ID);
+    //                      $('.cdate').val(getCurDate());
+                            $(".cdate").mask("99-99-9999");
+                            $(".loading").hide();
+                            $(window).scrollTop(scroll);
+                        }
+                    });             
+                }
+                if(vtype.toUpperCase()=="RGSALE")
+                {
+                    scroll = $(window).scrollTop();
+                    $.ajax({
+                        url: "<?php echo base_url();?>index.php/formController/sales_return_form",
+                        type: "GET",
+                        cache: false,
+                        success: function (html) {
+                            $(".modal-body").html(html);
+                            MoveTextBox('.form-input');
+                            GetPreviousRecord(ID);
+    //                      $('.cdate').val(getCurDate());
+                            $(".cdate").mask("99-99-9999");
+                            $(".loading").hide();
+                            $(window).scrollTop(scroll);
+
+                        }
+                    });             
+                }
+            }
+
+//////////////////////
+
+
+            function DeleteRecord(vtype,vsno,lid) {
+                //alert(vtype+','+vsno+','+lid);
+                data='vtype='+vtype+'&vsno='+vsno+'&lid='+lid;
+                var r = confirm("Do You Want to Delete");
+                if (r == true) {
+                    $('.loading').show();
+                        $.ajax({
+                            url: "<?php echo base_url();?>index.php/staffController/voucher_delete",
+                            type: "POST",
+                            data: data,
+                            cache: false,
+                            success: function (html) {
+                                $('.loading').hide();
+                                if(html==1){
+                                    // ShowList();
+                                 //    GetList();
+                                    GetRpt();
+                                    $('.done').html("<h4>Record Deleted.</h4>");
+                                    $('.done').fadeIn('slow', function () { });
+                                    $('.done').delay(600).fadeOut('slow', function () { });
+                                }
+                                else if(html==2){
+                                    alert('Sorry Delete Operation Failed !');
+                                }
+                                else{
+                                    alert('Sorry, unexpected error. Please try again later.');
+                                }
+                            }
+                        });
+                        return false;
+                }
+              }
+              function GetContent(){
+              
+              }
+              function LoadVoucherForm(vtype,jt)
+              {
+                v1=$(jt).attr('id');
+                if(v1=='btn_journal_dr'){
+                   jtype='Dr';
+                }else if(v1=='btn_journal_cr'){
+                   jtype='Cr';
+                }else{
+                   jtype='Not';
+                }
+                formname='Voucher Entry Modal';
+                data = "formname=" + formname+'&vtype='+vtype+'&lid='+$('#party_id').val()+'&jtype='+jtype;
+                $.ajax({
+                    url: "<?php echo base_url();?>index.php/master_general/loadform",
+                    type: "GET",
+                    data: data,
+                    cache: false,
+                    success: function (html) {
+                        $(".voucherform").html('').html(html);
+                        $("[tabindex='100']").focus();
+                    }
+                });
+                return false;
+              }
+              function LoadVoucherEditForm(vtype,id,lid)
+              {
+                formname='Voucher Entry Edit Modal';
+                data = "formname=" + formname+'&vtype='+vtype+'&sno='+id;
+                $.ajax({
+                    url: "<?php echo base_url();?>index.php/master_general/loadform",
+                    type: "GET",
+                    data: data,
+                    cache: false,
+                    success: function (html) {
+                        $('.modal').modal('show');
+                        $(".voucherform").html('').html(html);
+                        $("[tabindex='100']").focus();
+                    }
+                });
+                return false;
+              }
+              $(document).keypress(function(e) {
+                    console.log('Pressed !');
+                    if(e.which == 13) {
+                        //alert('You pressed enter!');
+                    }
+              });
+
+
+            function DeleteSelected() {
+                var myCheckboxes = new Array();
+                $("input:checked").each(function() {
+                   myCheckboxes.push($(this).val());
+                });
+                data="checkbox="+myCheckboxes;
+                $(".loading").show();
+                $.ajax({
+                    url: "<?php echo base_url();?>index.php/transactionController/ledger_deleteselected",
+                    type: "POST",
+                    data: data,
+                    cache: false,
+                    success: function (html){
+                        alert("OK");
+                        $("#del").hide();
+                        $(".deleteselected").html("Delete");
+                        GetRpt();
+                        $(".loading").hide();
+                    }
+                });
+            }
+
+              function exportExcel(){
+                $("#TblList").table2excel({
+                    // exclude CSS class
+                    exclude: ".noExl",
+                    name: "Ledger",
+                    filename:"Ledger"
+                  });    
+            //    $('.mytable').tableExport({type:'excel',escape:'false'});
+              }
+
+
+
+    function deletetransaction() 
+    {
+        var r = confirm("Are you sure want to Delete..");
+        if (r == true) 
+        {             
+            data = "list=list";
+            $(".loading").show();
+            var data = $('#transForm').serialize();
+            vtype='Deal';
+            $.ajax({
+                url: "<?php echo base_url();?>index.php/TransactionController/deletetransaction",
+                type: "POST",
+                data: data,
+                cache: false,
+                success: function (html) 
+                {      
+                    if(html==1)
+                    {
+                        alert('Delete successfully')
+                        //$("#data-list-table-loading").html(html);             
+                        $(".loading").hide();                       
+                        //Filter Filter              
+                        GetRpt();    
+                        $(".transferbtn").hide();
+                    } 
+                }
+            });
+        }
+    }
+
+            </script>

@@ -1,0 +1,645 @@
+   <style type="text/css">
+   .form-group {
+    margin-bottom: 0px;
+   }
+   .txt_cls{
+   	width: 100%;
+   }
+   .txt_item{
+   	width: 400px;
+   }
+   .modal{
+   	width: 100%;
+   	left: 0%;
+   	top:25%;
+   }
+   </style>
+   <!-- Button trigger modal -->
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Item Detail</h4>
+	      </div>
+	      <div class="modal-body">
+	        <table id="TblRpt" class="table">
+		 <thead>
+		  <tr>
+		   <th class="txt_item">Item Name</th>
+		   <th>Qty(M.T.)</th>
+		   <th>Qty(Bags)</th>
+		   <th>Type</th>
+		   <th>Stock No.</th>
+		   <th>Deal Rate</th>
+		   <th>Freight</th>
+		   <th>Action</th>
+		  </tr>
+		 </thead>
+		 <tbody>
+		  ...
+		 </tbody>
+		 <tfoot>
+		  <tr>
+		   <th>&nbsp;</th>
+		   <th><input type="text" id="tol_qtymt" name="tol_qtymt" readonly="true" class="txt_cls" /></th>
+		   <th><input type="text" id="tol_qtybag" name="tol_qtybag" readonly="true" class="txt_cls" /></th>
+		   <th>&nbsp;</th>
+		   <th>&nbsp;</th>
+		   <th><b>Total Freight</b></th>
+		   <th><input type="text" id="tol_freight" name="tol_freight" readonly="true" class="txt_cls" /></th>
+		   <th>&nbsp;</th>
+		  </tr>
+		 </tfoot>
+		</table>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+   <div id="data-list">
+            <br />
+			<div class="loading"></div>
+            <div id="data-list-table">
+            </div>
+    </div>
+    <div id="data-form" style="display:none;">
+        <div class="done" style="display:none;">
+            <h3>Record Saved.</h3>
+        </div>
+
+	    <div class="widget-box">
+	    <div class="widget-header">
+		    <h4 class="widget-title"><?=$title?></h4>
+	    </div>
+		<div class="widget-body">
+			<div class="widget-main">
+        <form action="#" class="form-horizontal form-input" id="userform" method="post" role="form">
+        <input type="hidden" value="add" name="status" id="status" class="form-control" />
+        <input type="hidden" value="" name="sno" id="sno" class="form-control" />
+        <input type="hidden" value="<?=$orderno?>" name="orderno" id="orderno" class="form-control" />
+        <input type="hidden" value="<?=$vtype?>" name="vtype" id="vtype" class="form-control" />
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Date</label>
+
+			<div class="col-sm-3">
+				<input tabindex="1" type="text"  name="cdate" id="cdate" data-rule-required="true"  placeholder="Date" class="col-xs-10 col-sm-12 cdate" list="0"/>
+			</div>
+		</div>
+		<div class="form-group">
+		    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Builty No.</label>
+
+			<div class="col-sm-3">
+				<input tabindex="2" type="text"  name="builtyno" id="builtyno" placeholder="Builty No" class="col-xs-10 col-sm-12 validate[required]"/>
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Truck No</label>
+
+			<div class="col-sm-3">
+				<input tabindex="3" type="text"  name="truckno" id="truckno" placeholder="Truck" class="col-xs-10 col-sm-12 validate[required,minSize[10],maxSize[10]]"/>
+			</div>
+		</div>
+		<div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Type</label>
+
+			<div class="col-sm-3">
+				<select tabindex="4" id="type" name="type" class="col-xs-10 col-sm-12 validate[required]">
+				 <option selected>SELF</option>
+				 <option>PARTY</option>
+				 <option>TRANSPORTER</option>
+				</select>
+			</div>
+	   </div>
+	   
+	    <div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Source</label>
+
+			<div class="col-sm-3">
+			    <select name="source_id" id="source_id" class="col-xs-10 col-sm-12" tabindex="5">
+			    <? foreach($sourcelist as $row){ ?>
+			     <option value="<?=$row->id?>"><?=$row->name?></option>
+			     <? } ?>
+			    </select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Party Name</label>
+
+			<div class="col-sm-3">
+			    <select name="ledger_id" id="ledger_id" class="col-xs-10 col-sm-12" tabindex="6">
+			    <? foreach($partylist as $row){ ?>
+			     <option value="<?=$row->id?>"><?=$row->name?></option>
+			     <? } ?>
+			    </select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Sub Dealer</label>
+
+			<div class="col-sm-3">
+			    <select name="sub_dealer_id" id="sub_dealer_id" class="col-xs-10 col-sm-12" tabindex="7">
+			    <? foreach($subdealerlist as $row){ ?>
+			     <option value="<?=$row->id?>"><?=$row->name?></option>
+			     <? } ?>
+			    </select>
+			</div>
+		</div>
+		<div class="form-group">
+		    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Consignee Name</label>
+
+			<div class="col-sm-3">
+				<input type="text" tabindex="8" name="consignee_name" id="consignee_name" class="col-xs-10 col-sm-12" placeholder="Consignee Name"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Destination</label>
+
+			<div class="col-sm-3">
+			    <select name="destination_id" id="destination_id" class="col-xs-10 col-sm-12 validate[required]" tabindex="9">
+			    <option value="">-</option>
+			    <? foreach($destinationlist as $row){ ?>
+			     <option value="<?=$row->id?>"><?=$row->name?></option>
+			     <? } ?>
+			    </select>
+			</div>
+		</div>
+		<div class="form-group">
+		<table id="TblRpt" class="table">
+		 <thead>
+		  <tr>
+		   <th class="txt_item">Item Name</th>
+		   <th>Qty(M.T.)</th>
+		   <th>Qty(Bags)</th>
+		   <th>Type</th>
+		   <th>Stock No.</th>
+		   <th>Deal Rate</th>
+		   <th>Freight</th>
+		   <th>Action</th>
+		  </tr>
+		 </thead>
+		 <tbody>
+		  <tr>
+           <td><input tabindex="10" type="text" id="txt_item" class="txt_item item" onkeyup="getItemAutoCompt();" onclick="getItemAutoCompt();" list="0"/><input type="hidden" id="item_id" name="item_id"/></td>
+           <td><input tabindex="11" type="text" id="txt_qtymt" class="txt_cls" onblur="GetQtyBag();return false;"/></td>
+           <td><input tabindex="12" type="text" id="txt_qtybag" class="txt_cls"/></td>
+           <td>
+           <select tabindex="13" id="txt_type" class="type">
+            <option>FOR</option>
+           </select>
+           </td>
+           <td><input tabindex="14" type="text" id="txt_stkno" class="txt_cls"/></td>
+           <td><input tabindex="15" type="text" id="txt_rate" class="txt_cls"/></td>
+           <td><input tabindex="16" type="text" id="txt_freight" class="txt_cls"/></td>
+           <td><button tabindex="17" type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAdd();return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button></td>
+		  </tr>
+		 </tbody>
+		 <tfoot>
+		  <tr>
+		   <th>&nbsp;</th>
+		   <th><input type="text" id="tol_qtymt" name="tol_qtymt" readonly="true" class="txt_cls" /></th>
+		   <th><input type="text" id="tol_qtybag" name="tol_qtybag" readonly="true" class="txt_cls" /></th>
+		   <th>&nbsp;</th>
+		   <th>&nbsp;</th>
+		   <th><b>Total Freight</b></th>
+		   <th><input type="text" id="tol_freight" name="tol_freight" readonly="true" class="txt_cls" /></th>
+		   <th>&nbsp;</th>
+		  </tr>
+		 </tfoot>
+		</table>
+		</div>
+		<div class="form-group">
+		    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Stop</label>
+
+			<div class="col-sm-3">
+				<select tabindex="18" name="stop_builty" id="stop_builty" class="col-xs-10 col-sm-12 validate[required]">
+				 <option value="1">YES</option>
+				 <option value="0">NO</option>
+				</select>
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Less Advance</label>
+
+			<div class="col-sm-3">
+				<input tabindex="19" type="text"  name="lessadv" id="lessadv" placeholder="Less Advance" class="col-xs-10 col-sm-12 validate[custom[number]]"/>
+			</div>
+		</div>
+		<div class="form-group">
+		    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Remark</label>
+
+			<div class="col-sm-3">
+				<input type="text" tabindex="20" name="remark" id="remark" placeholder="Remark" class="col-xs-10 col-sm-12"/>
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Balance Freight</label>
+
+			<div class="col-sm-3">
+				<input tabindex="21" type="text"  name="balfreight" id="balfreight" placeholder="Balance Freight" class="col-xs-10 col-sm-12 validate[custom[number]]"/>
+			</div>
+		</div>
+		<div class="space-4"></div>
+
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-3 col-md-9">
+				<button  tabindex="22" class="btn btn-info" type="button" id="newsubmit" >
+					<i class="ace-icon fa fa-check bigger-110"></i>
+					Submit
+				</button>
+
+				&nbsp; &nbsp; &nbsp;
+				<button class="btn" type="reset">
+					<i class="ace-icon fa fa-undo bigger-110"></i>
+					Reset
+				</button>
+				&nbsp; &nbsp; &nbsp;
+		        <button class="btn btn-primary" onclick="ShowList(); return false;">
+			        LIST
+		        </button>
+			</div>
+		</div>
+		<div class="loading"></div>
+
+		<div class="hr hr-24"></div>
+		</form>
+	</div>
+
+		<script type="text/javascript">
+		    function ShowForm() {
+		        $('#data-list').fadeOut(500, function () {
+		            $('#data-form').fadeIn(500);
+				    $("[tabindex='2']").focus();
+		        });
+		    }
+		    function BlankForm() {
+		        $('#userform').find('input:text').val('');
+		        $('#userform').find('input:password').val('');
+		        $('#userform').find('#orderno').val('0');
+		        $('#userform')[0].reset();
+		         $('#TblRpt tbody tr:not(:first)').remove();
+		        $('.cdate').val(getCurDate());
+		        $('#status').val('add');
+		    }
+		    function ShowList() {
+		        $('#data-form').fadeOut(500, function () {
+		            $('#data-list').fadeIn(500);
+		            GetList();
+		        });
+		    }
+            function GetFreight(id){
+            	if(id==''){
+                $('#appr_freight').val('0.00');
+            	}else{
+                var url = "<?php echo base_url();?>index.php/transactionController/destination_freight_get?id=" + id;
+		        $.get(url, function (data) {
+		            var report_obj = JSON.parse(data);
+		            if (report_obj.Message == "Success") {
+		                $("#appr_freight").val(report_obj.freight);
+		            }
+		            else {
+		                alert("Invalid");
+		            }
+		        });
+		        }
+            }
+ 		    function GetList() {
+		        data = "list=list";
+		        $(".loading").show();
+		        $.ajax({
+		            url: "<?php echo base_url();?>index.php/transactionController/pending_bill_rate_list",
+		            type: "GET",
+		            data: data+'&vtype='+$('#vtype').val(),
+		            cache: false,
+		            success: function (html) {
+		                $("#data-list-table").html(html);
+		                $(".loading").hide();
+		            }
+		        });
+		    }
+		    function GetItemList(ID) {
+		        data = "list=list";
+		        $(".loading").show();
+		        $.ajax({
+		            url: "<?php echo base_url();?>index.php/transactionController/dispatch_get_item",
+		            type: "GET",
+		            data: data+'&vtype='+$('#vtype').val()+'&id='+ID,
+		            cache: false,
+		            success: function (html) {
+		                $('#TblRpt tbody tr:not(:first)').remove();
+		                $('#TblRpt tbody').append(html);
+		                TolQtyMT();
+		                TolQtyBag();
+		                TolFreight();
+		                $(".loading").hide();
+		            }
+		        });
+		    }
+
+		    $(document).ready(function () {
+		    	CheckForm($('#orderno').val());
+		    	MoveTextBox('.form-input');
+		    	$('.cdate').val(getCurDate());
+		    	$(".cdate").mask("99-99-9999");
+                $("#userform").validationEngine();
+		        
+                $('#load,#cross,#direct').click(function(){
+				id=$(this).attr('id');
+				if($(this).is(':checked')){
+				    $(this).val('YES');  // checked
+				    if(id=='load'){
+				    	$('.optional1').show();
+				    }else if(id=='direct'){
+				    	$('.optional2').show();
+				    }
+				}
+				else{
+				    $(this).val('no');  // unchecked
+				    if(id=='load'){
+				    	$('.optional1').hide();
+				    }else if(id=='direct'){
+				    	$('.optional2').hide();
+				    }
+			    }
+			    });
+			    $('#stop_builty').click(function(){
+			    	if($(this).is(':checked'))
+			    		{
+                          $(this).val('YES');
+			    		}else{
+                          $(this).val('no');
+			    		}
+			    });
+			    $('#act_freight').keyup(function(){
+			    	GetActualAmt();
+			    });
+		        //if submit button is clicked
+		        $('#newsubmit').click(function () {
+		        company_id=$.cookie('ae_company_id');
+		        if(company_id=='' || company_id==0){
+                   alert('Unexpected Error ! Login Again .');
+		        }else{ // Valid Company Id
+		            	if ($('#userform').validationEngine('validate')) {		            
+		                var status = $('input[name=status]');
+		                var data = $("#userform").serialize();
+		                $('.loading').show();
+		                $.ajax({
+		                    url: "<?php echo base_url();?>index.php/transactionController/dispatch_save",
+		                    type: "POST",
+		                    data: data,
+		                    cache: false,
+		                    success: function (html) {
+		                        $('.loading').hide();
+		                        if (html == 1) {
+		                            $("html, body").animate({ scrollTop: 0 }, "slow");
+		                            if (status.val() == "edit") {
+		                                ShowList();
+		                                GetList();
+		                            }
+		                            else {
+
+		                            }
+		                            BlankForm();
+		                            $("[tabindex='2']").focus();
+		                            $('.done').html("<h4>Record Saved.</h4>");
+		                            $('.done').fadeIn('slow', function () { });
+		                            $('.done').delay(600).fadeOut('slow', function () { });
+		                        } else {
+		                            if (html == 2) {
+		                                alert('Already Exists');
+		                            } else {
+		                                alert('Sorry, unexpected error. Please try again later.');
+		                            }
+		                        }
+		                    }
+		                });
+		                return false;
+		                }
+		            } // End Check Company
+		        });
+
+
+		    });
+
+
+		    function GetRecord(ID) {
+		        var url = "<?php echo base_url();?>index.php/transactionController/dispatch_get?id=" + ID;
+		        $.get(url, function (data) {
+		            var report_obj = JSON.parse(data);
+		            if (report_obj.Message == "Success") {
+		                $.each(report_obj, function(key, value) {
+						    if(key=='Message' || key=='sno' || key=='status'){ 
+                               //declare manually
+						    }else{
+						    $("#"+key).val(value);
+						    }
+						});
+						GetItemList(report_obj.id);
+		                $("#sno").val(report_obj.id);
+		                $("#status").val("edit");
+		                ShowForm();
+		            }
+		            else {
+		                alert("Invalid");
+		            }
+		        });
+		    }
+            function DeleteRecord(ID) {
+		        var r = confirm("Do You Want to Delete");
+		        if (r == true) {
+		            $('.loading').show();
+		                $.ajax({
+		                    url: "<?php echo base_url();?>index.php/transactionController/dispatch_delete/tbl_trans1/tbl_trans2/id/billno",
+		                    type: "POST",
+		                    data: {ID: ID},
+		                    cache: false,
+		                    success: function (html) {
+		                        $('.loading').hide();
+		                        if(html==1){
+		                        	ShowList();
+		                            GetList();
+		                            $('.done').html("<h4>Record Deleted.</h4>");
+		                            $('.done').fadeIn('slow', function () { });
+		                            $('.done').delay(600).fadeOut('slow', function () { });
+		                        }
+		                        else if(html==2){
+                                    alert('Sorry Delete Operation Failed !');
+		                        }
+		                        else{
+		                        	alert('Sorry, unexpected error. Please try again later.');
+		                        }
+		                    }
+		                });
+		                return false;
+		        }
+		      }
+		      function CheckForm(id){
+		      	if(id==0){
+                    $("#data-list").show();
+		        	$("#data-form").hide();
+		        	GetList();
+		      	}else{
+		        	GetOrderRecord(id);
+		      	}
+		      }
+		      function GetOrderRecord(id){
+                var url = "<?php echo base_url();?>index.php/transactionController/pending_order_get?id=" + id;
+		        $.get(url, function (data) {
+		            var report_obj = JSON.parse(data);
+		            if (report_obj.Message == "Success") {
+		                $.each(report_obj, function(key, value) {
+						    if(key=='Message' || key=='sno' || key=='status'){ 
+                               //declare manually
+						    }else{
+						    $("#"+key).val(value);
+						    }
+						});
+						if($('#d_ledger_id').val()==0){
+                          $('.optional2').hide();
+						}else{
+						  $('.optional2').show();
+						}
+                        if($('#l_godown_id').val()==0){
+                          $('.optional1').hide();
+						}else{
+						  $('.optional1').show();
+						}
+		                $("#status").val("add");
+		                ShowForm();
+		            }
+		            else {
+		                alert("Invalid");
+		            }
+		        });
+		      }
+		      function GetActualAmt(){
+		      	act_freight=$('#act_freight').val();
+		      	if(act_freight==''){
+		      		act_freight=0;
+		      	}
+		         act_amt=act_freight*20;
+		      	 $('#act_rate').val(act_amt);
+		      	 GetDifference();
+		      }
+		      function GetDifference(){
+		      	appr_freight=$('#freight_rate').val();
+		      	act_freight=$('#act_rate').val();
+		      	if(act_freight==''){
+		      		act_freight=0;
+		      	}
+		      	dif=appr_freight-act_freight;
+		      	$('#difference').val(dif);
+		      }
+
+		      function ItemAdd(){
+		      	itemname=$('#txt_item').val();
+		      	itemid=$('#item_id').val();
+		      	qtymt=$('#txt_qtymt').val();
+		      	qtybag=$('#txt_qtybag').val();
+		      	type=$('#txt_type').val();
+		      	stkno=$('#txt_stkno').val();
+		      	rate=$('#txt_rate').val();
+		      	freight=$('#txt_freight').val();
+		      	$('#TblRpt tbody').append('<tr>'
+		      	+ '<td>'+itemname+'<input type="hidden" name="itemcode[]" value="'+itemid+'"></td>'
+		      	+ '<td class="qtymt">'+qtymt+'<input type="hidden" class="qtymt" name="qtymt[]" value="'+qtymt+'"></td>'
+		      	+ '<td class="qtybag">'+qtybag+'<input type="hidden" name="qtybag[]" value="'+qtybag+'"></td>'
+		      	+ '<td>'+type+'<input type="hidden" name="itype[]" value="'+type+'"></td>'
+		      	+ '<td>'+stkno+'<input type="hidden" name="stkno[]" value="'+stkno+'"></td>'
+		      	+ '<td>'+rate+'<input type="hidden" name="rate[]" value="'+rate+'"></td>'
+		      	+ '<td class="freight">'+freight+'<input type="hidden" class="freight" name="freight[]" value="'+freight+'"></td>'
+		      	+ '<td><button type="button" class="del btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'
+		      	+'</tr>');
+		      	ClnTxt();
+		      	TolQtyMT();
+		      	TolQtyBag();
+		      	TolFreight();
+		      	$('#txt_item').focus();
+		      }
+		      function ClnTxt(){
+		      	$('#txt_item,#item_id,#txt_qtymt,#txt_qtybag,#txt_stkno,#txt_rate,#txt_freight').val('');
+		      	$('.type').prop('selectedIndex',-1);
+		      }
+		      function TolQtyMT(){
+                var sum = 0;
+				$(".qtymt").each(function() {
+				    var value = $(this).text();
+				    if(!isNaN(value) && value.length != 0) {
+				        sum += parseFloat(value);
+				    }
+				    $('#tol_qtymt').val(sum);
+				});
+		      }
+		      function TolQtyBag(){
+			      var sum = 0;
+					$(".qtybag").each(function() {
+					    var value = $(this).text();
+					    if(!isNaN(value) && value.length != 0) {
+					        sum += parseFloat(value);
+					    }
+					    $('#tol_qtybag').val(sum);
+					});	
+		      }
+		      function TolFreight(){
+		      	var sum = 0;
+				$(".freight").each(function() {
+				    var value = $(this).text();
+				    if(!isNaN(value) && value.length != 0) {
+				        sum += parseFloat(value);
+				    }
+				    $('#tol_freight').val(sum);
+				});
+		      }
+		      function getItemAutoCompt(){
+	            $(".item").autocomplete({
+	            source: urlstr+"index.php/helperController/get_item2",
+	            minLength: 1,
+	            focus: function (event, ui) {
+	            $(event.target).val(ui.item.label);
+	            $('#item_id').val(ui.item.id);
+	            return false;
+	            },
+	            select: function (event, ui) {
+	            $(event.target).val(ui.item.label);
+	            $('#item_id').val(ui.item.id);
+	            return false;
+	        	},
+	            });
+	            }
+	            function GetQtyBag(){
+	            	qtymt=$('#txt_qtymt').val();
+	            	qtybag=$('#txt_qtybag').val();
+	            	if(isNaN(qtymt) || qtymt=='' || qtymt==0){
+	            		$('#txt_qtybag').val('0');
+	            	}
+	            	tolbag=parseInt(qtymt)*20;
+                    $('#txt_qtybag').val(tolbag);
+	           }
+	           function GetReport(ID) {
+		        data = "list=list";
+		        $(".loading").show();
+		        $.ajax({
+		            url: "<?php echo base_url();?>index.php/transactionController/dispatch_get_item",
+		            type: "GET",
+		            data: data+'&vtype='+$('#vtype').val()+'&id='+ID,
+		            cache: false,
+		            success: function (html) {
+		            	$('.modal-body #tblmodal tbody').html('');
+		            	$('.modal-body #tblmodal tbody').html(html);
+		                // TolQtyMT();
+		                // TolQtyBag();
+		                // TolFreight();
+		                $(".loading").hide();
+		            }
+		        });
+		    }
+                $(document).on('click','.del',function(){
+                  $(this).closest('tr').remove();
+                  TolQtyMT();
+                  TolQtyBag();
+                  TolFreight();
+                });
+				</script>

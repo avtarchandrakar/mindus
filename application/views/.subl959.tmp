@@ -1,0 +1,455 @@
+   <style type="text/css">
+   .form-group {
+    margin-bottom: 0px;
+   }
+   </style>
+   <div id="data-list">
+		    <button class="btn btn-xs btn-primary" onclick="ShowForm(); BlankForm();  return false;">
+			    ADD NEW
+		    </button>
+            <br />
+			<div class="loading"></div>
+            <div id="data-list-table">
+            </div>
+    </div>
+    <div id="data-form" style="display:none;">
+        <div class="done" style="display:none;">
+            <h3>Record Saved.</h3>
+        </div>
+
+	    <div class="widget-box">
+	    <div class="widget-header">
+		    <h4 class="widget-title"><?=$title?></h4>
+	    </div>
+		<div class="widget-body">
+			<div class="widget-main">
+        <form action="#" class="form-horizontal form-input" id="userform" method="post" role="form">
+        <input type="hidden" value="add" name="status" id="status" class="form-control" />
+        <input type="hidden" value="" name="sno" id="sno" class="form-control" />
+        <input type="hidden" value="<?=$orderno?>" name="orderno" id="orderno" class="form-control" />
+        <input type="hidden" value="<?=$vtype?>" name="vtype" id="vtype" class="form-control" />
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Date</label>
+
+			<div class="col-sm-3">
+				<input tabindex="1" type="text"  name="cdate" id="cdate" data-rule-required="true"  placeholder="Date" class="col-xs-10 col-sm-12 cdate" list="0"/>
+			</div>
+		</div>
+		<div class="form-group">
+		    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Builty No.</label>
+
+			<div class="col-sm-3">
+				<input tabindex="2" type="text"  name="buityno" id="buityno" placeholder="Builty No" class="col-xs-10 col-sm-12 validate[required]"/>
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Truck No</label>
+
+			<div class="col-sm-3">
+				<input tabindex="3" type="text"  name="truckno" id="truckno" placeholder="Truck" class="col-xs-10 col-sm-12 validate[required,minSize[10],maxSize[10]]"/>
+			</div>
+		</div>
+		<div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Type</label>
+
+			<div class="col-sm-3">
+				<select tabindex="4" id="type" name="type" class="col-xs-10 col-sm-12 validate[required]">
+				 <option selected>SELF</option>
+				 <option>PARTY</option>
+				 <option>TRANSPORTER</option>
+				</select>
+			</div>
+	   </div>
+	   
+	    <div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Source</label>
+
+			<div class="col-sm-3">
+			    <select name="source_id" id="source_id" class="col-xs-10 col-sm-12" tabindex="5">
+			    <? foreach($sourcelist as $row){ ?>
+			     <option value="<?=$row->id?>"><?=$row->name?></option>
+			     <? } ?>
+			    </select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Party Name</label>
+
+			<div class="col-sm-3">
+			    <select name="ledger_id" id="ledger_id" class="col-xs-10 col-sm-12" tabindex="6">
+			    <? foreach($partylist as $row){ ?>
+			     <option value="<?=$row->id?>"><?=$row->name?></option>
+			     <? } ?>
+			    </select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Sub Dealer</label>
+
+			<div class="col-sm-3">
+			    <select name="sub_dealer_id" id="sub_dealer_id" class="col-xs-10 col-sm-12" tabindex="7">
+			    <? foreach($subdealerlist as $row){ ?>
+			     <option value="<?=$row->id?>"><?=$row->name?></option>
+			     <? } ?>
+			    </select>
+			</div>
+		</div>
+		<div class="form-group">
+		    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Consignee Name</label>
+
+			<div class="col-sm-3">
+				<input type="text" tabindex="8" name="consignee_name" id="consignee_name" class="col-xs-10 col-sm-12" placeholder="Consignee Name"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Destination</label>
+
+			<div class="col-sm-3">
+			    <select name="destination_id" id="destination_id" class="col-xs-10 col-sm-12 validate[required]" tabindex="9">
+			    <option value="">-</option>
+			    <? foreach($destinationlist as $row){ ?>
+			     <option value="<?=$row->id?>"><?=$row->name?></option>
+			     <? } ?>
+			    </select>
+			</div>
+		</div>
+		<div class="form-group">
+		<table id="TblRpt" class="table">
+		 <thead>
+		  <tr>
+		   <th>Item Name</th>
+		   <th>Qty(M.T.)</th>
+		   <th>Qty(Bags)</th>
+		   <th>Type</th>
+		   <th>Stock No.</th>
+		   <th>Rate</th>
+		   <th>Freight</th>
+		  </tr>
+		 </thead>
+		 <tbody>
+		  <tr>
+           <td><input tabindex="10" type="text" id="txt_item"/></td>
+           <td><input tabindex="11" type="text" id="txt_qtymt"/></td>
+           <td><input tabindex="12" type="text" id="txt_qtybag"/></td>
+           <td><input tabindex="13" type="text" id="txt_type"/></td>
+           <td><input tabindex="14" type="text" id="txt_stkno"/></td>
+           <td><input tabindex="15" type="text" id="txt_rate"/></td>
+           <td><input tabindex="16" type="text" id="txt_freight"/></td>
+		  </tr>
+		 </tbody>
+		</table>
+		</div>
+		<div class="space-4"></div>
+
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-3 col-md-9">
+				<button  tabindex="27" class="btn btn-info" type="button" id="newsubmit" >
+					<i class="ace-icon fa fa-check bigger-110"></i>
+					Submit
+				</button>
+
+				&nbsp; &nbsp; &nbsp;
+				<button class="btn" type="reset">
+					<i class="ace-icon fa fa-undo bigger-110"></i>
+					Reset
+				</button>
+				&nbsp; &nbsp; &nbsp;
+		        <button class="btn btn-primary" onclick="ShowList(); return false;">
+			        LIST
+		        </button>
+			</div>
+		</div>
+		<div class="loading"></div>
+
+		<div class="hr hr-24"></div>
+		</form>
+	</div>
+
+		<script type="text/javascript">
+		    function ShowForm() {
+		        $('#data-list').fadeOut(500, function () {
+		            $('#data-form').fadeIn(500);
+				    $("[tabindex='2']").focus();
+		        });
+		    }
+		    function BlankForm() {
+		        $('#userform').find('input:text').val('');
+		        $('#userform').find('input:password').val('');
+		        $('#userform').find('#stop_builty').removeAttr('checked').val('no');
+		        $('#userform').find('#load').removeAttr('checked').val('no');
+		        $('#userform').find('#cross').removeAttr('checked').val('no');
+		        $('#userform').find('#direct').removeAttr('checked').val('no');
+		        $('#userform').find('#orderno').val('0');
+		        $('#userform')[0].reset();
+		        $('.optional1,.optional2').hide();
+		        $('.cdate').val(getCurDate());
+		        $('#status').val('add');
+		    }
+		    function ShowList() {
+		        $('#data-form').fadeOut(500, function () {
+		            $('#data-list').fadeIn(500);
+		            GetList();
+		        });
+		    }
+            function GetFreight(id){
+            	if(id==''){
+                $('#appr_freight').val('0.00');
+            	}else{
+                var url = "<?php echo base_url();?>index.php/transactionController/destination_freight_get?id=" + id;
+		        $.get(url, function (data) {
+		            var report_obj = JSON.parse(data);
+		            if (report_obj.Message == "Success") {
+		                $("#appr_freight").val(report_obj.freight);
+		            }
+		            else {
+		                alert("Invalid");
+		            }
+		        });
+		        }
+            }
+ 		    function GetList() {
+		        data = "list=list";
+		        $(".loading").show();
+		        $.ajax({
+		            url: "<?php echo base_url();?>index.php/transactionController/dispatch_list",
+		            type: "GET",
+		            data: data+'&vtype='+$('#vtype').val(),
+		            cache: false,
+		            success: function (html) {
+		                $("#data-list-table").html(html);
+		                $('#TblList').DataTable();
+		                $(".loading").hide();
+		            }
+		        });
+		    }
+
+		    $(document).ready(function () {
+		    	CheckForm($('#orderno').val());
+		    	MoveTextBox('.form-input');
+		    	$('.cdate').val(getCurDate());
+		    	$(".cdate").mask("99-99-9999");
+                $("#userform").validationEngine();
+		        
+                $('#qtymt').blur(function(){
+                  GetQtyBag();
+                });
+                $('#load,#cross,#direct').click(function(){
+				id=$(this).attr('id');
+				if($(this).is(':checked')){
+				    $(this).val('YES');  // checked
+				    if(id=='load'){
+				    	$('.optional1').show();
+				    }else if(id=='direct'){
+				    	$('.optional2').show();
+				    }
+				}
+				else{
+				    $(this).val('no');  // unchecked
+				    if(id=='load'){
+				    	$('.optional1').hide();
+				    }else if(id=='direct'){
+				    	$('.optional2').hide();
+				    }
+			    }
+			    });
+			    $('#stop_builty').click(function(){
+			    	if($(this).is(':checked'))
+			    		{
+                          $(this).val('YES');
+			    		}else{
+                          $(this).val('no');
+			    		}
+			    });
+			    $('#act_freight').keyup(function(){
+			    	GetActualAmt();
+			    });
+		        //if submit button is clicked
+		        $('#newsubmit').click(function () {
+		        company_id=$.cookie('ae_company_id');
+		        if(company_id=='' || company_id==0){
+                   alert('Unexpected Error ! Login Again .');
+		        }else{ // Valid Company Id
+		            	if ($('#userform').validationEngine('validate')) {		            
+		                var status = $('input[name=status]');
+		                var data = $("#userform").serialize();
+		                $('.loading').show();
+		                $.ajax({
+		                    url: "<?php echo base_url();?>index.php/transactionController/dispatch_save",
+		                    type: "POST",
+		                    data: data+'&load='+$('#load').val()+'&cross='+$('#cross').val()+'&direct='+$('#direct').val()+'&stop_builty='+$('#stop_builty').val(),
+		                    cache: false,
+		                    success: function (html) {
+		                        $('.loading').hide();
+		                        if (html == 1) {
+		                            $("html, body").animate({ scrollTop: 0 }, "slow");
+		                            if (status.val() == "edit") {
+		                                ShowList();
+		                                GetList();
+		                            }
+		                            else {
+
+		                            }
+		                            BlankForm();
+		                            $("[tabindex='2']").focus();
+		                            $('.done').html("<h4>Record Saved.</h4>");
+		                            $('.done').fadeIn('slow', function () { });
+		                            $('.done').delay(600).fadeOut('slow', function () { });
+		                        } else {
+		                            if (html == 2) {
+		                                alert('Already Exists');
+		                            } else {
+		                                alert('Sorry, unexpected error. Please try again later.');
+		                            }
+		                        }
+		                    }
+		                });
+		                return false;
+		                }
+		            } // End Check Company
+		        });
+
+
+		    });
+
+
+		    function GetRecord(ID) {
+		        var url = "<?php echo base_url();?>index.php/transactionController/trans_get?id=" + ID;
+		        $.get(url, function (data) {
+		            var report_obj = JSON.parse(data);
+		            if (report_obj.Message == "Success") {
+		                $.each(report_obj, function(key, value) {
+						    if(key=='Message' || key=='sno' || key=='status'){ 
+                               //declare manually
+						    }else{
+						    $("#"+key).val(value);
+						    }
+						});
+						$('.optional1,.optional2').hide();
+						if(report_obj.load=='YES'){
+							$('#load').prop('checked', 'checked');
+							$('.optional1').show();
+						}else{
+                            $('#load').removeAttr('checked');  
+						}
+						if(report_obj.cross=='YES'){
+							$('#cross').prop('checked', 'checked');
+						}else{
+                            $('#cross').removeAttr('checked');  
+						}
+						if(report_obj.direct=='YES'){
+							$('#direct').prop('checked', 'checked');
+							$('.optional2').show();
+						}else{
+                            $('#direct').removeAttr('checked');  
+						}
+						if(report_obj.stop_builty=='YES'){
+							$('#stop_builty').prop('checked', 'checked');
+							$('#stop_builty').val('YES');
+						}else{
+                            $('#stop_builty').removeAttr('checked');  
+                            $('#stop_builty').val('no');
+						}
+		                $("#sno").val(report_obj.id);
+		                $("#status").val("edit");
+		                ShowForm();
+		            }
+		            else {
+		                alert("Invalid");
+		            }
+		        });
+		    }
+            function DeleteRecord(ID) {
+		        var r = confirm("Do You Want to Delete");
+		        if (r == true) {
+		            $('.loading').show();
+		                $.ajax({
+		                    url: "<?php echo base_url();?>index.php/helperController/delete/tbl_trans/id",
+		                    type: "POST",
+		                    data: {ID: ID},
+		                    cache: false,
+		                    success: function (html) {
+		                        $('.loading').hide();
+		                        if(html==1){
+		                        	ShowList();
+		                            GetList();
+		                            $('.done').html("<h4>Record Deleted.</h4>");
+		                            $('.done').fadeIn('slow', function () { });
+		                            $('.done').delay(600).fadeOut('slow', function () { });
+		                        }
+		                        else if(html==2){
+                                    alert('Sorry Delete Operation Failed !');
+		                        }
+		                        else{
+		                        	alert('Sorry, unexpected error. Please try again later.');
+		                        }
+		                    }
+		                });
+		                return false;
+		        }
+		      }
+		      function GetQtyBag(){
+		      	qtymt=$('#qtymt').val();
+		      	appr_freight=$('#appr_freight').val();
+		      	qtybag=(qtymt*20);
+		      	qtyrate=qtymt*appr_freight;
+		      	$('#qtybag').val(qtybag);
+		      	$('#freight_rate').val(qtyrate);
+		      }
+		      function CheckForm(id){
+		      	if(id==0){
+                    $("#data-list").show();
+		        	$("#data-form").hide();
+		        	GetList();
+		      	}else{
+		        	GetOrderRecord(id);
+		      	}
+		      }
+		      function GetOrderRecord(id){
+                var url = "<?php echo base_url();?>index.php/transactionController/pending_order_get?id=" + id;
+		        $.get(url, function (data) {
+		            var report_obj = JSON.parse(data);
+		            if (report_obj.Message == "Success") {
+		                $.each(report_obj, function(key, value) {
+						    if(key=='Message' || key=='sno' || key=='status'){ 
+                               //declare manually
+						    }else{
+						    $("#"+key).val(value);
+						    }
+						});
+						if($('#d_ledger_id').val()==0){
+                          $('.optional2').hide();
+						}else{
+						  $('.optional2').show();
+						}
+                        if($('#l_godown_id').val()==0){
+                          $('.optional1').hide();
+						}else{
+						  $('.optional1').show();
+						}
+		                $("#status").val("add");
+		                ShowForm();
+		            }
+		            else {
+		                alert("Invalid");
+		            }
+		        });
+		      }
+		      function GetActualAmt(){
+		      	act_freight=$('#act_freight').val();
+		      	if(act_freight==''){
+		      		act_freight=0;
+		      	}
+		         act_amt=act_freight*20;
+		      	 $('#act_rate').val(act_amt);
+		      	 GetDifference();
+		      }
+		      function GetDifference(){
+		      	appr_freight=$('#freight_rate').val();
+		      	act_freight=$('#act_rate').val();
+		      	if(act_freight==''){
+		      		act_freight=0;
+		      	}
+		      	dif=appr_freight-act_freight;
+		      	$('#difference').val(dif);
+		      }
+				</script>

@@ -1,0 +1,245 @@
+    <div id="data-form">
+        <div class="done" style="display:none;">
+            <h3>Record Saved.</h3>
+        </div>
+
+	    <div class="widget-box">
+	    <div class="widget-header">
+		    <h4 class="widget-title">Price List State Wise</h4>
+	    </div>
+		<div class="widget-body">
+			<div class="widget-main">
+	<?php if($p_list==1){?>
+        <form action="#" class="form-horizontal form-input" id="userform" method="post" role="form">
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> State Name</label>
+
+			<div class="col-sm-3">
+				<?php
+					$query=$this->db->query("select id,name from m_master where company_id=". get_cookie('ae_company_id') ."  and type='State' order by name");
+					echo "<select id='state_id' name='state_id' tabindex='1' class='col-xs-10 col-sm-12' data-placeholder='Select State Name...''>";
+					foreach($query->result() as $row)
+					{
+						echo "<option value=" . $row->id . "> " . $row->name . "</option>";
+					}
+					echo "</select>";
+				?>
+			</div>
+
+			<div class="col-sm-3">
+				<button  tabindex="2" class="btn btn-info" type="button" id="btn_show" onclick="GetList();return false;" >
+					Show
+				</button>
+				<button  tabindex="3" class="btn btn-info" type="button" id="btn_hide" onclick="hidebtn();return false;" >
+					Copy
+				</button>
+			</div>
+			<br>
+
+	<div class="col-sm-4" id="state">
+			<div class="col-sm-8">	<?php
+					$query=$this->db->query("select id,name from m_master where company_id=". get_cookie('ae_company_id') ."  and type='State' order by name");
+					echo "<select id='state_id1' name='state_id1' tabindex='1' class='col-xs-10 col-sm-12' data-placeholder='Select State Name...''>";
+					foreach($query->result() as $row)
+					{
+						echo "<option value=" . $row->id . "> " . $row->name . "</option>";
+					}
+					echo "</select>";
+				?>
+				
+			</div>
+			<div class="col-sm-4">
+				<button  tabindex="2" class="btn btn-info" type="button" id="btn_select" onclick="GetCpyList();return false;" >
+					Select
+				</button>
+			</div>
+			
+
+		</div>
+
+		<div class="space-4"></div>
+		<br>
+
+		<div class="col-sm-6">
+		<div id="item-list"></div>
+		</div>
+		<div class="col-sm-6">
+				<br><br>
+				Previous Dates
+				<div id="date-list"></div>
+		</div>
+		
+		<div class="loading"></div>
+
+		<div class="hr hr-24"></div>
+		</form>
+		<?php }?>
+	</div>
+
+		<script type="text/javascript">
+		    function BlankForm() {
+		        $('#userform').find('input:text').val('');
+		        $('#userform').find('input:hidden').val('');
+		        $('#userform')[0].reset();
+		        $('#userform').find('input:password').val('');
+		        $('#status').val('add');
+		    }
+  function hidebtn() {
+		      $('#state').show() 
+		      $('#btn_hide').hide() 
+		    }
+
+
+		    function GetList() {
+		        item_id=$('#item_id').val();
+		    	rate=$('#rate').val();
+		        data = "state_id="+$("#state_id").val();
+		        $(".loading").show();
+		        $.ajax({
+		            url: "<?php echo base_url();?>index.php/master_general/item_list_state",
+		            type: "GET",
+		            data: data,
+		            cache: false,
+		            success: function (html) {
+		                $("#item-list").html(html);
+		                $(".loading").hide();
+		                $(".cdate").mask('99-99-9999');
+		                $('.cdate').val(getCurDate());
+						GetDateList();
+
+				        //if submit button is clicked
+				        $('#newsubmit').click(function () {
+				                var data = $("#userform").serialize();
+				                $('.loading').show();
+				                $.ajax({
+				                    url: "<?php echo base_url();?>index.php/master_general/item_state_save",
+				                    type: "POST",
+				                    data: data,
+				                    cache: false,
+				                    success: function (html) {
+				                        $('.loading').hide();
+				                        $("#item-list").html("");
+				                    }
+				                });
+				                return false;
+				        });
+
+
+		            }
+		        });
+		    }
+
+
+
+		    function GetDateList() {
+		        data = "state_id="+$("#state_id").val();
+		        $(".loading").show();
+		        $.ajax({
+		            url: "<?php echo base_url();?>index.php/master_general/date_list_state",
+		            type: "GET",
+		            data: data,
+		            cache: false,
+		            success: function (html) {
+		                $("#date-list").html(html);
+		                $(".loading").hide();
+
+		            }
+		        });
+		    }
+
+
+		    function GetListDate(pdate) {
+		        $('#date').val(pdate);
+		        pdate=$('#date').val();
+		        data = "pdate="+$("#date").val() + "&state_id="+$("#state_id").val();
+		        $(".loading").show();
+		        $.ajax({
+		            url: "<?php echo base_url();?>index.php/master_general/item_list_state_date",
+		            type: "GET",
+		            data: data,
+		            cache: false,
+		            success: function (html) {
+		                $("#item-list").html(html);
+		                $(".loading").hide();
+
+				        //if submit button is clicked
+				        $('#newsubmit').click(function () {
+				                var data = $("#userform").serialize();
+				                $('.loading').show();
+				                $.ajax({
+				                    url: "<?php echo base_url();?>index.php/master_general/item_state_save",
+				                    type: "POST",
+				                    data: data,
+				                    cache: false,
+				                    success: function (html) {
+				                        $('.loading').hide();
+				                        $("#item-list").html("");
+				                        GetList();
+				                    }
+				                });
+				                return false;
+
+				        });
+
+
+		            }
+		        });
+		    }
+
+
+		    function GetCpyList() {
+		    	item_id=$('#item_id').val();
+		    	rate=$('#rate').val();
+		        data = "state_id="+$("#state_id1").val();
+		        $(".loading").show();
+		        $.ajax({
+		            url: "<?php echo base_url();?>index.php/master_general/item_list_state",
+		            type: "GET",
+		            data: data,
+		            cache: false,
+		            success: function (html) {
+		                $("#item-list").html(html);
+		                $(".loading").hide();
+		                  $('#state').hide();
+		                  $("#btn_hide").show(); 
+				        //if submit button is clicked
+				        $('#newsubmit').click(function () {
+				                var data = $("#userform").serialize();
+				                $('.loading').show();
+				                $.ajax({
+				                    url: "<?php echo base_url();?>index.php/master_general/item_state_save",
+				                    type: "POST",
+				                    data: data,
+				                    cache: false,
+				                    success: function (html) {
+				                        $('.loading').hide();
+				                        $("#item-list").html("");
+				                    }
+				                });
+				                return false;
+				        });
+
+
+		            }
+		        });
+		    }
+		    $(document).ready(function () {
+		    	MoveTextBox('.form-input');
+                $('#state').hide() 
+
+
+
+		    });
+
+
+              function exportExcel(){
+                $("#TblList").table2excel({
+                    // exclude CSS class
+                    exclude: ".noExl",
+                    name: "Ledger",
+                    filename:"Ledger"
+                  });    
+            //    $('.mytable').tableExport({type:'excel',escape:'false'});
+              }
+
+				</script>

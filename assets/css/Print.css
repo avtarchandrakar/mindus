@@ -1,0 +1,5 @@
+#navigation, .do-not-print, #menu,footer {display:none}
+
+@media print {
+#header, #footer {display:none;}
+}

@@ -1,0 +1,103 @@
+<?
+function get_max_id($tablename, $id){
+    $ci=& get_instance();
+    $ci->load->database(); 
+
+    $query=$ci->db->query("select $id FROM $tablename ORDER BY $id DESC LIMIT 1");
+    if(mysql_affected_rows()>0){
+        foreach($query->result() as $row){
+            return $row->$id+1;
+        }
+    }
+    else
+    {
+           return 1;   
+    }
+}
+function pos_list(){
+	$ci=& get_instance();
+    $ci->load->database(); 
+
+    $query=$ci->db->query('select id,name from m_master where company_id='.get_cookie('ae_company_id').' and type="POS"');
+    return $query->result();    
+}
+function source_list(){
+    $ci=& get_instance();
+    $ci->load->database(); 
+
+    $query=$ci->db->query('select id,name from m_master where company_id='.get_cookie('ae_company_id').' and type="Source"');
+    return $query->result();    
+}
+function ledger_list(){
+    $ci=& get_instance();
+    $ci->load->database(); 
+
+    $query=$ci->db->query('select id,name from m_ledger where company_id='.get_cookie('ae_company_id').' and group_id=29');
+    return $query->result();    
+}
+function sub_dealer_list(){
+    $ci=& get_instance();
+    $ci->load->database(); 
+
+    $query=$ci->db->query('select id,name from m_ledger where company_id='.get_cookie('ae_company_id').' and (group_id=29 or group_id=30)');
+    return $query->result();    
+}
+function transporter_list(){
+    $ci=& get_instance();
+    $ci->load->database(); 
+
+    $query=$ci->db->query('select id,name from m_ledger where company_id='.get_cookie('ae_company_id').' and (group_id=31)');
+    return $query->result();    
+}
+function destination_list(){
+    $ci=& get_instance();
+    $ci->load->database(); 
+
+    $query=$ci->db->query('select id,name from m_master where company_id='.get_cookie('ae_company_id').' and type="Destination"');
+    return $query->result();    
+}
+function godown_list(){
+    $ci=& get_instance();
+    $ci->load->database(); 
+
+    $query=$ci->db->query('select id,name from m_master where company_id='.get_cookie('ae_company_id').' and type="Godown"');
+    return $query->result();    
+}
+function item_list(){
+    $ci=& get_instance();
+    $ci->load->database(); 
+
+    $query=$ci->db->query('select id,name from m_item where company_id='.get_cookie('ae_company_id'));
+    return $query->result();    
+}
+function cash_in_hand_list(){
+    $ci=& get_instance();
+    $ci->load->database(); 
+
+    $query=$ci->db->query('select id,name from m_ledger where company_id='.get_cookie('ae_company_id').' and group_id=18');
+    return $query->result();    
+}
+function indirect_expenses_list(){
+    $ci=& get_instance();
+    $ci->load->database(); 
+
+    $query=$ci->db->query('select id,name from m_ledger where company_id='.get_cookie('ae_company_id').' and group_id=8');
+    return $query->result();    
+}
+function consignee_list(){
+    $ci=& get_instance();
+    $ci->load->database(); 
+
+    $query=$ci->db->query('select id,name from m_ledger where company_id='.get_cookie('ae_company_id').' and group_id=32');
+    return $query->result();    
+}
+function getMaxPaymentFreight(){
+    $ci=& get_instance();
+    $ci->load->database(); 
+    $query=$ci->db->query('select id from tbl_payment_freight where company_id=1 order by id desc limit 0,1');
+    if(mysql_affected_rows()>0){
+        foreach($query->result() as $row){
+          return $row->id;
+        }
+    }
+}

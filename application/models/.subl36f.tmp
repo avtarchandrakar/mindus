@@ -1,0 +1,653 @@
+<?
+if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+class transaction_model extends CI_Model {
+    // Dispatch
+    public function dispatch_list(){
+      $vtype=$this->input->get('vtype');
+    	$query=$this->db->query('select t1.id,t1.cdate,t1.builtyno,p.name pname,l.name lname,d.name dname from tbl_trans1 t1 inner join m_master p on t1.pos_id=p.id inner join m_ledger l on t1.ledger_id=l.id inner join m_master d on t1.destination_id=d.id where t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'"');
+    	return $query->result();
+    }
+    public function dispatch_save()
+        {
+          $tableName1='tbl_trans1';
+          $tableName2='tbl_trans2';
+          $status = $this->input->post("status");
+          $fields = $this->db->field_data($tableName1);
+          foreach ($fields as $field)
+          {
+            if($field->primary_key==1)
+              continue;
+            $value=$this->input->post($field->name);
+            if(!empty($value))
+            {
+                $data[$field->name]=$value;
+            }
+          }
+          $data['cdate'] = date('Y-m-d',strtotime($data['cdate']));
+          $data['pos_id'] = get_cookie("ae_pos_id");
+          $data['company_id'] = get_cookie("ae_company_id");
+          $itemcode=$this->input->post("itemcode",TRUE);
+          $qtymt=$this->input->post("qtymt",TRUE);
+          $qtybag=$this->input->post("qtybag",TRUE);
+          $type=$this->input->post("itype",TRUE);
+          $stkno=$this->input->post("stkno",TRUE);
+          $rate=$this->input->post("rate",TRUE);
+          $freight=$this->input->post("freight",TRUE);
+          if($status=="add")
+            {
+            try{
+            $this->db->trans_begin();
+          $this->db->insert($tableName1,$data); // insert trans1
+          $id=$this->db->insert_id();
+          $zipped = array_map(null, $itemcode,$qtymt,$qtybag, $type,$stkno,$rate,$freight);
+          foreach($zipped as $tuple) {
+              $data2=array(
+                "billno"=>$id,
+                "itemcode"=>$tuple[0],
+                "qtymt"=>$tuple[1],
+                "qtybag"=>$tuple[2],
+                "type"=>$tuple[3],
+                "stkno"=>$tuple[4],
+                "rate"=>$tuple[5],
+                "freight"=>$tuple[6]
+                );
+              $this->db->insert($tableName2,$data2);
+          }
+          $this->db->trans_commit();
+          echo "1";       
+            }catch(Exception $e){
+            $this->db->trans_rollback();
+            echo "2";       
+            }
+        }
+        if($status=="edit")
+            {
+            try{
+          $id=$this->input->post('sno');
+            $this->db->where('id',$id);
+          $this->db->update($tableName1,$data); // update trans 1
+          $this->db->where('billno',$id);
+          $this->db->delete($tableName2); // delete trans 2
+          $zipped = array_map(null, $itemcode,$qtymt,$qtybag, $type,$stkno,$rate,$freight);
+          foreach($zipped as $tuple) {
+              $data2=array(
+                "billno"=>$id,
+                "itemcode"=>$tuple[0],
+                "qtymt"=>$tuple[1],
+                "qtybag"=>$tuple[2],
+                "type"=>$tuple[3],
+                "stkno"=>$tuple[4],
+                "rate"=>$tuple[5],
+                "freight"=>$tuple[6]
+                );
+              $this->db->insert($tableName2,$data2);
+          }
+          $this->db->trans_commit();
+          echo "1";       
+            }catch(Exception $e){
+            $this->db->trans_rollback();
+            echo "2";       
+            }
+        }
+      }
+
+      public function dispatch_get()
+      {
+        $id = $this->input->get("id");
+        $query=$this->db->query("select * from tbl_trans1 where id=".$id." and company_id=".get_cookie("ae_company_id"));
+        $result=$query->result();
+        if(mysql_affected_rows()>0)
+        {
+          foreach($result as $row)
+          {
+            $data = array(
+                "Message"=>"Success",
+                "id"=>$row->id,
+                "cdate"=>$row->cdate,
+                "builtyno"=>$row->builtyno,
+                "truckno"=>$row->truckno,
+                "type"=>$row->type,
+                "source_id"=>$row->source_id,
+                "ledger_id"=>$row->ledger_id,
+                "sub_dealer_id"=>$row->sub_dealer_id,
+                "consignee_name"=>$row->consignee_name,
+                "destination_id"=>$row->destination_id,
+                "stop_builty"=>$row->stop_builty,
+                "lessadv"=>$row->lessadv,
+                "balfreight"=>$row->balfreight,
+                "remark"=>$row->remark,
+                "vtype"=>$row->vtype
+              );
+          }
+        }
+        else{
+          $data = array(
+              "Message"=>"Failed"
+              );
+        }
+        echo json_encode($data);
+      }
+      public function dispatch_get_item(){
+          $id = $this->input->get("id");
+          $query=$this->db->query('select t2.*,i.name iname from tbl_trans2 t2  inner join m_item i on t2.itemcode=i.id where t2.billno='.$id);
+          $result=$query->result();
+          return $result;
+        }
+      public function dispatch_delete($tableName1,$tableName2,$id1,$id2){
+        try{
+          $this->db->trans_begin();
+          $id=$this->input->post('ID');
+          $this->db->where($id1,$id);
+          $this->db->delete($tableName1);
+          $this->db->where($id2,$id);
+          $this->db->delete($tableName2);
+          $this->db->trans_commit();
+          echo "1";
+        }catch(Exception $e){
+          $this->db->trans_rollback();
+          echo "2";
+        }
+      }
+        function dispatch_print_preview(){
+            $from=date('Y-m-d',strtotime($this->input->post('from')));
+            $to=date('Y-m-d',strtotime($this->input->post('to')));
+            $query=$this->db->query('select t.qtymt,t.qtybag,t.appr_freight,t.buityno,p.name pname,l.name lname from tbl_trans t inner join m_master p on t.pos_id=p.id inner join m_master l on t.ledger_id=l.id where t.company_id='.get_cookie('ae_company_id').' and t.vtype="DISPATCH" and(t.cdate between "'.$from.'" and "'.$to.'")');
+            return $query->result();
+        }
+        public function sendMail(){
+        try{
+        $email=$this->input->post('email');
+        $filename=$this->input->post('filename');
+        $this->load->library('encrypt');
+        $ci = get_instance();
+        $ci->load->library('email');
+        $msg='Please Check Invoice .';
+        $sub='Invoice';
+        $config['protocol'] = "smtp";
+        $config['smtp_host'] = "ssl://smtp.gmail.com";
+        $config['smtp_port'] = "465";
+        $config['smtp_user'] = "ramsona2010@gmail.com"; 
+        $config['smtp_pass'] = "r@msona22";
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['wordwrap'] = TRUE;
+        $config['newline'] = "\r\n";
+        $ci->email->initialize($config);        
+        $ci->email->from('ramsona2010@gmail.com', 'Atul Enterprise');
+        $list = array($email);
+        $ci->email->to($list); 
+        $this->email->reply_to('ramsona2010@gmail.com', 'Atul Enterprise');
+        $ci->email->subject($sub);
+        $ci->email->message($msg);
+        $path = set_realpath('PDF/');
+        $path=$path.$filename;
+        $this->email->attach($path);
+        //$ci->email->attach('http://192.168.0.70/atul_entp/PDF/20150305055203.pdf');
+        $ci->email->send();
+        return true;
+       }catch(Exception $e){
+        return false;
+        }
+    }
+    function dispatch_query(){
+       $subsql='';
+       $pos_id=$this->input->post('pos_id');
+       $item_id=$this->input->post('item_id');
+       $item_st=$this->input->post('item_st');
+       $godown_id=$this->input->post('godown_id');
+       $godown_st=$this->input->post('godown_st');
+       $ledger_id=$this->input->post('ledger_id');
+       $ledger_st=$this->input->post('ledger_st');
+       $sub_dealer_id=$this->input->post('sub_dealer_id');
+       $sub_dealer_st=$this->input->post('sub_dealer_st');
+       $builtyno=$this->input->post('builtyno');
+       $truckno=$this->input->post('truckno');
+       $trucksort=$this->input->post('trucksort');       
+       $type=$this->input->post('type');
+       if($pos_id!='-'){
+       $subsql=' and t.pos_id='.$pos_id;
+       }
+       if($item_st!='-'){
+        $subsql=$subsql.' and t.item_id<>'.$item_id;
+       }else{
+        if($item_id!='-'){
+         $subsql=' and t.item_id='.$item_id;
+        }
+       }
+       if($ledger_st!='-'){
+        $subsql=$subsql.' and t.ledger_id<>'.$ledger_id;
+       }else{
+        if($ledger_id!='-'){
+         $subsql=' and t.ledger_id='.$ledger_id;
+        }
+       }
+       if($godown_st!='-'){
+        $subsql=$subsql.' and t.godown_id<>'.$godown_id;
+       }else{
+        if($godown_id!='-'){
+         $subsql=' and t.godown_id='.$godown_id;
+        }
+       }
+       if($sub_dealer_st!='-'){
+        $subsql=$subsql.' and t.sub_dealer_id<>'.$sub_dealer_id;
+       }else{
+        if($sub_dealer_id!='-'){
+         $subsql=' and t.sub_dealer_id='.$sub_dealer_id;
+        }
+       }
+       echo 'select t.l_godown_id,t.d_ledger_id,t.l_qty,t.c_qty,t.d_qty,i.name iname,d.name dname,l.name lname,sd.name sdname,t.consignee_name,t.truckno,t.cdate,t.qtymt,t.qtybag,t.act_freight,t.buityno,p.name pname,l.name lname from tbl_trans t inner join m_master p on t.pos_id=p.id inner join m_item i on t.item_id=i.id inner join m_ledger l on t.ledger_id=l.id inner join m_master d on t.destination_id=d.id inner join m_ledger sd on t.sub_dealer_id=sd.id where t.company_id='.get_cookie('ae_company_id').' and t.vtype="DISPATCH" '.$subsql.'';
+    }
+    function dispatch_excel(){
+        $this->load->library('PHPExcel/IOFactory');
+
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setTitle("title")->setDescription("description");
+
+        // Assign cell values
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'cell value here');
+
+        // Save it as an excel 2003 file
+        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save("nameoffile.xls");
+    }
+    //Dispatch End
+    //Order
+    public function order_list(){
+        $vtype=$this->input->get('vtype');
+        $query=$this->db->query('select p.name posname,t1.cdate,t1.id,t1.qtymt,t1.qtybag,t1.appr_freight,l.name lname from tbl_trans t1 inner join m_ledger l on t1.ledger_id=l.id inner join m_master p on t1.pos_id=p.id where t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'"');
+        return $query->result();
+    }
+    public function order_list_get(){
+        $vtype=$this->input->get('vtype');
+        $query=$this->db->query('select p.name posname,t1.cdate,t1.id,t1.qtymt,t1.qtybag,t1.appr_freight,l.name lname from tbl_trans t1 inner join m_ledger l on t1.ledger_id=l.id inner join m_master p on t1.pos_id=p.id where t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'" and cdate="'.date('Y-m-d').'"');
+        return $query->result();
+    }
+    public function order_list_by_search(){
+            $from=date('Y-m-d',strtotime($this->input->post('from')));
+            $to=date('Y-m-d',strtotime($this->input->post('to')));
+            $ledger_id=$this->input->post('ledger_id');
+            $vtype='ORDER';
+            if($ledger_id=='-'){
+            $query=$this->db->query('select p.name posname,t1.cdate,t1.id,t1.qtymt,t1.qtybag,t1.appr_freight,l.name lname from tbl_trans t1 inner join m_ledger l on t1.ledger_id=l.id inner join m_master p on t1.pos_id=p.id where t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'" and (t1.cdate between "'.$from.'" and "'.$to.'")');
+            return $query->result();
+            }else{
+            $query=$this->db->query('select p.name posname,t1.cdate,t1.id,t1.qtymt,t1.qtybag,t1.appr_freight,l.name lname from tbl_trans t1 inner join m_ledger l on t1.ledger_id=l.id inner join m_master p on t1.pos_id=p.id where t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'" and  ledger_id='.$ledger_id.' and (t1.cdate between "'.$from.'" and "'.$to.'")');
+            return $query->result();
+            }
+        }
+    //Order End
+    //Arrival
+    public function arrival_list(){
+        $vtype=$this->input->get('vtype');
+    	$query=$this->db->query('select p.name posname,s.name sname,i.name iname,t1.cdate,t1.id,t1.gpno,t1.gpdate,t1.source_id,t1.item_id from tbl_trans t1 inner join m_master p on t1.pos_id=p.id inner join m_master s on t1.source_id=s.id inner join m_item i on t1.item_id=i.id where t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'"');
+    	return $query->result();
+    }
+    function arrival_query(){
+       $subsql='';
+       $item_id=$this->input->post('item_id');
+       $item_st=$this->input->post('item_st');
+       $source_id=$this->input->post('source_id');
+       $source_st=$this->input->post('source_st');
+       $transporter_id=$this->input->post('transporter_id');
+       $transporter_st=$this->input->post('transporter_st');
+       $godown_id=$this->input->post('godown_id');
+       $godown_st=$this->input->post('godown_st');
+       $ledger_id=$this->input->post('ledger_id');
+       $ledger_st=$this->input->post('ledger_st');
+       $truckno=$this->input->post('truckno');
+       $trucksort=$this->input->post('trucksort');       
+       $type=$this->input->post('type');
+       if($source_st!='-'){
+        $subsql=$subsql.' and t.source_id<>'.$source_id;
+       }else{
+        if($source_id!='-'){
+         $subsql=' and t.source_id='.$source_id;
+        }
+       }
+       if($transporter_st!='-'){
+        $subsql=$subsql.' and t.transporter_id<>'.$transporter_id;
+       }else{
+        if($transporter_id!='-'){
+         $subsql=' and t.transporter_id='.$transporter_id;
+        }
+       }
+       if($item_st!='-'){
+        $subsql=$subsql.' and t.item_id<>'.$item_id;
+       }else{
+        if($item_id!='-'){
+         $subsql=' and t.item_id='.$item_id;
+        }
+       }
+      if($ledger_st!='-'){
+        $subsql=$subsql.' and t.ledger_id<>'.$ledger_id;
+       }else{
+        if($ledger_id!='-'){
+         $subsql=' and t.ledger_id='.$ledger_id;
+        }
+       }
+       if($godown_st!='-'){
+        $subsql=$subsql.' and t.godown_id<>'.$godown_id;
+       }else{
+        if($godown_id!='-'){
+         $subsql=' and t.godown_id='.$godown_id;
+        }
+       }
+       if(!empty($truckno)){
+       $subsql=$subsql.' and t.truckno="'.$truckno.'"';
+       }
+       echo 'select t.cdate,t.qtymt,t.qtybag,t.truckno,t.l_qty,t.c_qty,t.d_qty,s.name sname,i.name iname,trans.name tname from tbl_trans t inner join m_master s on t.source_id=s.id inner join m_item i on t.item_id=i.id inner join m_ledger trans on t.transporter_id=trans.id where t.company_id='.get_cookie('ae_company_id').' and t.vtype="ARRIVAL" '.$subsql.'';
+    }
+    //End Arrival
+    //Pending Order List
+    public function pending_order_list(){
+        $vtype=$this->input->get('vtype');
+        $query=$this->db->query('select p.name posname,t1.cdate,t1.id,(t1.qtymt+t1.dispatchqty) qtymt,((t1.qtymt+t1.dispatchqty)*20) qtybag,l.name lname,i.name iname  from tbl_trans t1 inner join m_ledger l on t1.ledger_id=l.id inner join m_master p on t1.pos_id=p.id inner join m_item i on t1.item_id=i.id where t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'"');
+        return $query->result();
+    }
+    public function pending_order_get()
+        { 
+            $id = $this->input->get("id");
+            $query=$this->db->query("select id,pos_id,cdate,consignee_name,ledger_id,sub_dealer_id,destination_id,item_id,(qtymt+dispatchqty) qtymt,((qtymt+dispatchqty)*20) qtybag,appr_freight,mobileno,remark from tbl_trans where company_id=".get_cookie('ae_company_id')." and id=$id");
+            $result=$query->result();
+            if(mysql_affected_rows()>0)
+            {
+                foreach($result as $row)
+                {
+                    $data = array(
+                            "Message"=>"Success",
+                            "id"=>$row->id,
+                            "pos_id"=>$row->pos_id,
+                            "cdate"=>date('d-m-Y',strtotime($row->cdate)),
+                            "consignee_name"=>$row->consignee_name,
+                            "ledger_id"=>$row->ledger_id,
+                            "sub_dealer_id"=>$row->sub_dealer_id,
+                            "destination_id"=>$row->destination_id,
+                            "item_id"=>$row->item_id,
+                            "qtymt"=>$row->qtymt,
+                            "qtybag"=>$row->qtybag,
+                            "appr_freight"=>$row->appr_freight,
+                            "mobileno"=>$row->mobileno,
+                            "remark"=>$row->remark
+                        );
+                }
+
+            }
+            else{
+                $data = array(
+                        "Message"=>"Failed"
+                        );
+            }
+            echo json_encode($data);
+        }
+    // Pending Order List End
+public function trans_get()
+	    { 
+	    	$id = $this->input->get("id");
+	    	$query=$this->db->query("select * from tbl_trans where company_id=".get_cookie('ae_company_id')." and id=$id");
+	    	$result=$query->result();
+	    	if(mysql_affected_rows()>0)
+	    	{
+	    		foreach($result as $row)
+	    		{
+		    		$data = array(
+		    				"Message"=>"Success",
+		    				"id"=>$row->id,
+		    				"pos_id"=>$row->pos_id,
+		    				"cdate"=>date('d-m-Y',strtotime($row->cdate)),
+		    				"consignee_name"=>$row->consignee_name,
+		    				"challan_no"=>$row->challan_no,
+                            "so_no"=>$row->so_no,
+		    				"ledger_id"=>$row->ledger_id,
+                            "sub_dealer_id"=>$row->sub_dealer_id,
+                            "destination_id"=>$row->destination_id,
+                            "item_id"=>$row->item_id,
+                            "qtymt"=>$row->qtymt,
+                            "qtybag"=>$row->qtybag,
+                            "truckno"=>$row->truckno,
+                            "buityno"=>$row->buityno,
+                            "transporter_id"=>$row->transporter_id,
+                            "freight_type"=>$row->freight_type,
+                            "appr_freight"=>$row->appr_freight,
+                            "act_freight"=>$row->act_freight,
+                            "difference"=>$row->difference,
+                            "freight_rate"=>$row->freight_rate,
+                            "act_rate"=>$row->act_rate,
+                            "load"=>$row->load,
+                            "cross"=>$row->cross,
+                            "direct"=>$row->direct,
+                            "l_qty"=>$row->l_qty,
+                            "l_godown_id"=>$row->l_godown_id,
+                            "c_qty"=>$row->c_qty,
+                            "c_truckno"=>$row->c_truckno,
+                            "d_qty"=>$row->d_qty,
+                            "d_ledger_id"=>$row->d_ledger_id,
+                            "source_id"=>$row->source_id,
+                            "shortage"=>$row->shortage,
+                            "damage"=>$row->damage,
+                            "gpno"=>$row->gpno,
+                            "gpdate"=>date('d-m-Y',strtotime($row->gpdate)),
+                            "invoiceno"=>$row->invoiceno,
+                            "invoicedate"=>date('d-m-Y',strtotime($row->invoicedate)),
+                            "adv_freight"=>$row->adv_freight,
+                            "mobileno"=>$row->mobileno,
+                            "remark"=>$row->remark,
+                            "orderno"=>$row->orderno,
+                            "stop_builty"=>$row->stop_builty
+		    			);
+	    		}
+
+	    	}
+	    	else{
+	    		$data = array(
+	    				"Message"=>"Failed"
+		    			);
+	    	}
+    		echo json_encode($data);
+	    }
+        //Payment Freight
+        public function destination_freight_get()
+        { 
+            $id = $this->input->get("id");
+            $query=$this->db->query("select freight from m_master where company_id=".get_cookie('ae_company_id')." and type='destination' and id=$id");
+            $result=$query->result();
+            if(mysql_affected_rows()>0)
+            {
+                foreach($result as $row)
+                {
+                    $data = array(
+                            "Message"=>"Success",
+                            "freight"=>$row->freight
+                        );
+                }
+
+            }
+            else{
+                $data = array(
+                        "Message"=>"Failed"
+                        );
+            }
+            echo json_encode($data);
+        }
+        public function builty_detail_get()
+        { 
+            $id = $this->input->get("id");
+            $query=$this->db->query("select t.*,l.name lname,d.name dname from tbl_trans t inner join m_ledger l on t.ledger_id=l.id inner join m_master d on t.destination_id=d.id where t.company_id=".get_cookie('ae_company_id')." and t. vtype='dispatch' and t.buityno=$id");
+            $result=$query->result();
+            if(mysql_affected_rows()>0)
+            {
+                foreach($result as $row)
+                {
+                    $data = array(
+                            "Message"=>"Success",
+                            "sub_dealer_id"=>$row->sub_dealer_id,
+                            "lname"=>$row->lname,
+                            "dname"=>$row->dname,
+                            //"freightamt"=>$row->act_freight,
+                            "freightamt"=>$row->freight_rate,
+                            "truckno"=>$row->truckno,
+                            "qtymt"=>$row->qtymt,
+                            "destination_id"=>$row->destination_id,
+                            "stop_builty"=>$row->stop_builty,
+                            "adv_freight"=>$row->adv_freight
+                        );
+                }
+
+            }
+            else{
+                $data = array(
+                        "Message"=>"Failed"
+                        );
+            }
+            echo json_encode($data);
+        }
+        function paymentFreight_save(){
+            $tableName1='tbl_payment_freight';
+            $tableName2='tbl_payment_freight_detail';
+            $status = $this->input->post("status");
+            $fields = $this->db->field_data($tableName1);
+                foreach ($fields as $field)
+                {
+                    if($field->primary_key==1)
+                        continue;
+                    $value=$this->input->post($field->name);
+                    if(!empty($value))
+                    {
+                            $data[$field->name]=$value;
+                    }
+                }
+                $data['cdate'] = date('Y-m-d',strtotime($data['cdate']));
+                $data['company_id'] = get_cookie("ae_company_id");
+                $desc=$this->input->post("builtyno",TRUE);
+                $munit=$this->input->post("sub_dealer_id",TRUE);
+                $qty=$this->input->post("freightamt",TRUE);
+                $rate=$this->input->post("truckno",TRUE);
+                $amount=$this->input->post("qtymt",TRUE);
+                $vatper=$this->input->post("destination_id",TRUE);
+                $vatamount=$this->input->post("advamt",TRUE);
+                $amt=$this->input->post("amtpaid",TRUE);
+                if($status=="add")
+                {
+                try{
+                $this->db->insert($tableName1,$data); // insert trans1
+                $id=$this->db->insert_id();
+                $zipped = array_map(null, $desc,$munit,$qty,$rate,$amount,$vatper,$vatamount,$amt);
+                foreach($zipped as $tuple) {
+                    $data2=array(
+                        "billno"=>$id,
+                        "builtyno"=>$tuple[0],
+                        "sub_dealer_id"=>$tuple[1],
+                        "freightamt"=>$tuple[2],
+                        "truckno"=>$tuple[3],
+                        "qtymt"=>$tuple[4],
+                        "destination_id"=>$tuple[5],
+                        "advamt"=>$tuple[6],
+                        "amtpaid"=>$tuple[7]
+                        );
+                    $this->db->insert($tableName2,$data2);
+                }
+                $this->db->trans_commit();
+                echo "1";           
+                }catch(Exception $e){
+                $this->db->trans_rollback();
+                echo "2";           
+                }
+            }
+            if($status=="edit")
+                {
+                try{
+                $id=$this->input->post('sno');
+                $this->db->where('id',$id);
+                $this->db->update($tableName1,$data); // update trans 1
+                $this->db->where('billno',$id);
+                $this->db->delete($tableName2); // delete trans 2
+                $zipped = array_map(null, $desc,$munit,$qty,$rate,$amount,$vatper,$vatamount,$amt);
+                foreach($zipped as $tuple) {
+                    $data2=array(
+                        "billno"=>$id,
+                        "builtyno"=>$tuple[0],
+                        "sub_dealer_id"=>$tuple[1],
+                        "freightamt"=>$tuple[2],
+                        "truckno"=>$tuple[3],
+                        "qtymt"=>$tuple[4],
+                        "destination_id"=>$tuple[5],
+                        "advamt"=>$tuple[6],
+                        "amtpaid"=>$tuple[7]
+                        );
+                    $this->db->insert($tableName2,$data2);
+                }
+                $this->db->trans_commit();
+                echo "1";           
+                }catch(Exception $e){
+                $this->db->trans_rollback();
+                echo "2";           
+                }
+            }
+        }
+        public function paymentFreight_list(){
+            $query=$this->db->query('select t.cdate,t.id,t.pos_id,t.achead_id,a.name aname,t.payhead_id ,p.name pname,pos.name posname,t.netamt ,t.remark from tbl_payment_freight t inner join m_ledger a on t.achead_id=a.id inner join m_ledger p on t.payhead_id=p.id inner join m_master pos on t.pos_id=pos.id where t.company_id='.get_cookie('ae_company_id').' and t.cdate="'.date('Y-m-d').'"');
+            return $query->result();
+        }
+        public function paymentFreight_list_by_search(){
+            $from=date('Y-m-d',strtotime($this->input->post('from')));
+            $to=date('Y-m-d',strtotime($this->input->post('to')));
+            $ledger_id=$this->input->post('ledger_id');
+            if($ledger_id=='-'){
+            $query=$this->db->query('select t.cdate,t.id,t.pos_id,t.achead_id,a.name aname,t.payhead_id ,p.name pname,pos.name posname,t.netamt ,t.remark from tbl_payment_freight t inner join m_ledger a on t.achead_id=a.id inner join m_ledger p on t.payhead_id=p.id inner join m_master pos on t.pos_id=pos.id where t.company_id='.get_cookie('ae_company_id').' and (t.cdate between "'.$from.'" and "'.$to.'")');
+            return $query->result();
+            }else{
+            $query=$this->db->query('select t.cdate,t.id,t.pos_id,t.achead_id,a.name aname,t.payhead_id ,p.name pname,pos.name posname,t.netamt ,t.remark from tbl_payment_freight t inner join m_ledger a on t.achead_id=a.id inner join m_ledger p on t.payhead_id=p.id inner join m_master pos on t.pos_id=pos.id where t.company_id='.get_cookie('ae_company_id').' and a.id='.$ledger_id.' and (t.cdate between "'.$from.'" and "'.$to.'")');
+            return $query->result();
+            }
+        }
+        public function paymentFreight_get()
+        {
+            $id = $this->input->get("id");
+            $query=$this->db->query('select * from tbl_payment_freight where company_id='.get_cookie('ae_company_id').' and id='.$id);            
+            $result=$query->result();
+            if(mysql_affected_rows()>0)
+            {
+                foreach($result as $row)
+                {
+                    $data = array(
+                            "Message"=>"Success",
+                            "id"=>$row->id,
+                            "cdate"=>date('d-m-Y',strtotime($row->cdate)),
+                            "achead_id"=>$row->achead_id,
+                            "remark"=>$row->remark,
+                            "tds"=>$row->tds,
+                            "tdsamt"=>$row->tdsamt,
+                            "payhead_id"=>$row->payhead_id,
+                            "less_id"=>$row->less_id,
+                            "lessamt"=>$row->lessamt,
+                            "add_id"=>$row->add_id,
+                            "addamt"=>$row->addamt,
+                            "tolamt"=>$row->tolamt,
+                            "netamt"=>$row->netamt
+                        );
+                }
+
+            }
+            else{
+                $data = array(
+                        "Message"=>"Failed"
+                        );
+            }
+            echo json_encode($data);
+        }
+        public function paymentFreight_get_item(){
+            $id = $this->input->post("id");
+            $query=$this->db->query("select * from tbl_payment_freight_detail where billno=$id");
+            $result=$query->result();
+            return $result;
+        }
+        //End Payment Freight
+        //Pending Bill Rate
+        public function pending_bill_rate_list(){
+          $vtype=$this->input->get('vtype');
+          $query=$this->db->query('select t1.id,t1.cdate,t1.builtyno,p.name pname,l.name lname,d.name dname from tbl_trans1 t1 inner join m_master p on t1.pos_id=p.id inner join m_ledger l on t1.ledger_id=l.id inner join m_master d on t1.destination_id=d.id where t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'"');
+          return $query->result();
+        }
+        //End Pending Bil Rate
+}

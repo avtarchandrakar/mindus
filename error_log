@@ -1,0 +1,13 @@
+[02-Apr-2023 08:31:27 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method CI_DB_mysqli_driver::query1() in /home/ungbdhyj/public_html/application/controllers/master_general.php:5772
+Stack trace:
+#0 /home/ungbdhyj/public_html/system/core/CodeIgniter.php(359): master_general->emp_list()
+#1 /home/ungbdhyj/public_html/index.php(204): require_once('/home/ungbdhyj/...')
+#2 {main}
+  thrown in /home/ungbdhyj/public_html/application/controllers/master_general.php on line 5772
+[02-Apr-2023 08:41:50 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/ungbdhyj/public_html/application/controllers/master_general.php on line 5798
+[02-Apr-2023 08:41:53 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/ungbdhyj/public_html/application/controllers/master_general.php on line 5798
+[02-Apr-2023 08:41:55 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/ungbdhyj/public_html/application/controllers/master_general.php on line 5798
+[02-Apr-2023 08:42:04 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/ungbdhyj/public_html/application/controllers/master_general.php on line 5798
+[02-Apr-2023 08:45:42 UTC] PHP Parse error:  syntax error, unexpected '}', expecting ';' or ',' in /home/ungbdhyj/public_html/application/controllers/master_general.php on line 5799
+[02-Apr-2023 08:46:32 UTC] PHP Parse error:  syntax error, unexpected '}', expecting ';' or ',' in /home/ungbdhyj/public_html/application/controllers/master_general.php on line 5799
+[09-Apr-2023 15:14:36 UTC] PHP Parse error:  syntax error, unexpected end of file, expecting '(' in /home/ungbdhyj/public_html/application/models/transaction_model.php on line 1100

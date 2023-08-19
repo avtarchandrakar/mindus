@@ -1,0 +1,716 @@
+<?php
+	if (!defined('BASEPATH')) exit('No direct script access allowed');
+	
+	class master_general extends CI_Controller {
+	
+	    function __construct() {
+	        parent::__construct();
+	        $this->load->helper('common_helper');
+	    }
+	
+	    function area() {
+	        $this->load->view('area');
+	    }
+
+	    function SelectCompany(){
+	    	$company_id= $this->input->get('company_id');
+	    	$company_name= $this->input->get('company_name');
+	    	$pos_id= $this->input->get('pos_id');
+	    	$pos_name= $this->input->get('pos_name');
+
+    		// set cookie
+			$cookie = array(
+			'name'   => 'company_id',
+			'value'  => $company_id,
+			'expire' => time()+86500,
+			'path'   => '/',
+			'prefix' => 'ae_',
+			);
+			 
+			set_cookie($cookie);
+			
+			$cookie1 = array(
+			'name'   => 'company_name',
+			'value'  => $company_name,
+			'expire' => time()+86500,
+			'path'   => '/',
+			'prefix' => 'ae_',
+			);
+			 
+			set_cookie($cookie1);
+
+			$cookie2 = array(
+			'name'   => 'pos_id',
+			'value'  => $pos_id,
+			'expire' => time()+86500,
+			'path'   => '/',
+			'prefix' => 'ae_',
+			);
+			 
+			set_cookie($cookie2);
+			
+			$cookie3 = array(
+			'name'   => 'pos_name',
+			'value'  => $pos_name,
+			'expire' => time()+86500,
+			'path'   => '/',
+			'prefix' => 'ae_',
+			);
+			 
+			set_cookie($cookie3);
+	    }
+
+	    function SelectOtherCompany(){
+			$cookie = array(
+			    'name'   => 'company_id',
+			    'value'  => '',
+			    'expire' => '0',
+			    'prefix' => 'ae_'
+			    );
+			 
+			delete_cookie($cookie);
+
+			$cookie1 = array(
+			    'name'   => 'company_name',
+			    'value'  => '',
+			    'expire' => '0',
+			    'prefix' => 'ae_'
+			    );
+			 
+			delete_cookie($cookie1);
+
+			$cookie2 = array(
+			    'name'   => 'pos_id',
+			    'value'  => '',
+			    'expire' => '0',
+			    'prefix' => 'ae_'
+			    );
+			 
+			delete_cookie($cookie2);
+
+			$cookie3 = array(
+			    'name'   => 'pos_name',
+			    'value'  => '',
+			    'expire' => '0',
+			    'prefix' => 'ae_'
+			    );
+			 
+			delete_cookie($cookie3);
+	    }
+
+	    function loadform()
+	    {
+	    	$formname= $this->input->get('formname');
+	    	if($formname=="Dashboard")
+	    	{
+	    		return $this->load->view('dashboardview');
+	    	}
+	    	if($formname=="Ledger")
+	    	{
+	    		return $this->load->view('ledger');
+	    	}
+	    	if($formname=="Destination")
+	    	{
+	    		return $this->load->view('destination');
+	    	}
+	    	if($formname=="Source")
+	    	{
+	    		return $this->load->view('source');
+	    	}
+	    	if($formname=="District")
+	    	{
+	    		return $this->load->view('district_master');
+	    	}
+	    	if($formname=="Item")
+	    	{
+	    		return $this->load->view('item');
+	    	}
+	    	if($formname=="Item Group")
+	    	{
+	    		return $this->load->view('itemgroup');
+	    	}
+	    	if($formname=="POS Location")
+	    	{
+	    		return $this->load->view('poslocation');
+	    	}
+	    	if($formname=="Godown")
+	    	{
+	    		return $this->load->view('godown');
+	    	}
+	    	if($formname=="Dispatch")
+	    	{
+	    		$data=array(
+	    			'title'=>'Manage Dispatch',
+	    			'vtype'=>'dispatch',
+	    			'poslist'=>pos_list(),
+	    			'sourcelist'=>source_list(),
+	    			'partylist'=>ledger_list(),
+	    			'subdealerlist'=>sub_dealer_list(),
+	    			'transporterlist'=>transporter_list(),
+	    			'consigneelist'=>consignee_list(),
+	    			'destinationlist'=>destination_list(),
+	    			'itemlist'=>item_list(),
+	    			'godownlist'=>godown_list()
+	    			);
+	    		$action=$this->input->get('action');
+	    		if($action=='pending')
+	    		$data['orderno']=$this->input->get('id');
+	    		else
+                $data['orderno']=0;
+	    		return $this->load->view('dispatch',$data);
+	    	}
+	    	if($formname=="Payment Freight List")
+	    	{
+	    		return $this->load->view('payment_freight_list');
+	    	}
+	    	if($formname=="Arrival")
+	    	{
+	    		$data=array(
+	    			'title'=>'Manage Arrival',
+	    			'vtype'=>'arrival',
+	    			'poslist'=>pos_list(),
+	    			'partylist'=>ledger_list(),
+	    			'sourcelist'=>source_list(),
+	    			'transporterlist'=>transporter_list(),
+	    			'itemlist'=>item_list(),
+	    			'godownlist'=>godown_list()
+	    			);
+	    		return $this->load->view('arrival',$data);
+	    	}
+	    	if($formname=="Order")
+	    	{
+	    		$data=array(
+	    			'title'=>'Manage Order',
+	    			'vtype'=>'order',
+	    			'poslist'=>pos_list(),
+	    			'partylist'=>ledger_list(),
+	    			'subdealerlist'=>sub_dealer_list(),
+	    			'consigneelist'=>consignee_list(),
+	    			'destinationlist'=>destination_list(),
+	    			'itemlist'=>item_list()
+	    			);
+	    		return $this->load->view('order',$data);
+	    	}
+	    	if($formname=="Pending Order")
+	    	{
+	    		$data=array(
+	    			'title'=>'Manage Pending Order',
+	    			'vtype'=>'ORDER',
+	    			'poslist'=>pos_list(),
+	    			'partylist'=>ledger_list(),
+	    			'subdealerlist'=>sub_dealer_list(),
+	    			'consigneelist'=>consignee_list(),
+	    			'destinationlist'=>destination_list(),
+	    			'itemlist'=>item_list()
+	    			);
+	    		return $this->load->view('pending_order',$data);
+	    	}
+	    	if($formname=="Payment Freight")
+	    	{
+	    		$action=$this->input->get('action');
+	    		if($action=='edit'){
+	    		$data=array(
+	    			'title'=>'Edit Payment Freight',
+	    			'status'=>'edit',
+	    			'id'=>$this->input->get('id'),
+	    			'vtype'=>'freight',
+	    			'poslist'=>pos_list(),
+	    			'cash_in_hand_list'=>cash_in_hand_list(),
+	    			'indirect_expenses_list'=>indirect_expenses_list()
+	    			);
+	    	   }else{
+	    	   $data=array(
+	    			'title'=>'Add Payment Freight',
+	    			'status'=>'add',
+	    			'id'=>'',
+	    			'vtype'=>'freight',
+	    			'poslist'=>pos_list(),
+	    			'cash_in_hand_list'=>cash_in_hand_list(),
+	    			'indirect_expenses_list'=>indirect_expenses_list()
+	    			);
+	    	   }
+	    		return $this->load->view('payment_freight',$data);
+	    	}
+	    	if($formname=="Dispatch List")
+	    	{
+	    		$data=array(
+	    			'title'=>'Dispatch List',
+	    			'vtype'=>'dispatch',
+	    			'poslist'=>pos_list(),
+	    			'partylist'=>ledger_list(),
+	    			'subdealerlist'=>sub_dealer_list(),
+	    			'transporterlist'=>transporter_list(),
+	    			'consigneelist'=>consignee_list(),
+	    			'destinationlist'=>destination_list(),
+	    			'itemlist'=>item_list(),
+	    			'godownlist'=>godown_list()
+	    			);
+	    		return $this->load->view('dispatch_list',$data);
+	    	}
+	    	if($formname=="Arrival List")
+	    	{
+	    		$data=array(
+	    			'title'=>'Arrival List',
+	    			'vtype'=>'ARRIVAL',
+	    			'sourcelist'=>source_list(),
+	    			'partylist'=>ledger_list(),
+	    			'transporterlist'=>transporter_list(),
+	    			'itemlist'=>item_list(),
+	    			'godownlist'=>godown_list()
+	    			);
+	    		return $this->load->view('arrival_list',$data);
+	    	}
+	    	if($formname=="Order List")
+	    	{
+	    		$data=array(
+	    			'title'=>'Order List',
+	    			'vtype'=>'ORDER',
+	    			'partylist'=>ledger_list(),
+	    			'itemlist'=>item_list()
+	    			);
+	    		return $this->load->view('order_list',$data);
+	    	}
+	     }
+	    function area_list()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$result=$this->master_general_model->area_list();
+	    	if(mysql_affected_rows()>0)
+	    	{
+		        echo '<table class="table table-striped table-bordered table-hover">';
+		        echo '    <thead>';
+		        echo '        <tr>';
+		        echo '            <th>Name</th>';
+		        echo '            <th   style="width:130px">Action</th>';
+		        echo '        </tr>';
+		        echo '    </thead>';
+		        echo '    <tbody>';
+
+		        foreach($result as $row)
+		        {
+	                echo '<tr class="">';
+	                echo '    <td>' . $row->area_name . '</td>';
+	                echo '    <td>';
+					echo '	    <div class="hidden-sm hidden-xs btn-group">';
+					echo '		    <button class="btn btn-xs btn-info" title="Edit" onclick="GetRecord(' . $row->area_id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-pencil bigger-120"></i>';
+					echo '		    </button>';
+
+					echo '		    <button class="btn btn-xs btn-danger" title="Delete" onclick="DeleteRecord(' . $row->area_id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+					echo '		    </button>';
+					echo '	    </div>';
+	                echo '    </td>';
+	                echo '</tr>';
+		        }
+	    	}
+	    }
+	    function area_save()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->area_save();
+	    }
+	    function area_get()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->area_get();
+	    }
+
+
+//LEDGER STARTS
+	    function ledger_save()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->ledger_save();
+	    }
+	    function ledger_list()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$result=$this->master_general_model->ledger_list();
+	    	if(mysql_affected_rows()>0)
+	    	{
+		        echo '<table class="table table-striped table-bordered table-hover">';
+		        echo '    <thead>';
+		        echo '        <tr>';
+		        echo '            <th>Name</th>';
+		        echo '            <th>Group</th>';
+		        echo '            <th>Op.Balance</th>';
+		        echo '            <th>Mobile No.</th>';
+		        echo '            <th   style="width:130px">Action</th>';
+		        echo '        </tr>';
+		        echo '    </thead>';
+		        echo '    <tbody>';
+
+		        foreach($result as $row)
+		        {
+	                echo '<tr class="">';
+	                echo '    <td>' . $row->name . '</td>';
+	                echo '    <td>' . $row->group_name . '</td>';
+	                echo '    <td>' . $row->opbalance . '</td>';
+	                echo '    <td>' . $row->mobileno . '</td>';
+	                echo '    <td>';
+					echo '	    <div class="hidden-sm hidden-xs btn-group">';
+					echo '		    <button class="btn btn-xs btn-info" title="Edit" onclick="GetRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-pencil bigger-120"></i>';
+					echo '		    </button>';
+
+					echo '		    <button class="btn btn-xs btn-danger" title="Delete" onclick="DeleteRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+					echo '		    </button>';
+					echo '	    </div>';
+	                echo '    </td>';
+	                echo '</tr>';
+		        }
+	    	}
+	    }
+	    function ledger_get()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->ledger_get();
+	    }
+
+//LEDGER ENDS
+
+
+
+
+
+//DESTINATION STARTS
+	    function destination_save()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->destination_save();
+	    }
+	    function destination_list()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$result=$this->master_general_model->destination_list();
+	    	if(mysql_affected_rows()>0)
+	    	{
+		        echo '<table class="table table-striped table-bordered table-hover">';
+		        echo '    <thead>';
+		        echo '        <tr>';
+		        echo '            <th>Name</th>';
+		        echo '            <th>Freight(PMT)</th>';
+		        echo '            <th   style="width:130px">Action</th>';
+		        echo '        </tr>';
+		        echo '    </thead>';
+		        echo '    <tbody>';
+
+		        foreach($result as $row)
+		        {
+	                echo '<tr class="">';
+	                echo '    <td>' . $row->name . '</td>';
+	                echo '    <td>' . $row->freight . '</td>';
+	                echo '    <td>';
+					echo '	    <div class="hidden-sm hidden-xs btn-group">';
+					echo '		    <button class="btn btn-xs btn-info" title="Edit" onclick="GetRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-pencil bigger-120"></i>';
+					echo '		    </button>';
+
+					echo '		    <button class="btn btn-xs btn-danger" title="Delete" onclick="DeleteRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+					echo '		    </button>';
+					echo '	    </div>';
+	                echo '    </td>';
+	                echo '</tr>';
+		        }
+	    	}
+	    }
+	    function destination_get()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->destination_get();
+	    }
+
+//DESTINATION ENDS
+
+
+
+
+//SOURCE STARTS
+	    function source_save()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->source_save();
+	    }
+	    function source_list()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$result=$this->master_general_model->source_list();
+	    	if(mysql_affected_rows()>0)
+	    	{
+		        echo '<table class="table table-striped table-bordered table-hover">';
+		        echo '    <thead>';
+		        echo '        <tr>';
+		        echo '            <th>Name</th>';
+		        echo '            <th>Freight</th>';
+		        echo '            <th   style="width:130px">Action</th>';
+		        echo '        </tr>';
+		        echo '    </thead>';
+		        echo '    <tbody>';
+
+		        foreach($result as $row)
+		        {
+	                echo '<tr class="">';
+	                echo '    <td>' . $row->name . '</td>';
+	                echo '    <td>' . $row->freight . '</td>';
+	                echo '    <td>';
+					echo '	    <div class="hidden-sm hidden-xs btn-group">';
+					echo '		    <button class="btn btn-xs btn-info" title="Edit" onclick="GetRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-pencil bigger-120"></i>';
+					echo '		    </button>';
+
+					echo '		    <button class="btn btn-xs btn-danger" title="Delete" onclick="DeleteRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+					echo '		    </button>';
+					echo '	    </div>';
+	                echo '    </td>';
+	                echo '</tr>';
+		        }
+	    	}
+	    }
+	    function source_get()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->source_get();
+	    }
+
+//SOURCE ENDS
+
+
+
+
+
+
+//ITEM GROUP STARTS
+	    function itemgroup_save()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->itemgroup_save();
+	    }
+	    function itemgroup_list()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$result=$this->master_general_model->itemgroup_list();
+	    	if(mysql_affected_rows()>0)
+	    	{
+		        echo '<table class="table table-striped table-bordered table-hover">';
+		        echo '    <thead>';
+		        echo '        <tr>';
+		        echo '            <th>Name</th>';
+		        echo '            <th   style="width:130px">Action</th>';
+		        echo '        </tr>';
+		        echo '    </thead>';
+		        echo '    <tbody>';
+
+		        foreach($result as $row)
+		        {
+	                echo '<tr class="">';
+	                echo '    <td>' . $row->name . '</td>';
+	                echo '    <td>';
+					echo '	    <div class="hidden-sm hidden-xs btn-group">';
+					echo '		    <button class="btn btn-xs btn-info" title="Edit" onclick="GetRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-pencil bigger-120"></i>';
+					echo '		    </button>';
+
+					echo '		    <button class="btn btn-xs btn-danger" title="Delete" onclick="DeleteRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+					echo '		    </button>';
+					echo '	    </div>';
+	                echo '    </td>';
+	                echo '</tr>';
+		        }
+	    	}
+	    }
+	    function itemgroup_get()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->itemgroup_get();
+	    }
+
+//ITEM GROUP ENDS
+
+
+
+
+
+
+//ITEM STARTS
+	    function item_save()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->item_save();
+	    }
+	    function item_list()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$result=$this->master_general_model->item_list();
+	    	if(mysql_affected_rows()>0)
+	    	{
+		        echo '<table class="table table-striped table-bordered table-hover">';
+		        echo '    <thead>';
+		        echo '        <tr>';
+		        echo '            <th>Name</th>';
+		        echo '            <th>Group</th>';
+		        echo '            <th>Company</th>';
+		        echo '            <th>Desp.Type</th>';
+		        echo '            <th   style="width:130px">Action</th>';
+		        echo '        </tr>';
+		        echo '    </thead>';
+		        echo '    <tbody>';
+
+		        foreach($result as $row)
+		        {
+	                echo '<tr class="">';
+	                echo '    <td>' . $row->name . '</td>';
+	                echo '    <td>' . $row->group_name . '</td>';
+	                echo '    <td>' . $row->ledger_name . '</td>';
+	                echo '    <td>' . $row->desptype . '</td>';
+	                echo '    <td>';
+					echo '	    <div class="hidden-sm hidden-xs btn-group">';
+					echo '		    <button class="btn btn-xs btn-info" title="Edit" onclick="GetRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-pencil bigger-120"></i>';
+					echo '		    </button>';
+
+					echo '		    <button class="btn btn-xs btn-danger" title="Delete" onclick="DeleteRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+					echo '		    </button>';
+					echo '	    </div>';
+	                echo '    </td>';
+	                echo '</tr>';
+		        }
+	    	}
+	    }
+	    function item_get()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->item_get();
+	    }
+//ITEM ENDS
+	    //START POS LOCATION
+	    function pos_list()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$result=$this->master_general_model->pos_list();
+	    	if(mysql_affected_rows()>0)
+	    	{
+		        echo '<table class="table table-striped table-bordered table-hover">';
+		        echo '    <thead>';
+		        echo '        <tr>';
+		        echo '            <th>Name</th>';
+		        echo '            <th   style="width:130px">Action</th>';
+		        echo '        </tr>';
+		        echo '    </thead>';
+		        echo '    <tbody>';
+
+		        foreach($result as $row)
+		        {
+	                echo '<tr class="">';
+	                echo '    <td>' . $row->name . '</td>';
+	                echo '    <td>';
+					echo '	    <div class="hidden-sm hidden-xs btn-group">';
+					echo '		    <button class="btn btn-xs btn-info" title="Edit" onclick="GetRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-pencil bigger-120"></i>';
+					echo '		    </button>';
+
+					echo '		    <button class="btn btn-xs btn-danger" title="Delete" onclick="DeleteRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+					echo '		    </button>';
+					echo '	    </div>';
+	                echo '    </td>';
+	                echo '</tr>';
+		        }
+	    	}
+	    }
+	    function pos_get()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->pos_get();
+	    }
+	    //END POS LOCATION
+	    //START GODOWN
+	    function godown_list()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$result=$this->master_general_model->godown_list();
+	    	if(mysql_affected_rows()>0)
+	    	{
+		        echo '<table class="table table-striped table-bordered table-hover">';
+		        echo '    <thead>';
+		        echo '        <tr>';
+		        echo '            <th>Name</th>';
+		        echo '            <th   style="width:130px">Action</th>';
+		        echo '        </tr>';
+		        echo '    </thead>';
+		        echo '    <tbody>';
+
+		        foreach($result as $row)
+		        {
+	                echo '<tr class="">';
+	                echo '    <td>' . $row->name . '</td>';
+	                echo '    <td>';
+					echo '	    <div class="hidden-sm hidden-xs btn-group">';
+					echo '		    <button class="btn btn-xs btn-info" title="Edit" onclick="GetRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-pencil bigger-120"></i>';
+					echo '		    </button>';
+
+					echo '		    <button class="btn btn-xs btn-danger" title="Delete" onclick="DeleteRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+					echo '		    </button>';
+					echo '	    </div>';
+	                echo '    </td>';
+	                echo '</tr>';
+		        }
+	    	}
+	    }
+	    function godown_get()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->godown_get();
+	    }
+	    //END GODOWN
+	    //DISTRICT MASTER
+	    function district_list()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$result=$this->master_general_model->district_list();
+	    	if(mysql_affected_rows()>0)
+	    	{
+		        echo '<table class="table table-striped table-bordered table-hover">';
+		        echo '    <thead>';
+		        echo '        <tr>';
+		        echo '            <th>Name</th>';
+		        echo '            <th   style="width:130px">Action</th>';
+		        echo '        </tr>';
+		        echo '    </thead>';
+		        echo '    <tbody>';
+
+		        foreach($result as $row)
+		        {
+	                echo '<tr class="">';
+	                echo '    <td>' . $row->name . '</td>';
+	                echo '    <td>';
+					echo '	    <div class="hidden-sm hidden-xs btn-group">';
+					echo '		    <button class="btn btn-xs btn-info" title="Edit" onclick="GetRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-pencil bigger-120"></i>';
+					echo '		    </button>';
+
+					echo '		    <button class="btn btn-xs btn-danger" title="Delete" onclick="DeleteRecord(' . $row->id .');return false;">';
+					echo '			    <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+					echo '		    </button>';
+					echo '	    </div>';
+	                echo '    </td>';
+	                echo '</tr>';
+		        }
+	    	}
+	    }
+	    function district_get()
+	    {
+	    	$this->load->model('master_general_model');
+	    	$this->master_general_model->district_get();
+	    }
+	    //END DISTRICT MASTER
+
+	}
+
