@@ -1207,6 +1207,84 @@ class formController extends CI_Controller {
           }
           $this->load->view('work_order_form',$data);
     }
+
+    function q3format_form(){
+          $user_id=get_cookie('ae_user_id');
+          $query=$this->db->query('select p_entry,p_modify,p_delete,p_list,p_bdate from tbl_user_permission where permission_id='.$user_id.' and form_id="Sales"');
+          //echo $this->db->last_query();die;
+            if($query->num_rows()>0)    
+            {          
+                foreach($query->result() as $row)
+                {
+                  $p_entry=$row->p_entry;
+                  $p_modify=$row->p_modify;
+                  $p_delete=$row->p_delete;
+                  $p_list=$row->p_list;
+                  $p_bdate=$row->p_bdate;
+                }
+          }
+
+          $back_date=get_cookie('ae_back_date');
+          $action=$this->input->get('action');
+          if($action=="edit")
+          {
+            $q=$this->input->get('q');
+            $data=array(
+              'title'=>'Q3 format Modify',
+              'vtype'=>'quatation',
+              'poslist'=>pos_list(),
+              'status'=>'edit',
+              'id'=>$this->input->get('id'),
+              'orderno'=>0,
+              'sourcelist'=>source_list(),
+              'partylist'=>ledger_list(),
+              'q'=>$q,
+              'subdealerlist'=>sub_dealer_list(),
+              'transporterlist'=>transporter_list(),
+              'consigneelist'=>consignee_list(),
+              'destinationlist'=>destination_list(),
+              'categorylist'=>category_list(),
+              'itemlist'=>item_list(),
+              'godownlist'=>godown_list(),
+              'back_date'=>$back_date,
+              'p_entry'=>$p_entry,
+              'p_modify'=>$p_modify,
+              'p_delete'=>$p_delete,
+              'p_list'=>$p_list,
+              'p_bdate'=>$p_bdate
+              );
+          }
+          else
+          {
+            $data=array(
+              'title'=>'Q3 format',
+              'vtype'=>'quatation',
+              'orderno'=>0,
+              'status'=>'add',
+              'id'=>0,
+              'poslist'=>pos_list(),
+              'sourcelist'=>source_list(),
+              'q'=>0,
+              'partylist'=>ledger_list(),
+              'subdealerlist'=>sub_dealer_list(),
+              'transporterlist'=>transporter_list(),
+              'consigneelist'=>consignee_list(),
+              'destinationlist'=>destination_list(),
+              'categorylist'=>category_list(),
+              'itemlist'=>item_list(),
+              'godownlist'=>godown_list(),
+              'back_date'=>$back_date,
+              'p_entry'=>$p_entry,
+              'p_modify'=>$p_modify,
+              'p_delete'=>$p_delete,
+              'p_list'=>$p_list,
+              'p_bdate'=>$p_bdate
+              );
+          }
+          $this->load->view('q3format_form',$data);
+    }
+
+    
     function receipt_form(){
           $user_id=get_cookie('ae_user_id');
           $query=$this->db->query('select p_entry,p_modify,p_delete,p_list,p_bdate from tbl_user_permission where permission_id='.$user_id.' and form_id="Receipt"');

@@ -16,7 +16,7 @@
 </head>
 <body style="padding-left:50px;padding-right:50px;padding-bottom:50px;">
     <?php 
-      $query=$this->db->query('select t.cdate,l.name as lname,t.ledger_mobno,t.jobcard,t.id,t.tol_freight,t.builtyno,t.purchase_no,t.loading_person_name,t.remark,t.lr_freight,t.paid_build,t.checked_by,t.dispatch_through,t.ref_details,t.sub_details,t.pakking_forwerding,t.delivery_period,t.payment_terms,t.warranty_guarantee,t.ld_clause,t.designation,t.file_path,t.prepared_name from tbl_trans1 t inner join m_ledger l on t.ledger_id=l.id  where t.company_id='.get_cookie('ae_company_id').' and t.id='.$id);
+      $query=$this->db->query('select t.cdate,t.quatation_no,l.name as lname,t.ledger_mobno,t.jobcard,t.id,t.tol_freight,t.builtyno,t.purchase_no,t.loading_person_name,t.remark,t.lr_freight,t.paid_build,t.checked_by,t.dispatch_through,t.ref_details,t.sub_details,t.pakking_forwerding,t.delivery_period,t.payment_terms,t.warranty_guarantee,t.ld_clause,t.designation,t.file_path,t.prepared_name from tbl_trans1 t inner join m_ledger l on t.ledger_id=l.id  where t.company_id='.get_cookie('ae_company_id').' and t.id='.$id);
       $partyname="";
       $cdate="";
       $tol_freight=0;
@@ -40,6 +40,8 @@
       $file_path='';
       $designation='';
       $prepared_name='';
+      $quatation_no='';
+
 
       foreach($query->result() as $row)
       {
@@ -67,6 +69,8 @@
         $file_path=$row->file_path;
         $designation=$row->designation;
         $prepared_name=$row->prepared_name;
+        $quatation_no=$row->quatation_no;
+
 
 
       }
@@ -94,7 +98,7 @@
                     &nbsp;
                   </td>
                   <td style="width:33%;text-align:center;font-size:15px;font-weight:bold;">
-                    WORK ORDER
+                    Quotation
                   </td>
                   <td style="width:33%;text-align:right;font-size:13px;">
                     &nbsp;
@@ -125,7 +129,7 @@
                     Supplier Name : <? echo $partyname;?>
                   </td>
                   <td style="width:50%;text-align:right;font-size:13px;">
-                    Jobcard : <? echo $jobcard;?>
+                    Quotation : <? echo $quatation_no;?>
                   </td>
                 </tr>
                 <tr>
@@ -133,7 +137,7 @@
                     Ref: <? echo $ref_details;?>
                   </td>
                   <td style="width:50%;text-align:right;font-size:13px;">
-                    Purchase NO. : <? echo $purchase_no;?>
+                    <!-- Purchase NO. : <? echo $purchase_no;?> -->
                   </td>
                 </tr>
                 <tr>

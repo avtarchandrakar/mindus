@@ -2979,6 +2979,50 @@
 	    		return $this->load->view('work_order',$data);
 	    	}
 
+	    	if($formname=="Q3 format")
+	    	{
+	    		$user_id=get_cookie('ae_user_id');
+	    		$query=$this->db->query('select p_entry,p_modify,p_delete,p_list,p_bdate from tbl_user_permission where permission_id='.$user_id.' and form_id="'.$formname.'"');
+	    		//echo $this->db->last_query();die;
+		        if($query->num_rows()>0)    
+		        {          
+		          	foreach($query->result() as $row)
+		          	{
+		          		$p_entry=$row->p_entry;
+		          		$p_modify=$row->p_modify;
+		          		$p_delete=$row->p_delete;
+		          		$p_list=$row->p_list;
+		          		$p_bdate=$row->p_bdate;
+		            }
+		    	}
+		    	$back_date=get_cookie('ae_back_date');
+	    		$data=array(
+	    			'title'=>'Q3 format',
+	    			'vtype'=>'quatation',
+	    			'poslist'=>pos_list(),
+	    			'sourcelist'=>source_list(),
+	    			'partylist'=>ledger_list(),
+	    			'subdealerlist'=>sub_dealer_list(),
+	    			'transporterlist'=>transporter_list(),
+	    			'consigneelist'=>consignee_list(),
+	    			'destinationlist'=>destination_list(),
+	    			'categorylist'=>category_list(),
+	    			'itemlist'=>item_list(),
+	    			'godownlist'=>godown_list(),
+	    			'p_entry'=>$p_entry,
+		    		'p_modify'=>$p_modify,
+		    		'p_delete'=>$p_delete,
+		    		'p_list'=>$p_list,
+		    		'p_bdate'=>$p_bdate
+	    			);
+	    		$action=$this->input->get('action');
+	    		if($action=='pending')
+	    		$data['orderno']=$this->input->get('id');
+	    		else
+                $data['orderno']=0;
+	    		return $this->load->view('q3format',$data);
+	    	}
+
 	    	if($formname=="Purchase Return")
 	    	{
 	    		$user_id=get_cookie('ae_user_id');

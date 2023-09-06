@@ -90,7 +90,7 @@
 														<span class="block input-icon input-icon-right">
 															<select tabindex="1" id="session" name="session" class="form-control">
 																<option value="ungbdhyj_202223">2022-2023</option>
-																<option value="ungbdhyj_202324">2023-2024</option>
+																<!-- <option value="ungbdhyj_202324">2023-2024</option> -->
 															</select>
 														</span>
 													</label>

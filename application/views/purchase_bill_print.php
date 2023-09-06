@@ -149,7 +149,7 @@
           <tr>
             <td style="width:100%;">
               <table style="width:100%;" cellpadding="0" cellspacing="0">
-                <thead>
+               
                 <tr>
                   <th style="border-top:1px solid black;border-bottom:1px solid black;width:5%;text-align:center;font-size:13px;">
                     Sr. No.
@@ -173,7 +173,6 @@
                     Total Amount (In Rs.)
                   </th>
                 </tr>
-                </thead>
                 <? 
                   $query=$this->db->query('select i.name as item, t.qtymt,m.vat pkg,t.rate,t.freight,t.percent,t.discount,t.remark,t.unit from tbl_trans2 t inner join m_item i on t.itemcode=i.id inner join m_master m on i.group_id=m.id  where  t.billno='.$id  . ' order by t.id');
                   $totqty=0;

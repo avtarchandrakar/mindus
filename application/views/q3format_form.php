@@ -85,13 +85,13 @@
 				<input tabindex="2" type="text"  name="lname" id="lname" autocomplete="off" placeholder="Ledger Name" class="ledgerinfo col-xs-10 col-sm-12" list="0" onkeyup="GetParty();return false;" /><input type="hidden" id="ledger_id" name="ledger_id">
 			</div>
 
-			<label class="col-sm-2 control-label no-padding-right" for="form-field-1" > Jobcard No</label>
+			<label class="col-sm-2 control-label no-padding-right hidden" for="form-field-1" > Jobcard No</label>
 			
-			<div class="col-sm-3" >
+			<div class="col-sm-3 hidden" >
 					<input type="text" tabindex="3" name="jobcard" id="jobcard" class="col-xs-10 col-sm-12" placeholder="Jobcard No" data-rule-required="true"/>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group hidden">
 			<div class="col-sm-5" id="cust_details"></div>
 
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1" > Work Order No.</label>
@@ -533,7 +533,7 @@
 	                var data = $("#userform").serialize();
 	                $('.loading').show();
 	                $('button').prop('disabled','disabled');                  
-                    var target="<?php echo base_url();?>index.php/transactionController/work_order_save/tbl_trans1/id";
+                    var target="<?php echo base_url();?>index.php/transactionController/q3format_save/tbl_trans1/id";
                     $('#userform').ajaxSubmit({url:target,
                             type: "POST",
                             data: data,
@@ -552,7 +552,7 @@
 									var r = confirm("Do You Want to Print");
 									if(r==true)
 									{
-						                window.open("<?php echo base_url();?>index.php/transactionController/work_order_print/"+html,'_blank');
+						                window.open("<?php echo base_url();?>index.php/transactionController/q3format_print/"+html,'_blank');
 									}	
 		                            if (status.val() == "edit") {
 										$('#modal_form').modal('hide');

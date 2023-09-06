@@ -608,6 +608,14 @@ function sales_return_list(){
       $this->load->view('wo_print', $data);
     }
 
+    function q3format_print($id){
+      $data=array(
+      'id'=>$id
+      );
+      $this->load->helper(array('dompdfA4', 'file'));
+      $this->load->view('q3format_print', $data);
+    }
+
     function voucher_print($id){
       $data=array(
       'id'=>$id
@@ -1384,6 +1392,75 @@ function sales_return_list(){
         }
     }
 
+
+    function q3format_save($tableName,$id)
+    {
+        $opt=$this->input->post('status');
+        $this->load->model('transaction_model');
+        $file_ext='';
+        $rename_file_name='';
+        
+        $i=1;
+        $path="./uploads";
+        if(is_dir($path)==false)
+        {
+            $structure = $path;
+    
+            if(!mkdir($structure, 0, true)) {
+    
+            }
+        }
+        try{
+            if(!empty($_FILES['photo']["name"]))
+            {
+                $temp_file_name = $_FILES['photo']['name'];
+                $r=date('d-m-Y-H-i-s');
+                $file_ext = substr(strrchr($temp_file_name,'.'),1);
+                $file_name=preg_replace('/[\s_-]/', '', strchr($temp_file_name,'.',true).$r.strchr($temp_file_name,'.'));
+                $config['upload_path'] = $path;
+                $config['allowed_types'] = 'jpeg|jpg|png|pdf';
+                $config['file_name'] = $file_name;
+    
+                $this->load->library('upload');
+                $this->upload->initialize($config);
+                $path=$path."/".$file_name;
+                if (!$this->upload->do_upload('photo')) // put the name tag value inside i.e UnderImage
+                {
+                    $error = array('error' => $this->upload->display_errors());
+        
+                    foreach ($error as $d){
+                        echo $d;
+                    }
+                }
+                else
+                {
+                    $data = $this->upload->data();
+                    $full_path=base_url().'uploads/'.$data['file_name'];
+                    $status = $this->transaction_model->q3format_save($tableName, null, $id,$full_path,$data['file_name']);
+                }
+            }
+            else if(isset($_POST['filepath']))
+            { // For Empty Photo or Update
+        $full_path=$_POST['filepath'];
+        $fullname=$_POST['filename'];
+        $status = $this->transaction_model->q3format_save($tableName, null, $id,$full_path,$fullname);
+        echo $status;
+      }
+      else
+      {
+        $full_path=base_url().'uploads/'.'unknown.jpg';
+        $fullname='unknown.jpg';
+        $status = $this->transaction_model->q3format_save($tableName, null, $id,$full_path,$fullname);
+        echo $status;
+      }
+           
+        }
+        catch(Exception $e){
+            $this->db->trans_rollback();
+            echo "2";  
+        }
+    }
+
     //  function sales_save(){
     //   $this->load->model('transaction_model');
     //   $this->transaction_model->sales_save();
@@ -1512,7 +1589,7 @@ function sales_return_list(){
       $data=array(
       'id'=>$id
       );
-      $html = $this->load->view('work_order_print', $data, true);
+      $html = $this->load->view('wo_print', $data, true);
       $this->load->helper('file');
         require_once 'vendor/autoload.php';
         $pdf = new DOMPDF();
@@ -1789,7 +1866,7 @@ function sales_return_list(){
       $data=array(
       'id'=>$id
       );
-      $html = $this->load->view('work_order_print', $data, true);
+      $html = $this->load->view('wo_print', $data, true);
       $this->load->helper('file');
       $filePath = FCPATH."/whatsapp/";
       require_once 'vendor/autoload.php';
@@ -2275,7 +2352,7 @@ function sales_return_list(){
       $data=array(
       'id'=>$id
       );
-      $html = $this->load->view('work_order_print', $data, true);
+      $html = $this->load->view('wo_print', $data, true);
       $this->load->helper('file');
       $filePath = FCPATH."/whatsapp/";
       require_once 'vendor/autoload.php';
@@ -2565,6 +2642,124 @@ function purchase_list(){
     }
 
 
+    function wo_list(){
+      $this->load->model('transaction_model');
+      $result=$this->transaction_model->wo_list();
+      if(count($result)>0)
+      {
+          echo '<table id="TblList" class="table table-striped table-bordered table-hover">';
+          echo '    <thead>';
+          echo '        <tr>';
+          // echo '            <th>Category</th>';
+          echo '            <th>Date</th>';
+          echo '            <th>No</th>';
+          // echo '            <th>POS</th>';
+          echo '            <th>PartyName</th>';
+          // echo '            <th>Items</th>';
+          echo '            <th>Document</th>';
+          echo '            <th   style="width:130px">Action</th>';
+          echo '        </tr>';
+          echo '    </thead>';
+          echo '    <tbody>';
+
+          foreach($result as $row)
+          {
+                echo '<tr class="">';
+                // echo '    <td>' . $row->catname . '</td>';
+                echo '    <td>' . date('d-m-Y',strtotime($row->cdate)) . '</td>';
+                echo '    <td>' . $row->builtyno . '</td>';
+                echo '    <td>' . $row->lname . '</td>';
+                // echo '    <td>' . $row->items . '</td>';
+                // echo '    <td>' . $row->dname . '</td>';    
+                if ($row->file_path!='') 
+              {                
+                echo '    <td> <a href="' . $row->file_path . '" target="_blank">View</a></td>';    
+              }
+              else
+              {
+                echo '    <td> No Docs</td>';   
+              }                    
+                echo '    <td>';
+        echo '      <div class="   btn-group">';  
+        echo '        <a class="btn btn-xs btn-info btn_modify" title="view" onclick="GetRecord(' . $row->id .');return false;">';
+        echo '          <i class="ace-icon fa fa-pencil bigger-120"></i>';
+        echo '        </a>';
+        echo '        <button class="btn btn-xs btn-info" title="Print" onclick="GetReport(' . $row->id .');return false;">';
+        echo '          <i class="ace-icon fa fa-print bigger-120"></i>';
+        echo '        </button>';
+        echo '        <button class="btn btn-xs btn-danger btn-print" title="Download" onclick="GetDownload(' . $row->id .');return false;">';
+        echo '          <i class="ace-icon fa fa-download bigger-120"></i>';
+        echo '        </button>';
+        echo '        <button class="btn btn-xs btn-info btn-print" title="Whatsapp" onclick="GetWhatsapp(' . $row->id .',' . $row->ledger_id .');return false;">';
+        echo '          <i class="ace-icon fa fa-send bigger-120"></i>';
+        echo '        </button>';
+        echo '        <button class="btn btn-xs btn-danger btn-print" title="Mail" onclick="GetMail(' . $row->id .',' . $row->ledger_id .');return false;">';
+        echo '          <i class="ace-icon fa fa-envelope bigger-120"></i>';
+        echo '        </button>';
+        echo '      </div>';
+                echo '    </td>';
+                echo '</tr>';
+          }
+      }
+    }
+
+
+     function q3format_list(){
+      $this->load->model('transaction_model');
+      $result=$this->transaction_model->q3format_list();
+      if(count($result)>0)
+      {
+          echo '<table id="TblList" class="table table-striped table-bordered table-hover">';
+          echo '    <thead>';
+          echo '        <tr>';
+          echo '            <th>Date</th>';
+          echo '            <th>No</th>';
+          echo '            <th>SNo</th>';
+          echo '            <th>PartyName</th>';
+          echo '            <th>Document</th>';
+          echo '            <th   style="width:130px">Action</th>';
+          echo '        </tr>';
+          echo '    </thead>';
+          echo '    <tbody>';
+
+          foreach($result as $row)
+          {
+                echo '<tr class="">';
+                echo '    <td>' . date('d-m-Y',strtotime($row->cdate)) . '</td>';
+                echo '    <td>' . $row->builtyno . '</td>';
+                echo '    <td>' . $row->quatation_no . '</td>';
+                echo '    <td>' . $row->lname . '</td>'; 
+                if ($row->file_path!='') 
+              {                
+                echo '    <td> <a href="' . $row->file_path . '" target="_blank">View</a></td>';    
+              }
+              else
+              {
+                echo '    <td> No Docs</td>';   
+              }                    
+                echo '    <td>';
+        echo '      <div class="   btn-group">';  
+        echo '        <a class="btn btn-xs btn-info btn_modify" title="view" onclick="GetRecord(' . $row->id .');return false;">';
+        echo '          <i class="ace-icon fa fa-pencil bigger-120"></i>';
+        echo '        </a>';
+        echo '        <button class="btn btn-xs btn-info" title="Print" onclick="GetReport(' . $row->id .');return false;">';
+        echo '          <i class="ace-icon fa fa-print bigger-120"></i>';
+        echo '        </button>';
+        // echo '        <button class="btn btn-xs btn-danger btn-print" title="Download" onclick="GetDownload(' . $row->id .');return false;">';
+        // echo '          <i class="ace-icon fa fa-download bigger-120"></i>';
+        // echo '        </button>';
+        // echo '        <button class="btn btn-xs btn-info btn-print" title="Whatsapp" onclick="GetWhatsapp(' . $row->id .',' . $row->ledger_id .');return false;">';
+        // echo '          <i class="ace-icon fa fa-send bigger-120"></i>';
+        // echo '        </button>';
+        // echo '        <button class="btn btn-xs btn-danger btn-print" title="Mail" onclick="GetMail(' . $row->id .',' . $row->ledger_id .');return false;">';
+        // echo '          <i class="ace-icon fa fa-envelope bigger-120"></i>';
+        // echo '        </button>';
+        echo '      </div>';
+                echo '    </td>';
+                echo '</tr>';
+          }
+      }
+    }
 
     function voucher_list(){
       $this->load->model('transaction_model');
@@ -3182,6 +3377,11 @@ function purchase_return_list(){
 
         }
 
+
+
+
+
+
         function sales_get_item(){
            $this->load->model('transaction_model');
            $result=$this->transaction_model->sales_get_item();
@@ -3211,6 +3411,51 @@ function purchase_return_list(){
                   </td>';
 
                 
+                
+                echo ' <td><input value="'.$row->remark.'"  type="text" name="item_remark[]" id="txt_remark" class="txt_cls" />';
+                echo ' <td><input value="'.$row->moc.'" tabindex="'.$ti++.'" type="text" name="moc[]" id="txt_unit" class="txt_cls" /></td>';
+                echo ' <td><input value="'.$row->qtymt.'" tabindex="'.$ti++.'" type="text" name="qtymt[]" id="txt_qtymt" class="qtymt txt_cls" onblur="GetQtyBag(this);return false;"/></td>';
+
+                echo '<input value="'.$row->unit.'" type="hidden" name="unit[]" id="txt_unit" class="txt_cls" />';
+                
+                echo '<input value="'.$row->rate.'" type="hidden" name="rate[]" id="txt_rate" class="txt_cls" onblur="CalcAmount(this);return false;"/>';
+                echo '<input value="'.$row->discount.'"  type="hidden" name="discountrs[]" id="txt_discountrs" class="txt_cls" onblur="CalcAmount(this);return false;"/>';
+                 echo '<input value="'.$row->percent.'"  type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/>';
+                echo ' <input value="'.$row->freight.'" type="hidden" name="freight[]" id="txt_freight" class="freight txt_cls" onblur="TolFreight();" /></td>';
+                echo ' <td><button tabindex="'.$ti++.'" type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>';
+                echo '</tr>';
+               }
+           }  
+           else
+           {
+                echo '<tr>';
+                echo ' <td><input tabindex="'.$ti++.'" type="text" id="txt_item" class="txt_item item" onkeyup="getItemAutoCompt(this);" list="0"/><input type="hidden" id="item_id" class="item_id" name="itemcode[]"/><input type="hidden" id="order_id" name="orderid_gen[]"/></td>';
+                echo ' <td><input tabindex="'.$ti++.'" type="text" name="qtymt[]" id="txt_qtymt" class="qtymt txt_cls" onblur="GetQtyBag(this);return false;"/></td>';
+                // echo ' <td><input tabindex="'.$ti++.'" type="text" name="qtybag[]" id="txt_qtybag" class="qtybag txt_cls" readonly="true"/></td>           ';
+                echo ' <td><input  tabindex="'.$ti++.'" type="text" name="rate[]" id="txt_rate" class="txt_cls"/></td>';
+                 echo ' <td><input tabindex="'.$ti++.'" type="text" name="discountrs[]" id="txt_discountrs" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>';
+                 echo ' <td><input tabindex="'.$ti++.'" type="text" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>';
+                echo ' <td><input tabindex="'.$ti++.'" type="text" name="freight[]" id="txt_freight" class="freight txt_cls" onblur="TolFreight();" /></td>';
+                echo ' <td><button tabindex="'.$ti++.'" type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>';
+                echo '</tr>';
+
+           }
+
+        }
+
+
+    function wo_get_item(){
+           $this->load->model('transaction_model');
+           $result=$this->transaction_model->sales_get_item();
+           $ti=9;
+           if(count($result)>0){
+               foreach($result as $row){
+                echo '<tr>';
+                echo ' <td>
+                    <input type="text" value="'.$row->item_name.'" tabindex="'.$ti++.'"  id="item_name" name="item_name[]" class="txt_cls" placeholder="Item Name"/>
+                    <input type="hidden" value="'.$row->itemcode.'" tabindex="'.$ti++.'"  id="itemcode" name="itemcode[]"/>
+                    <input type="hidden" value="'.$row->order_id.'" tabindex="'.$ti++.'"  id="order_id" name="orderid_gen[]"/>
+                  </td>';
                 
                 echo ' <td><input value="'.$row->remark.'"  type="text" name="item_remark[]" id="txt_remark" class="txt_cls" />';
                 echo ' <td><input value="'.$row->moc.'" tabindex="'.$ti++.'" type="text" name="moc[]" id="txt_unit" class="txt_cls" /></td>';

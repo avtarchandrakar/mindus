@@ -49,15 +49,15 @@ $active_group = 'default';
 $active_record = TRUE;
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
-$db['default']['password'] = '';
-if (get_cookie("ae_session_d")=="ungbdhyj_202223") {
-	$db['default']['database'] = 'mindust';
-}elseif (get_cookie("ae_session_d")=="ungbdhyj_202324") {
-	$db['default']['database'] = 'mindust';
-}else{
-	$db['default']['database'] = 'mindust';
-}
-
+$db['default']['password'] = '123456';
+// if (get_cookie("ae_session_d")=="ungbdhyj_202223") {
+// 	$db['default']['database'] = 'mindust';
+// }elseif (get_cookie("ae_session_d")=="ungbdhyj_202324") {
+// 	$db['default']['database'] = 'mindust';
+// }else{
+// 	$db['default']['database'] = 'mindust';
+// }
+$db['default']['database'] = 'db_mindust';
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = FALSE; // Change

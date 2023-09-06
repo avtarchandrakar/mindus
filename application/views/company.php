@@ -147,31 +147,60 @@
 
 		</div>
 		<div class="form-group">
-			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Account Holder</label>
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Account Holder 1</label>
 
 			<div class="col-sm-3">
 				<input  type="text" name="ac_holder" id="ac_holder"  placeholder="Account Holder" class="col-xs-10 col-sm-12" />
 			</div>
 
-			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Bank Name</label>
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Bank Name 1</label>
 
 			<div class="col-sm-3">
 				<input  type="text"  name="bankname" id="bankname" data-rule-required="true"  placeholder=" Bank Name" class="col-xs-10 col-sm-12" />
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Account No.</label>
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Account No. 1</label>
 
 			<div class="col-sm-3">
 				<input  type="text" name="ac_no" id="ac_no"  placeholder="A/C No" class="col-xs-10 col-sm-12" />
 			</div>
 
-			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> IFSC Code</label>
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> IFSC Code 1</label>
 
 			<div class="col-sm-3">
 				<input  type="text"  name="ifsccode" id="ifsccode" data-rule-required="true"  placeholder=" IFSC Code" class="col-xs-10 col-sm-12" />
 			</div>
 		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Account Holder 2</label>
+
+			<div class="col-sm-3">
+				<input  type="text" name="ac_holder2" id="ac_holder2"  placeholder="Account Holder" class="col-xs-10 col-sm-12" />
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Bank Name 2</label>
+
+			<div class="col-sm-3">
+				<input  type="text"  name="bankname2" id="bankname2" data-rule-required="true"  placeholder=" Bank Name" class="col-xs-10 col-sm-12" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Account No. 2</label>
+
+			<div class="col-sm-3">
+				<input  type="text" name="ac_no2" id="ac_no2"  placeholder="A/C No" class="col-xs-10 col-sm-12" />
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> IFSC Code 2</label>
+
+			<div class="col-sm-3">
+				<input  type="text"  name="ifsccode2" id="ifsccode2" data-rule-required="true"  placeholder=" IFSC Code" class="col-xs-10 col-sm-12" />
+			</div>
+		</div>
+
+
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Terms & Condition</label>
 

@@ -174,7 +174,8 @@
                 </tr>
                 </thead>
                 <? 
-                  $query=$this->db->query('select i.name as item, t.qtymt,m.vat pkg,t.rate,t.freight,t.percent,t.discount,t.remark,t.unit from tbl_trans2 t inner join m_item i on t.itemcode=i.id inner join m_master m on i.group_id=m.id  where  t.billno='.$id  . ' order by t.id');
+                  $query=$this->db->query('select t.item_name as item, t.qtymt,m.vat pkg,t.rate,t.freight,t.percent,t.discount,t.remark,t.unit from tbl_trans2 where  t.billno='.$id  . ' order by t.id');
+                  // echo $this->db->last_query();die;
                   $totqty=0;
                   $totbox=0;
                   $i=0;

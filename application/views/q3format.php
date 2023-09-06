@@ -63,7 +63,7 @@
 		    function ShowForm() {
 				$('#modal_form').modal('show');
 		        $.ajax({
-		            url: "<?php echo base_url();?>index.php/formController/work_order_form",
+		            url: "<?php echo base_url();?>index.php/formController/q3format_form",
 		            type: "GET",
 		            cache: false,
 		            success: function (html) {
@@ -161,7 +161,7 @@
 		        p_modify=$('#p_modify').val();
 		        $(".loading").show();
 		        $.ajax({
-		            url: "<?php echo base_url();?>index.php/transactionController/wo_list",
+		            url: "<?php echo base_url();?>index.php/transactionController/q3format_list",
 		            type: "GET",
 		            data: data+'&vtype='+$('#vtype').val(),
 		            cache: false,
@@ -192,7 +192,7 @@
 		    function GetRecord(ID) {
 				$('#modal_form').modal('show');
 		        $.ajax({
-		            url: "<?php echo base_url();?>index.php/formController/work_order_form",
+		            url: "<?php echo base_url();?>index.php/formController/q3format_form",
 		            type: "GET",
 		            cache: false,
 		            success: function (html) {
@@ -208,7 +208,7 @@
 		    }
 
 		function GetReport(ID) {
-              window.open("<?php echo base_url();?>index.php/transactionController/work_order_print/"+ID,'_blank');
+              window.open("<?php echo base_url();?>index.php/transactionController/q3format_print/"+ID,'_blank');
         }
 
 

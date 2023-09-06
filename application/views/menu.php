@@ -57,6 +57,32 @@
 	            }
 		    ?>
 
+
+		    <?php 
+	          	foreach($query->result() as $row)
+	          	{
+	          		if($row->form_id=="Q3 format")
+	          		{
+		          		$p_entry=$row->p_entry;
+		          		$p_modify=$row->p_modify;
+		          		$p_delete=$row->p_delete;
+		          		$p_list=$row->p_list;
+		          		$p_bdate=$row->p_bdate;
+
+		    			if($p_entry==1 || $p_modify==1 || $p_delete==1 || $p_list==1 || $p_bdate==1)
+		    			{?>
+			                <li class="">
+								<a href="#" onclick="LoadForm('Q3 format');">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Q3 format
+								</a>
+								<b class="arrow"></b>
+							</li>
+						 <? }
+	          		}
+	            }
+		    ?>
+
 		    <?php 
 	          	foreach($query->result() as $row)
 	          	{

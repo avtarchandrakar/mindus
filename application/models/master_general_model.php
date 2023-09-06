@@ -1132,6 +1132,11 @@
 	    	$ac_no = $this->input->post("ac_no");
 	    	$ifsccode = $this->input->post("ifsccode");
 
+	    	$ac_holder2 = $this->input->post("ac_holder2");
+	    	$bankname2 = $this->input->post("bankname2");
+	    	$ac_no2 = $this->input->post("ac_no2");
+	    	$ifsccode2 = $this->input->post("ifsccode2");
+
 	    	$data=array(
 	    				'company_name'=>$company_name,
 	    				'company_address'=>$company_address,
@@ -1158,6 +1163,11 @@
 	    				'bankname'=>$bankname,
 	    				'ac_no'=>$ac_no,
 	    				'ifsccode'=>$ifsccode,
+
+	    				'ac_holder2'=>$ac_holder2,
+	    				'bankname2'=>$bankname2,
+	    				'ac_no2'=>$ac_no2,
+	    				'ifsccode2'=>$ifsccode2,
 	    				
 	    				);
 
@@ -1232,6 +1242,10 @@
 		    				"bankname"=>$row->bankname,
 		    				"ac_no"=>$row->ac_no,
 		    				"ifsccode"=>$row->ifsccode,
+		    				"ac_holder2"=>$row->ac_holder2,
+		    				"bankname2"=>$row->bankname2,
+		    				"ac_no2"=>$row->ac_no2,
+		    				"ifsccode2"=>$row->ifsccode2,
 
 		    			);
 	    		}
