@@ -260,7 +260,23 @@
 		   <th>Round Off Amt:</th>
 		   <th><input type="text" id="round_off_amt" readonly="true" name="round_off_amt" onblur="tolamount();return false;"  class="txt_cls" /><input type="hidden" id="round_off" name="round_off" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
-		  </tr>  
+		  </tr>
+		  <tr>
+		  	<th>&nbsp;</th>
+		   <th>&nbsp;</th>
+		   <th>&nbsp;</th>
+		   <th>&nbsp;</th>
+		   <th>&nbsp;</th>
+		   <th>Select Bank Account Details:</th>
+		   <th>
+		   	<select type="text" id="acc_details" name="acc_details"   class="txt_cls col-xs-10 col-sm-12">
+		   		<option value="1">1st Bank Details</option>
+		   		<option value="2">2nd Bank Details</option>
+
+		   	</select>
+		   	</th>
+		   <th>&nbsp;</th>
+		  </tr>    
 		 </tfoot>
 		</table>
 		</div>

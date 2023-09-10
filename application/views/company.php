@@ -430,6 +430,11 @@
 		                $("#bankname").val(report_obj.bankname);
 		                $("#ac_no").val(report_obj.ac_no);
 		                $("#ifsccode").val(report_obj.ifsccode);
+
+		                $("#ac_holder2").val(report_obj.ac_holder2);
+		                $("#bankname2").val(report_obj.bankname2);
+		                $("#ac_no2").val(report_obj.ac_no2);
+		                $("#ifsccode2").val(report_obj.ifsccode2);
 		                
 		                $("#sno").val(report_obj.id);
 		                $("#status").val("edit");

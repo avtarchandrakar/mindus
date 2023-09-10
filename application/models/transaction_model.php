@@ -4682,6 +4682,7 @@ public function purchase_return_save()
                 "modified_by"=>$row->modified_by,
                 "company_id"=>$row->company_id,
                 "file_name"=>$row->file_name,
+                "acc_details"=>$row->acc_details,
                 "file_path"=>$row->file_path
               );
           }

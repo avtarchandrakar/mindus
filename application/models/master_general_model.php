@@ -1234,7 +1234,6 @@
 		    				"headerfilename"=>$row->headerfilename,
 		    				"footerfilepath"=>$row->footerfilepath,
 		    				"footerfilename"=>$row->footerfilename,
-
 		    				"cin"=>$row->cin,
 		    				"gmail"=>$row->gmail,
 		    				"website"=>$row->website,

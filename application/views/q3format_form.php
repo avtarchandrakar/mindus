@@ -91,29 +91,7 @@
 					<input type="text" tabindex="3" name="jobcard" id="jobcard" class="col-xs-10 col-sm-12" placeholder="Jobcard No" data-rule-required="true"/>
 			</div>
 		</div>
-		<div class="form-group hidden">
-			<div class="col-sm-5" id="cust_details"></div>
-
-			<label class="col-sm-2 control-label no-padding-right" for="form-field-1" > Work Order No.</label>
-			
-			<div class="col-sm-3" >
-					<input type="text" name="pon" id="pon" class="col-xs-10 col-sm-12" placeholder=" Work Order No." data-rule-required="true"/>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Ref:</label>
-
-			<div class="col-sm-10">
-				<input tabindex="4" type="text"  name="ref_details" id="ref_details" autocomplete="off" placeholder="Ref:" class=" col-xs-10 col-sm-12" list="0"/>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Sub:</label>
-
-			<div class="col-sm-10">
-				<input tabindex="5" type="text"  name="sub_details" id="sub_details" autocomplete="off" placeholder="Sub:" class=" col-xs-10 col-sm-12" list="0"/>
-			</div>
-		</div>
+		
 		<div class="form-group hidden"  style="display:none;">
 			<label class="col-sm-2 control-label no-padding-right " for="form-field-1"> State</label>
 
@@ -127,12 +105,12 @@
 		<table id="TblRpt" class="table">
 		 <thead>
 		  <tr>
-		   <th class="txt_item">Item Name</th>
-		   <th>Specificatio</th>
-		   <th>Qty</th>
-		   <th>UOM</th>
-		   <th>Unit Rate (In Rs.)</th>
-		   <th>Total Amount (In Rs.)</th>
+		   <th class="txt_item">Description</th>
+		   <th>BLD</th>
+		   <th>Quantity</th>
+		   <!-- <th>UOM</th> -->
+		   <th>Offer Amount (In Rs.) </th>
+		   <th>Remark</th>
 		   <th style="width:100px;">Action</th>
 		  </tr>
 		 </thead>
@@ -145,13 +123,17 @@
            </td>
            <td style="width:150px;"><input  type="text" placeholder="" name="item_remark[]" id="item_remark" placeholder="Specification" class="txt_cls"/></td>
            <td style="width:150px;"><input  type="text" name="qtymt[]" id="txt_qtymt" class="qtymt txt_cls" onblur="GetQtyBag(this);return false;"/></td>
-           <td style="width:150px;"><input  type="text" name="unit[]" id="txt_unit"  class="txt_cls"/></td>
+           <!-- <td style="width:150px;"> -->
+           	<input  type="hidden" name="unit[]" id="txt_unit"  class="txt_cls"/>
+           <!-- </td> -->
                     
            <td style="width:150px;"><input  type="text" name="rate[]" id="txt_rate" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>
 			<input  type="hidden"  name="discountrs[]" id="txt_discountrs" class="txt_cls" onblur="CalcAmount(this);return false;"/>
 			<input  type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/>
            
-           <td style="width:150px;"><input  type="text" name="freight[]" id="txt_freight" class="freight txt_cls" readonly="true" onblur="TolFreight();" /></td>
+           <td style="width:150px;">
+           	<input  type="text" name="remark[]" id="txt_remark" class="txt_cls"/>
+           	<input  type="hidden" name="freight[]" id="txt_freight" class="freight txt_cls" readonly="true" onblur="TolFreight();" /></td>
            <td><button type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>
 		  </tr>
 		 </tbody>
@@ -159,68 +141,155 @@
 		 <tr>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <th><input type="text" id="tol_qtymt" name="tol_qtymt" readonly="true" class="txt_cls" /></th>
+		   <th class="hidden"><input type="text" id="tol_qtymt" name="tol_qtymt" readonly="true" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <th><input type="hidden" id="tol_qtybag" name="tol_qtybag" readonly="true" class="txt_cls" />Total Amount</th>
-		   <th><input type="text" id="tol_freight" name="tol_freight" readonly="true" class="txt_cls" /></th>
+		   <th class="hidden"><input type="hidden" id="tol_qtybag" name="tol_qtybag" readonly="true" class="txt_cls" />Total Amount</th>
+		   <th class="hidden"><input type="text" id="tol_freight" name="tol_freight" readonly="true" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
 		  </tr>	
+		  <tr>
+		   <th>Assumptions made for Erection : </th>
+		   <th colspan="6"><input type="text" id="assumptions_erection" name="assumptions_erection" class="txt_cls" value="<br>1. Anchor Bolt Supply & Periodic Supervision is in our Scope. Casting of Anchor bolt is in Civil Contractor’s Scope.<br>
+2. Level compacted ground shall be provided before start of Erection.<br>
+3. Minimum 15 days curing time is to be given after Anchor Bolt Casting is done.<br>
+4. Free Power and water are to be provided close to site.<br>
+5. Levelling plates and or shims, Construction temporary bracing while installation is in our scope and the installation pricing accordingly is inclusive of this cost.<br>
+6. We assumed that, crane can move inside the proposed building while erecting the main frames.<br> " /></th>
+		   <th>&nbsp;</th>
+		  </tr > 
 		 <tr>
 		   <th>Scope of Work for Contractor :</th>
-		   <th colspan="6"><input type="text" id="pakking_forwerding" name="pakking_forwerding" class="txt_cls" value="<br>Fabrication of structural steel for staircase.<br>
-1. All machines, tools tackles, labour, consumables, unloading, loading of materials at plant.<br>
-2. One coat of DTM paint, applies on structure.<br>
-3. Assembly of landing flight and stringer.<br>
-4. Handrail fabrication on layout.<br>
-5. Fit-up, welding, DP test on weld joint and finishing.<br>
+		   <th colspan="6"><input type="text" id="pakking_forwerding" name="pakking_forwerding" class="txt_cls" value="<br>1. Erection of material as per MI specifications<br>
+2. Alignment of columns and rafters<br>
+3. Plumbing and checking water level of columns & Portal frame.<br>
+4. Cleaning and Touch up paint work for the structure on damaged surfaces during transportation and site movement.<br>
+5. Alignment of Purlins and Girts<br>
+6. Fixing of roof sheeting ,wall sheeting and accessories <br>
 " /></th>
-		   <th>&nbsp;</th>
-		  </tr>
-		  <tr>
-		   <th>Scope of Metalite Industries :</th>
-		   <th colspan="6"><input type="text" id="ld_clause" name="ld_clause" class="txt_cls" value="<br>1. Supply of raw material and paint at Contractor’s plant.<br>
-2. Transportation to site.<br>
-3. Cutting plan as per Metalite approval.<br>
-4. Inspection before dispatch.<br>
-" /></th>
-		   <!-- onblur="TolFreight();" onkeyup="TolFreight();" -->
 		   <th>&nbsp;</th>
 		  </tr>
 
 		  <tr>
-		   <th>Delivery Period : </th>
-		   <th colspan="6"><input type="text" id="delivery_period" name="delivery_period" class="txt_cls"  /></th>
+		   <th>Scope of Client  </th>
+		   <th colspan="6"><input type="text" id="scope_of_client" name="scope_of_client" class="txt_cls" value="<br>1. Anchor Bolt Supply & Periodic Supervision is in our Scope. Casting of Anchor bolt is in Civil Contractor’s Scope.<br>
+2. Level compacted ground shall be provided before start of Erection.<br>
+3. Minimum 15 days curing time is to be given after Anchor Bolt Casting is done.<br>
+4. Free Power and water are to be provided close to site.<br>
+5. Levelling plates and or shims, Construction temporary bracing while installation is in our scope and the installation pricing accordingly is inclusive of this cost.<br>
+6. We assumed that, crane can move inside the proposed building while erecting the main frames.<br> " /></th>
 		   <th>&nbsp;</th>
-		  </tr> 
-		  <tr>
-		   <th>Payment Terms : </th>
-		   <th colspan="6"> <input type="text" id="payment_terms" name="payment_terms" class="txt_cls"  /></th>
-		   <th>&nbsp;</th>
-		  </tr> 
-		  <tr class="hidden">
-		   <th >Warranty / Guarantee  : </th>
-		   <th colspan="6"><input type="text" id="warranty_guarantee" name="warranty_guarantee" class="txt_cls"  /></th>
-		   <th>&nbsp;</th>
-		  </tr> 
-		  <tr class="hidden">
-		   <th >LD Clause   : </th>
-		   <th colspan="6"><input type="text" id="ld_clausedfg" name="ld_clausedg" class="txt_cls"  /></th>
-		   <th>&nbsp;</th>
-		  </tr> 
-		  <tr class="hidden">
-		   <th >Note  : </th>
-		   <th colspan="6"><input type="text" id="remark" name="remark" class="txt_cls"  /></th>
-		   <th>&nbsp;</th>
-		  </tr> 
-		  <tr class="hidden">
-		   <th >Purchase Manager Name  : </th>
-		   <th colspan="6"><input type="text" id="designation" name="designation" class="txt_cls"  /></th>
-		   <th>&nbsp;</th>
-		  </tr>
+		  </tr > 
 		 </tfoot>
 		</table>
 		</div>
+		<br>
+		
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Payment Terms</label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="payment_terms" id="payment_terms" autocomplete="off" placeholder="Sub:" class=" col-xs-10 col-sm-12" list="0">SUPPLY & ERECTION<br>
+&nbsp;&nbsp;1. 60% advance along with P.O/ Signed contract.<br>
+&nbsp;&nbsp;2. 30% before of dispatch of material after inspection at our factory or with PI.<br>
+&nbsp;&nbsp;3. 5% on structure on progress<br>
+&nbsp;&nbsp;4. 5% on Successfully handing over of the building.</textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Delivery Period</label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="delivery_period" id="delivery_period" autocomplete="off" placeholder="Sub:" class=" col-xs-10 col-sm-12" list="0">Delivery within 45 days from the date of receipt of signed approved drawings and receipt of payment as per agreed terms whichever is later.</textarea>
+			</div>
+		</div>
+
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> ERECTION PERIOD </label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="erection_period" id="erection_period" autocomplete="off" placeholder="Sub:" class=" col-xs-10 col-sm-12" list="0">Erection Period within 25 days from date of Casting of Anchor bolt Release.</textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> GST</label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="gst_tax" id="gst_tax" autocomplete="off" placeholder="GST :" class=" col-xs-10 col-sm-12" list="0">Extra @ 18% on both supplies & Erection.</textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> SCOPE OF CONTRACT</label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="scope_of_contract" id="scope_of_contract" autocomplete="off" placeholder="SCOPE OF CONTRACT" class=" col-xs-10 col-sm-12" list="0">This Contract is the only Agreement between the MEPL (hereinafter referred to as SELLER) & BUYER (who has signed his acceptance on this contract) and the terms which have been Expressly stated in this Agreement will be binding including any amendments mutually agreed upon in writing. </textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> PROPOSAL VALIDITY</label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="proposal_validity" id="proposal_validity" autocomplete="off" placeholder="PROPOSAL VALIDITY" class=" col-xs-10 col-sm-12" list="0">This proposal is valid for (3) days from the date of this proposal. Any extension of validity must be received in writing from the SELLER </textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> ERECTION DRW. </label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="erection_drw" id="erection_drw" autocomplete="off" placeholder="ERECTION DRW. " class=" col-xs-10 col-sm-12" list="0">“MI” the SELLER will furnish the BUYER with all standard erection drawings required for the erection of the buildings.  </textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> SPECIFICATION CHANGES</label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="specification_changes" id="specification_changes" autocomplete="off" placeholder="ERECTION DRW. " class=" col-xs-10 col-sm-12" list="0">SELLER reserve the right to modify the design of his standard buildings and to substitute
+material equal to or superior to that originally specified (in order to permit incorporation of
+changes and improvements, in the continued development of the SELLER's product).  </textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> CHANGE IN SCOPE</label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="change_in_scope" id="change_in_scope" autocomplete="off" placeholder="CHANGE IN SCOPE" class=" col-xs-10 col-sm-12" list="0">Any change and/or revision to the above stated scope of supply MAY lead to a variation in the price and the delivery period. </textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> OUR LIABILITY</label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="our_liablity" id="our_liablity" autocomplete="off" placeholder="OUR LIABILITY" class=" col-xs-10 col-sm-12" list="0">Any change and/or revision to the above stated scope of supply MAY lead to a variation in the price and the delivery period. </textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> OWNERSHIP OF UNAPPROVED MATERIAL AT SITE </label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="ownership" id="ownership" autocomplete="off" placeholder="OWNERSHIP OF UNAPPROVED MATERIAL AT SITE " class=" col-xs-10 col-sm-12" list="0">All material supplied to site by MI, which are unapproved and in excess of building requirements shall be the property of MI and MI reserves the right to ship the same back to its place. </textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Warranty</label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="performance_warranty" id="performance_warranty" autocomplete="off" placeholder="Warranty" class=" col-xs-10 col-sm-12" list="0">Products supplied by MI are warranted against any failure due to defective material & workmanship for a period of One year. </textarea>
+			</div>
+		</div>
+
+		
+
 		<div class="form-group" style="display:none;">
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Loading Person Name</label>
 			<div class="col-sm-4">

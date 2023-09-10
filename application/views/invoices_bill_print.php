@@ -74,6 +74,8 @@ th, td {
       $grand_total='';
       $round_off_amt='';
       $file_path='';
+      $acc_details='';
+
 
 
 
@@ -106,6 +108,8 @@ th, td {
         $tol_freight=$row->tol_freight;
         $quatation_no=$row->quatation;
         $file_path=$row->file_path;
+        $acc_details=$row->acc_details;
+
       }
     ?>
 
@@ -120,6 +124,11 @@ th, td {
       $ac_no='';
       $ifsccode='';
 
+      $ac_holder2="";
+      $bankname2='';
+      $ac_no2='';
+      $ifsccode2='';
+
       foreach($query1->result() as $row1)
       {
         $gstn=$row1->gstn;
@@ -130,6 +139,11 @@ th, td {
         $bankname=$row1->bankname;
         $ac_no=$row1->ac_no;
         $ifsccode=$row1->ifsccode;
+
+        $ac_holder2=$row1->ac_holder2;
+        $bankname2=$row1->bankname2;
+        $ac_no2=$row1->ac_no2;
+        $ifsccode2=$row1->ifsccode2;
 
       }
       ?>
@@ -397,9 +411,15 @@ th, td {
         </tr>
 
         <tr>
+        <?php if ($acc_details==2) { ?>
+          <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+            Account Holder : <?=$ac_holder2?>
+          </td>
+        <?php }else{  ?>
           <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             Account Holder : <?=$ac_holder?>
           </td>
+        <?php } ?>
           <td  colspan="3" style="border-top:1px solid;border-left:1px solid;width:30%;text-align:right;font-size:13px;padding:2px;">
             Add IGST Tax <?php echo number_format($igst_per,0);?>% :                        
           </td>
@@ -409,9 +429,16 @@ th, td {
         </tr>
 
         <tr>
+          <?php if ($acc_details==2) { ?>
+          <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+            Bank Name : <?=$bankname2?>
+          </td>
+        <?php }else{  ?>
           <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             Bank Name : <?=$bankname?>
           </td>
+        <?php } ?>
+          
           <td  colspan="3" style="border-top:1px solid;border-left:1px solid;width:30%;text-align:right;font-size:13px;padding:2px;">
             Total GST (1+2+3) :                        
           </td>
@@ -421,9 +448,16 @@ th, td {
         </tr>
 
         <tr>
+          <?php if ($acc_details==2) { ?>
+          <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+            Account No. : <?=$ac_no2?>
+          </td>
+        <?php }else{  ?>
           <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             Account No. : <?=$ac_no?>
           </td>
+        <?php } ?>
+          
           <td  colspan="3" style="border-top:1px solid;border-left:1px solid;width:30%;text-align:right;font-size:13px;padding:2px;">
             Grand Total :                        
           </td>
@@ -433,9 +467,16 @@ th, td {
         </tr>
 
         <tr>
+          <?php if ($acc_details==2) { ?>
+          <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+            IFSC Code : <?=$ifsccode2?>
+          </td>
+        <?php }else{  ?>
           <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             IFSC Code : <?=$ifsccode?>
           </td>
+        <?php } ?>
+          
           <td  colspan="3" style="border-top:1px solid;border-left:1px solid;width:30%;text-align:right;font-size:13px;padding:2px;">
             Round Off Amount :                          
           </td>
