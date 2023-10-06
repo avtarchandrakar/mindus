@@ -58,6 +58,8 @@
         <input type="hidden" value="<?=$status?>" name="status" id="status" class="form-control" />
         <input type="hidden" value="<?=$id?>" name="sno" id="sno" class="form-control" />
         <input type="hidden" value="<?=$orderno?>" name="orderno" id="orderno" class="form-control" />
+        <input type="hidden" value="Q3" name="quatation_selected" id="quatation_selected" class="form-control" />
+        
         <input type="hidden" value="<?=$vtype?>" name="vtype" id="vtype" class="form-control" />
 		<div class="form-group">
 		   
@@ -121,8 +123,8 @@
 			    <input type="hidden" id="itemcode" name="itemcode[]"/>
 				<input type="hidden" id="order_id" name="orderid_gen[]"/>
            </td>
-           <td style="width:150px;"><input  type="text" placeholder="" name="item_remark[]" id="item_remark" placeholder="Specification" class="txt_cls"/></td>
-           <td style="width:150px;"><input  type="text" name="qtymt[]" id="txt_qtymt" class="qtymt txt_cls" onblur="GetQtyBag(this);return false;"/></td>
+           <td style="width:150px;"><input  type="text" placeholder="" name="item_bld[]" id="item_bld" placeholder="" class="txt_cls"/></td>
+           <td style="width:150px;"><input  type="text" name="moc[]" id="txt_moc" class="moc txt_cls" onblur="GetQtyBag(this);return false;"/></td>
            <!-- <td style="width:150px;"> -->
            	<input  type="hidden" name="unit[]" id="txt_unit"  class="txt_cls"/>
            <!-- </td> -->
@@ -132,7 +134,7 @@
 			<input  type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/>
            
            <td style="width:150px;">
-           	<input  type="text" name="remark[]" id="txt_remark" class="txt_cls"/>
+           	<input  type="text" name="item_remark[]" id="item_remark" class="txt_cls txt_item_remark"/>
            	<input  type="hidden" name="freight[]" id="txt_freight" class="freight txt_cls" readonly="true" onblur="TolFreight();" /></td>
            <td><button type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>
 		  </tr>
@@ -185,6 +187,15 @@
 		</div>
 		<br>
 		
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Prepared & Submitted By</label>
+
+			<div class="col-sm-10">
+				<textarea  type="text" name="prepare_by" id="prepare_by" autocomplete="off" placeholder="Prepared & Submitted By" class=" col-xs-10 col-sm-12" list="0">Venketeshwar Agrawal<br>Metalite Industries<br>Contact: +91 7052899999</textarea>
+			</div>
+		</div>
+
+
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Payment Terms</label>
 
@@ -288,7 +299,436 @@ changes and improvements, in the continued development of the SELLER's product).
 			</div>
 		</div>
 
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1" style="background: yellow;"> BRIEF DETAILS</label>
+		</div>
+		<div class="form-group">
+			<table border="0" style="width:80%;" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="width:25%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> BUILDING NO.</label>            </td>
+            <td style="width:75%;text-align:right;font-size:10px;">
+              <input type="text" id="building_no" name="building_no" class="txt_cls" placeholder="BUILDING NO." value="1" />
+            </td>
+          </tr>
+        	<tr>
+            <td style="width:25%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> BUILDING DESCRIPTION</label>            </td>
+            <td style="width:75%;text-align:right;font-size:10px;">
+              <input type="text" id="building_desc" name="building_desc" class="txt_cls" placeholder="BUILDING DESCRIPTION" value="PEB BUILDING" />
+            </td>
+          </tr>
+          <tr>
+            <td style="width:25%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> BUILDING AREA (SQM) </label>            </td>
+            <td style="width:75%;text-align:right;font-size:10px;">
+              <input type="text" id="building_area" name="building_area" class="txt_cls" placeholder="BUILDING AREA (SQM) " value="300" />
+            </td>
+          </tr>
+          <tr>
+            <td style="width:25%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> QUANTITY</label>            </td>
+            <td style="width:75%;text-align:right;font-size:10px;">
+              <input type="text" id="building_set" name="building_set" class="txt_cls" placeholder="QUANTITY" value="01set" />
+            </td>
+          </tr>
+        </table>
+		</div>
+
+
+		<div class="form-group">
+			<label class="col-sm-4 control-label no-padding-right" for="form-field-1" style="background: yellow;"> BASIC BUILDING DESCRIPTION</label>
+		</div>
+		<div class="form-group">
+			<table border="0" style="width:80%;" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> S. N</label>            </td>
+            <td style="width:20%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> DESCRIPTION</label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <!-- <input type="text" id="building_no" name="building_no" class="txt_cls" placeholder="BUILDING NO." value="1" /> -->
+              <label class="control-label no-padding-right " for="form-field-1"> Canopy * Staircase</label>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 1</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Frame Type </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_frame_type" name="basic_frame_type" class="txt_cls" placeholder="Frame Type" value="RF/MF" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 2</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Width (M) </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_width" name="basic_width" class="txt_cls" placeholder="Width (M)" value="15" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 3</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Length (M) </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_length" name="basic_length" class="txt_cls" placeholder="Length (M)" value="20" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 4</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Clear Height (M)  </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_clear_height" name="basic_clear_height" class="txt_cls" placeholder="Clear Height (M) " value="8" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 5</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Brick wall Height (M)   </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_brick_wall" name="basic_brick_wall" class="txt_cls" placeholder="Brick wall Height (M)  " value="3" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 6</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Interior column spacing (m) </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_interior_column" name="basic_interior_column" class="txt_cls" placeholder="Interior column spacing (m)" value="As per your GA drawing" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 7</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Roof slope </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_roof_slope" name="basic_roof_slope" class="txt_cls" placeholder="Roof slope" value="8" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 8</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Bay spacing (m) </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_bay_spacing" name="basic_bay_spacing" class="txt_cls" placeholder="Bay spacing (m)" value="As per Layout" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 9</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> End wall column Spacing (m) </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_end_wall" name="basic_end_wall" class="txt_cls" placeholder="End wall column Spacing (m)" value="As per Layout" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 10</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Type of end frames </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_end_frames" name="basic_end_frames" class="txt_cls" placeholder="Type of end frames" value="Expandable Frames in Length" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 11</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Wind bracing </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_wind_bracing" name="basic_wind_bracing" class="txt_cls" placeholder="Wind bracing" value="Rod Bracing for roof and walls" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 12</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Roof cladding </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_roof_cladding" name="basic_roof_cladding" class="txt_cls" placeholder="Roof cladding" value="Roof shall be covered Colour coated profiled sheet" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 13</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Wall cladding  </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_wall_cladding" name="basic_wall_cladding" class="txt_cls" placeholder="Wall cladding " value="Cladding shall be Covered Colour Profile Sheed." />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 14</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Openings at North wall </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_north_wall" name="basic_north_wall" class="txt_cls" placeholder="Openings at North wall" value="As per your GA drawing" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 15</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Openings at South wall </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_sorth_wall" name="basic_sorth_wall" class="txt_cls" placeholder="Openings at South wall" value="As per your GA drawing" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 16</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Openings at East wall </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_east_wall" name="basic_east_wall" class="txt_cls" placeholder="Openings at East wall" value="As per your GA drawing" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 17</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Openings at West wall </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_west_wall" name="basic_west_wall" class="txt_cls" placeholder="Openings at West wall" value="As per your GA drawing" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 18</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Curved eaves </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_curved_eaves" name="basic_curved_eaves" class="txt_cls" placeholder="Curved eaves" value="NA" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 19</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Gutters </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_gutters" name="basic_gutters" class="txt_cls" placeholder="Gutters" value="As per Approved Standard design" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 20</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Eave trim </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_eave_trim" name="basic_eave_trim" class="txt_cls" placeholder="Eave trim" value="As per Approved Standard design" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 21</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Downspouts </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="basic_downspouts" name="basic_downspouts" class="txt_cls" placeholder="Downspouts" value="As per Approved Standard design" />
+            </td>
+          </tr>
+
+        </table>
+		</div>
 		
+		<div class="form-group">
+			<label class="col-sm-7 control-label no-padding-right" for="form-field-1" style="background: yellow;"> STANDARD BUILDING ADDITIONS [CANOPY / FASCIA / LINER / PARTITIONS] </label>
+		</div>
+		<div class="form-group">
+			<table border="0" style="width:80%;" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> S. N</label>            </td>
+            <td style="width:20%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> DESCRIPTION</label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <label class="control-label no-padding-right " for="form-field-1"> PEB Shed</label>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 1</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Canopy– location / description </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="standard_location" name="standard_location" class="txt_cls" placeholder="Canopy– location / description" value="As per your GA drawing" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 2</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Framed Openings  </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="standard_framed_openings" name="standard_framed_openings" class="txt_cls" placeholder="Framed Openings " value="" />
+            </td>
+          </tr>
+
+       </table>
+		</div>
+
+
+		<div class="form-group">
+			<label class="col-sm-4 control-label no-padding-right" for="form-field-1" style="background: yellow;"> STEEL WORK FINISH  </label>
+		</div>
+		<div class="form-group">
+			<table border="0" style="width:80%;" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> S. N</label>            </td>
+            <td style="width:20%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> DESCRIPTION</label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <label class="control-label no-padding-right " for="form-field-1"> PEB Shed</label>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 1</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> WELDING </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="steel_welding" name="steel_welding" class="txt_cls" placeholder="WELDING" value="Continuous SAW welding or FCAW welding, AWS D1.1 or ASME SECIX " />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 2</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Frames, Built-Up / HR  </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="steel_built_up" name="steel_built_up" class="txt_cls" placeholder="Frames, Built-Up / HR " value="Mechanical Cleaning with One coat of red oxide primer and one coat of synthetic enamel finish paint or DTM paints" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 3</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Purlins / Girts </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="steel_purlins" name="steel_purlins" class="txt_cls" placeholder="Purlins / Girts " value="Galvanized 120 GSM" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 4</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Profile Sheets   </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="steel_profile_sheets" name="steel_profile_sheets" class="txt_cls" placeholder="Profile Sheets  " value="TBSL/JSW/BUSHAN/UTTAM/AMNS AZ70" />
+            </td>
+          </tr>
+
+       </table>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-4 control-label no-padding-right" for="form-field-1" style="background: yellow;"> DESIGN LOADS  </label>
+		</div>
+		<div class="form-group">
+			<table border="0" style="width:80%;" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> S. N</label>            </td>
+            <td style="width:20%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> DESCRIPTION</label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <label class="control-label no-padding-right " for="form-field-1"> PEB Shed</label>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 1</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Dead load </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="design_dead_load" name="design_dead_load" class="txt_cls" placeholder="Dead load" value="0.15 Kn/M2" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 2</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> live load </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="design_live_load" name="design_live_load" class="txt_cls" placeholder="live load" value="0.57 Kn/M2" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 3</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Collateral Load</label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="design_collateral" name="design_collateral" class="txt_cls" placeholder="Collateral Load" value="-" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 4</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Wind load (Kmph or m/sec) </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="design_wind_load" name="design_wind_load" class="txt_cls" placeholder="Wind load (Kmph or m/sec)" value="44 M/Sec" />
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:5%;text-align:center;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> 5</label>            </td>
+            <td style="width:20%;text-align:left;font-size:10px;">
+            	<label class="control-label no-padding-right " for="form-field-1"> Seismic load (zone no.)  </label>            </td>
+            <td style="width:75%;text-align:center;font-size:10px;">
+              <input type="text" id="design_seismic_load" name="design_seismic_load" class="txt_cls" placeholder="Seismic load (zone no.) " value="Zone II" />
+            </td>
+          </tr>
+
+       </table>
+		</div>
 
 		<div class="form-group" style="display:none;">
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Loading Person Name</label>
@@ -415,7 +855,7 @@ changes and improvements, in the continued development of the SELLER's product).
 		        data = "list=list";
 		        $(".loading").show();
 		        $.ajax({
-		            url: "<?php echo base_url();?>index.php/transactionController/wo_get_item",
+		            url: "<?php echo base_url();?>index.php/transactionController/q3_get_item",
 		            type: "GET",
 		            data: data+'&vtype='+$('#vtype').val()+'&id='+ID,
 		            cache: false,
@@ -728,7 +1168,7 @@ changes and improvements, in the continued development of the SELLER's product).
 
 
 		    function GetPreviousRecord(ID) {
-		        var url = "<?php echo base_url();?>index.php/transactionController/sales_get?id=" + ID;
+		        var url = "<?php echo base_url();?>index.php/transactionController/q3_get?id=" + ID;
 		        $.get(url, function (data) {
 		            var report_obj = JSON.parse(data);
 		            // console.log(data);

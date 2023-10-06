@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/3.0/paper.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -25,7 +25,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
     /* switch to landscape */ 
 /*   size: landscape; */
    /* set page margins */ 
-/*   margin: 0.5cm; */
+/*   margin: 5cm; */
    /* Default footers */ 
    @bottom-left { 
      content: "Department of Strategy"; 
@@ -460,10 +460,10 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
   <thead>
     
   <tr>
-    <th style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+    <th style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;margin-top: 30px;">
       Item
     </th>
-    <th style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;border-right: 0.1px solid grey;">
+    <th style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;margin-top: 30px;border-right: 1px solid grey;">
       Commercial Terms & Conditions
     </th>
   </tr>
@@ -471,80 +471,80 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
   <tbody>
   <?php if ($price!='0') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;margin-top: 30px;">
       <b>Price</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;margin-top: 30px;text-align: justify;text-justify: inter-word;">
       <b><?php echo ucwords(strtolower($price))?>/-</b>
     </td>
   </tr>
   <?php } ?>
   <?php if ($performance_warranty!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Performance Warranty</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($performance_warranty))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($equipment_acceptance!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Equipment Acceptance</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($equipment_acceptance))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($supervision_commissioning!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Supervision of Erection & Commissioning</b>:
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($supervision_commissioning))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($training!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Training</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($training))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($general_safety!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>General Safety</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($general_safety))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($spare_parts!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Spare Parts</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($spare_parts))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($chassis_equipment!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Transportation of chassis & equipment</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($chassis_equipment))?>
     </td>
   </tr>
@@ -552,86 +552,86 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
 
   <?php if ($gst_tax!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>GST Tax</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($gst_tax))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($mobile_crane!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Mobile Crane</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($mobile_crane))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($scope_of_unloading!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Scope Of Unloading</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($scope_of_unloading))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($intrest_charge!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Overdue Intrest & Wherehousing Charge</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($intrest_charge))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($cancellation!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Cancellation</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($cancellation))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($jurisdication!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Jurisdication</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;border-right: 1px solid grey;">
       <?php echo ucwords(strtolower($jurisdication))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($documents_provided!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Documents Provided During Delivery</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;border-right: 1px solid grey;">
       <?php echo ucwords(strtolower($documents_provided))?>
     </td>
   </tr>
   <?php } ?>
   <?php if ($load_test!='') { ?>
   <tr>
-    <td style="width:30%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td style="width:30%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       <b>Load Test</b>
     </td>
-    <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;">
+    <td style="width:70%;text-align:center;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;text-align: justify;text-justify: inter-word;border-right: 1px solid grey;">
       <?php echo ucwords(strtolower($load_test))?>
     </td>
   </tr>
   <?php } ?>
   <tr>
-    <td colspan="3" style="width:100%;text-align:left;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;">
+    <td colspan="3" style="width:100%;text-align:left;padding:5px;border: 1px solid grey;border-right: 1px solid grey;font-size:15px;">
       Warm Regards,<br>
       Venketeshwar Agrawal<br>
       Metalite Industries<br>

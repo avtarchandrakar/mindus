@@ -219,6 +219,10 @@
 		    	window.open("<?php echo base_url();?>index.php/transactionController/invoices_bill_print/"+id,'_blank');
 		    }
 
+		    function GetReporteye(id){
+		    	window.open("<?php echo base_url();?>index.php/transactionController/invoices_bill_printeye/"+id,'_blank');
+		    }
+
 		    function GetDownload(ID) {
 	            window.open("<?php echo base_url();?>index.php/transactionController/invoices_download/"+ID);
 		    }

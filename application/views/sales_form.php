@@ -82,7 +82,6 @@
 				<select  type="text" name="quatation_selected" id="quatation_selected" autocomplete="off" placeholder="Load Test" class=" col-xs-10 col-sm-12" list="0">
 					<option value="Q1">Q1</option>
 					<option value="Q2">Q2</option>
-					<option value="Q3">Q3</option>
 				</select>
 			</div>
 		</div>

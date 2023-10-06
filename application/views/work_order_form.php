@@ -213,7 +213,7 @@
 		   <th colspan="6"><input type="text" id="remark" name="remark" class="txt_cls"  /></th>
 		   <th>&nbsp;</th>
 		  </tr> 
-		  <tr class="hidden">
+		  <tr class="">
 		   <th >Purchase Manager Name  : </th>
 		   <th colspan="6"><input type="text" id="designation" name="designation" class="txt_cls"  /></th>
 		   <th>&nbsp;</th>
@@ -254,12 +254,12 @@
 				<input type="text"  name="transport_narration" id="transport_narration" placeholder="Transport Narration" class="col-xs-11"/><!-- col-xs-10 col-sm-12 -->
 			</div>			
 		</div>
-		<div class="form-group" style="display:none;">
-			<label class="col-sm-2 control-label no-padding-right" for="form-field-1">Dispatch Through</label>
-			<div class="col-sm-4">
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right hidden" for="form-field-1">Dispatch Through</label>
+			<div class="col-sm-4 hidden">
 				<input type="text"  name="dispatch_through" id="dispatch_through" placeholder="Dispatch Through" class="col-xs-11"/>
 			</div>	 
-			<label class="col-sm-2 control-label">Attach Document PDF/JPG</label>
+			<label class="col-sm-2 control-label">Attach Sign. JPG/PNG</label>
 			<div class="col-sm-3">
 				<input type='file' id='photo' name='photo' class='form-control' />
 				<input type="hidden" id="filepath" name="filepath" readonly="readonly"/>

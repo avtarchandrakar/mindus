@@ -440,10 +440,10 @@
                 //data = "list=list";
                 if ($('#userform').validationEngine('validate')) 
                 {
-                	var ledger_id = $('#ledger_id').val();
-                	if (ledger_id==0 || ledger_id=='') {
-                   		alert('Please Select Party Name');return;
-                	}
+                	// var ledger_id = $('#ledger_id').val();
+                	// if (ledger_id==0 || ledger_id=='') {
+                   	// 	alert('Please Select Party Name');return;
+                	// }
                     modified_by=$.cookie('ae_username');		            
 	                var status = $('input[name=status]');
 	                var data = $("#userform").serialize();

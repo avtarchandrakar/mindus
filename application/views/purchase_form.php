@@ -262,7 +262,7 @@
 		</div>
 		<div class="form-group" >
 				<input type="hidden"  name="dispatch_through" id="dispatch_through" placeholder="Dispatch Through" class="col-xs-11"/>
-			<label class="col-sm-2 control-label">Attach Signature PDF/JPG</label>
+			<label class="col-sm-2 control-label">Attach Signature JPG/PNG</label>
 			<div class="col-sm-3">
 				<input type='file' id='photo' name='photo' class='form-control' />
 				<input type="hidden" id="filepath" name="filepath" readonly="readonly"/>

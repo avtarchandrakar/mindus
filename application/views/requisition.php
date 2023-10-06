@@ -180,6 +180,11 @@
 	            window.open("<?php echo base_url();?>index.php/transactionController/requisition_bill_print/"+ID,'_blank');
 		    }
 
+
+		    function GetReporteye(ID) {
+	            window.open("<?php echo base_url();?>index.php/transactionController/requisition_bill_printeye/"+ID,'_blank');
+		    }
+
 //////////////////////
                function checkAction(status){
 	              if(status=='edit'){

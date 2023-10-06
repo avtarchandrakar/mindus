@@ -90,10 +90,11 @@
 				<input type="text"  name="lname" id="lname" autocomplete="off" placeholder="Ledger Name" class="ledgerinfo col-xs-10 col-sm-12" list="0" onkeyup="GetParty();return false;" /><input type="hidden" id="ledger_id" name="ledger_id">
 			</div>
 
-			<label class="col-sm-2 control-label no-padding-right" for="form-field-1" > Quatation No</label>
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1" > Quotation No</label>
 			
 			<div class="col-sm-4" >
-					<input type="text" name="quatation" id="quatation" autocomplete="off" class="col-xs-10 col-sm-12" placeholder="Quatation No" onblur="GetPreviousRecord(this.value)" data-rule-required="true"/>
+					<input type="text" name="quatation" id="quatation" autocomplete="off" class="col-xs-10 col-sm-12" placeholder="Quotation No"  data-rule-required="true"/>
+					<!-- onblur="GetPreviousRecord(this.value)" -->
 			</div>
 		</div>
 		<div class="form-group">
@@ -182,7 +183,7 @@
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th><input type="text" id="tol_qtymt" name="tol_qtymt" readonly="true" class="txt_cls" /></th>
-		   <th>&nbsp;</th>
+		   <!-- <th>&nbsp;</th> -->
 		   <th>&nbsp;</th>
 		   <th><input type="hidden" id="tol_qtybag" name="tol_qtybag" readonly="true" class="txt_cls" />Total Amount</th>
 		   <th><input type="text" id="tol_freight" name="tol_freight" readonly="true" class="txt_cls" /></th>
@@ -191,7 +192,7 @@
 		 <tr>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <th>&nbsp;</th>
+		   <!-- <th>&nbsp;</th> -->
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th>Total Amount Before Tax :</th>
@@ -200,7 +201,7 @@
 		  </tr>
 		  <tr>
 		  	<th>&nbsp;</th>
-		   <th>&nbsp;</th>
+		   <!-- <th>&nbsp;</th> -->
 		   <th>&nbsp;</th>
 		   <th>Add CGST % :</th>
 		   <th><input type="text" id="cgst_per" onblur="tolamount();return false;"  name="cgst_per" class="txt_cls" /></th>
@@ -210,7 +211,7 @@
 		  </tr>
 		  <tr>
 		  	<th>&nbsp;</th>
-		   <th>&nbsp;</th>
+		   <!-- <th>&nbsp;</th> -->
 		   <th>&nbsp;</th>
 		   <th>Add SGST % :</th>
 		   <th><input type="text" id="sgst_per" onblur="tolamount();return false;"  name="sgst_per" class="txt_cls" /></th>
@@ -222,7 +223,7 @@
 		  <tr>
 		  	<th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <th>&nbsp;</th>
+		   <!-- <th>&nbsp;</th> -->
 		   <th>Add IGST % :</th>
 		   <th><input type="text" id="igst_per" onblur="tolamount();return false;"  name="igst_per" class="txt_cls" /></th>
 		   <th>CGST Amount :</th>
@@ -236,7 +237,7 @@
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <th>&nbsp;</th>
+		   <!-- <th>&nbsp;</th> -->
 		   <th>Total GST(1+2+3):</th>
 		   <th><input type="text" id="total_gst" readonly="true" onblur="tolamount();return false;"  name="total_gst" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
@@ -246,7 +247,7 @@
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <th>&nbsp;</th>
+		   <!-- <th>&nbsp;</th> -->
 		   <th>Grand Total:</th>
 		   <th><input type="text" id="grand_total" readonly="true" onblur="tolamount();return false;"  name="grand_total" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
@@ -256,7 +257,7 @@
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <th>&nbsp;</th>
+		   <!-- <th>&nbsp;</th> -->
 		   <th>Round Off Amt:</th>
 		   <th><input type="text" id="round_off_amt" readonly="true" name="round_off_amt" onblur="tolamount();return false;"  class="txt_cls" /><input type="hidden" id="round_off" name="round_off" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
@@ -265,10 +266,10 @@
 		  	<th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <th>&nbsp;</th>
-		   <th>&nbsp;</th>
-		   <th>Select Bank Account Details:</th>
-		   <th>
+		   <!-- <th>&nbsp;</th> -->
+		   <!-- <th>&nbsp;</th> -->
+		   <th colspan="2" style="text-align: right;">Select Bank Account Details:</th>
+		   <th colspan="2">
 		   	<select type="text" id="acc_details" name="acc_details"   class="txt_cls col-xs-10 col-sm-12">
 		   		<option value="1">1st Bank Details</option>
 		   		<option value="2">2nd Bank Details</option>
@@ -320,7 +321,6 @@
 				<input type='file' id='photo' name='photo' class='form-control' />
 				<input type="hidden" id="filepath" name="filepath" readonly="readonly"/>
 			 	<input type="hidden" id="filename" name="filename" readonly="readonly"/>
-			 	 
 			</div>  
 		</div>
 

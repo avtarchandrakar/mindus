@@ -41,7 +41,7 @@
       $designation='';
       $prepared_name='';
       $pon='';
-
+      
 
       foreach($query->result() as $row)
       {
@@ -318,7 +318,7 @@
   </td></tr></tbody>
 <tfoot><tr><td>
   <div style="padding-top:70px;padding-left:50px;padding-right:50px;">
-    <img src="<?php echo base_url();?>assets/images/footer.jpg" style="height:auto;width: 88%;margin-bottom: 20px;margin-top: 5px;position: fixed;left: 0;bottom: 0;margin-top:50px;margin-left:50px;margin-right:50px;">
+    <img src="<?php echo base_url();?>assets/images/footer.jpg" style="height:auto;width: 88%;margin-left:50px;margin-right:50px;">
   </div>
 </td></tr></tfoot>
 </table>
@@ -328,7 +328,7 @@
 
       <script type="text/javascript">
         $(document).ready(function(){
-          window.print();
+          // window.print();
         });
       </script>
 </body>

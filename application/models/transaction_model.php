@@ -88,11 +88,11 @@ public function GetState()
 
       if($p_bdate==1)
       {
-        $query=$this->db->query('select t1.id,t1.quatation_selected,t1.if_approve,t1.cdate,t1.builtyno,t1.quatation_no,t1.file_path,t1.ledger_id,ledger_mobno,l.name lname from tbl_trans1 t1, m_ledger l where t1.ledger_id=l.id and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="quatation" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") order by id desc');
+        $query=$this->db->query('select t1.id,t1.quatation_selected,t1.if_approve,t1.cdate,t1.builtyno,t1.quatation_no,t1.file_path,t1.ledger_id,ledger_mobno,l.name lname from tbl_trans1 t1, m_ledger l where t1.ledger_id=l.id and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="quatation"  and (t1.quatation_selected="Q1" || t1.quatation_selected="Q2") and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") order by id desc');
         // echo 'select t1.id,t1.if_approve,t1.cdate,t1.builtyno,t1.quatation_no,t1.ledger_id,ledger_mobno,l.name lname from tbl_trans1 t1, m_ledger l where t1.ledger_id=l.id and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="quatation" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") ';die();
       }
       else{
-        $query=$this->db->query('select t1.id,t1.quatation_selected,t1.if_approve,t1.cdate,t1.builtyno,t1.file_path,t1.quatation_no,t1.ledger_id,ledger_mobno,l.name lname from tbl_trans1 t1, m_ledger l where t1.ledger_id=l.id and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="quatation" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") order by id desc');
+        $query=$this->db->query('select t1.id,t1.quatation_selected,t1.if_approve,t1.cdate,t1.builtyno,t1.file_path,t1.quatation_no,t1.ledger_id,ledger_mobno,l.name lname from tbl_trans1 t1, m_ledger l where t1.ledger_id=l.id and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="quatation"  and (t1.quatation_selected="Q1" || t1.quatation_selected="Q2") and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") order by id desc');
       }    
       // echo $this->db->last_query();die;
       return $query->result();
@@ -718,11 +718,11 @@ public function GetState()
 
       if($p_bdate==1)
       {
-        $query=$this->db->query('select t1.file_path,t1.quatation_no,t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name lname,t1.item_type,t1.ledger_id from tbl_trans1 t1, m_ledger l,tbl_trans2 t2 where t1.ledger_id=l.id and t1.id=t2.billno  and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") group by t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name,t1.item_type order by t1.cdate,t1.id');
+        $query=$this->db->query('select t1.file_path,t1.quatation_no,t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name lname,t1.item_type,t1.ledger_id from tbl_trans1 t1, m_ledger l,tbl_trans2 t2 where t1.ledger_id=l.id and t1.id=t2.billno  and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'" and t1.quatation_selected="Q3" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") group by t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name,t1.item_type order by t1.id desc');
       }
       else
       {
-        $query=$this->db->query('select t1.file_path,t1.quatation_no,t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name lname,t1.item_type,t1.ledger_id from tbl_trans1 t1, m_ledger l,tbl_trans2 t2 where t1.ledger_id=l.id and t1.id=t2.billno and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") group by t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name,t1.item_type order by t1.cdate,t1.id');
+        $query=$this->db->query('select t1.file_path,t1.quatation_no,t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name lname,t1.item_type,t1.ledger_id from tbl_trans1 t1, m_ledger l,tbl_trans2 t2 where t1.ledger_id=l.id and t1.id=t2.billno and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'"  and t1.quatation_selected="Q3" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") group by t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name,t1.item_type order by t1.id desc');
       }
       // echo $this->db->last_query();die;
       return $query->result();
@@ -2167,8 +2167,12 @@ public function GetState()
           $tableName1='tbl_trans1';
           $tableName2='tbl_trans2';
           $tableName3='tbl_order_bal';
+          $tableName4='q3_rest';
+
           $status = $this->input->post("status");
           $fields = $this->db->field_data($tableName1);
+
+          $fields4 = $this->db->field_data($tableName4);
           foreach ($fields as $field)
           {
             if($field->primary_key==1)
@@ -2177,6 +2181,17 @@ public function GetState()
             if(!empty($value))
             {
                 $data[$field->name]=$value;
+            }
+          }
+
+          foreach ($fields4 as $field)
+          {
+            if($field->primary_key==1)
+              continue;
+            $value=$this->input->post($field->name);
+            if(!empty($value))
+            {
+                $data4[$field->name]=$value;
             }
           }
 
@@ -2192,7 +2207,7 @@ public function GetState()
           $itemcode=$this->input->post("itemcode");
           $item_name=$this->input->post("item_name");
 
-          $qtymt=$this->input->post("qtymt");
+          $qtymt=$this->input->post("moc");
           // $specification=$this->input->post("specification");
           $rate=$this->input->post("rate");
           $discountrs=$this->input->post("discountrs");
@@ -2200,8 +2215,12 @@ public function GetState()
           $freight=$this->input->post("freight");
           $orderid_gen=$this->input->post("orderid_gen");
           $item_remark=$this->input->post("item_remark");
+          $remark=$this->input->post("item_bld");
+          
+
           $unit=$this->input->post("unit");
           $ledger_id=$this->input->post("ledger_id");
+
 
 
           $data['file_name']=$file_name;
@@ -2263,23 +2282,25 @@ public function GetState()
             $id=$this->db->insert_id();
 
 
+          // print_r($remark);die();
 
-            $zipped = array_map(null,$itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit,$item_name);
+            $zipped = array_map(null,$itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$remark,$unit,$item_name,$item_remark);
             foreach($zipped as $tuple) {
             
               $data2=array(
                 "billno"=>$id,
                 "itemcode"=>$tuple[0],
-                "qtymt"=>$tuple[1],
+                "moc"=>$tuple[1],
                 "rate"=>$tuple[2],
                 "discount"=>$tuple[3],
                 "percent"=>$tuple[6],
                 "freight"=>$tuple[4],
                 "cat_id"=>$cat_id,
                 "orderid_gen"=>$tuple[5],
-                "remark"=>$tuple[7],
+                "item_bld"=>$tuple[7],
                 "unit"=>$tuple[8],
                 "item_name"=>$tuple[9],
+                "item_remark"=>$tuple[10],
                 "company_id"=>get_cookie('ae_company_id')
                 );
               // print_r($tuple[9]);die();
@@ -2287,6 +2308,11 @@ public function GetState()
               $this->db->insert($tableName2,$data2);
            
           }
+
+          $data4['billid'] = $id;
+          $this->db->trans_begin();
+          $this->db->insert($tableName4,$data4); // insert q3_rest
+
           $this->db->trans_commit();
           echo $id;       
             }catch(Exception $e){
@@ -2308,26 +2334,54 @@ public function GetState()
 
           $this->db->where('billno',$id);
           $this->db->delete($tableName2); // delete trans 2
-          $zipped = array_map(null, $itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit,$item_name);
+
+          // print_r($itemcode);
+          // print_r($qtymt);
+          // print_r($rate);
+          // print_r($discountrs);
+          // print_r($freight);
+          // print_r($orderid_gen);
+          // print_r($discountper);
+          // print_r($remark);
+          // print_r($unit);
+          // print_r($item_name);
+          // print_r($item_remark);
+          // die();
+
+          // Array ( [0] => [1] => [2] => ) Array ( [0] => 454 [1] => 6565 [2] => 454656 ) Array ( [0] => 345.00 [1] => 6756.00 [2] => 465 ) Array ( [0] => [1] => [2] => ) Array ( [0] => [1] => [2] => ) Array ( [0] => [1] => [2] => ) Array ( [0] => [1] => [2] => ) Array ( [0] => hjgkhgfd [1] => ghgfhg [2] => rdfhj ) Array ( [0] => [1] => [2] => ) Array ( [0] => gbbgbnmvnhgh [1] => gjdfhdf [2] => 6 )
+
+          // print_r($remark);die();
+          $zipped = array_map(null, $itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$remark,$unit,$item_name,$item_remark);
           foreach($zipped as $tuple) {
               $data2=array(
                 "billno"=>$id,
                 "itemcode"=>$tuple[0],
-                "qtymt"=>$tuple[1],
+                "moc"=>$tuple[1],
                 "rate"=>$tuple[2],
                 "discount"=>$tuple[3],
                 "percent"=>$tuple[6],
                 "freight"=>$tuple[4],
                 "cat_id"=>$cat_id,
                 "orderid_gen"=>$tuple[5],
-                 "remark"=>$tuple[7],
+                 "item_bld"=>$tuple[7],
                  "unit"=>$tuple[8],
                 "item_name"=>$tuple[9],
+                "item_remark"=>$tuple[10],
+
                 "company_id"=>get_cookie('ae_company_id')            
                 );
               // print_r($tuple[9]);die();
               $this->db->insert($tableName2,$data2);
           }
+
+
+          $this->db->where('billid',$id);
+          $this->db->delete($tableName4); // delete q3_rest
+
+          $data4['billid'] = $id;
+          $this->db->trans_begin();
+          $this->db->insert($tableName4,$data4); // insert q3_rest
+          
 
           $this->db->trans_commit();
           echo $id;       
@@ -4217,6 +4271,179 @@ public function purchase_return_save()
         echo json_encode($data);
       }
 
+      public function q3_get()
+      {
+        $id = $this->input->get("id");
+        $previd=0;
+        $nextid=0;
+
+        if(get_cookie('ae_user_id')==1)
+        {
+          $query=$this->db->query("select max(id) as id from tbl_trans1 where id<".$id." and vtype='quatation' and company_id=".get_cookie("ae_company_id"));
+        }else{
+          $query=$this->db->query("select max(id) as id from tbl_trans1 where billstatus!='clear' and id<".$id." and vtype='quatation' and company_id=".get_cookie("ae_company_id"));
+        }
+        $result=$query->result();
+        if($query->num_rows()>0)
+        {
+          foreach($result as $row)
+          {
+            $previd=$row->id;
+          }
+        }
+
+        if(get_cookie('ae_user_id')==1)
+        {
+          $query=$this->db->query("select min(id) as id from tbl_trans1 where id>".$id." and vtype='quatation' and company_id=".get_cookie("ae_company_id"));
+        }else{
+          $query=$this->db->query("select min(id) as id from tbl_trans1 where billstatus!='clear' and id>".$id." and vtype='quatation' and company_id=".get_cookie("ae_company_id"));
+        }
+        $result=$query->result();
+        if($query->num_rows()>0)
+        {
+          foreach($result as $row)
+          {
+            $nextid=$row->id;
+          }
+        }
+
+        $query=$this->db->query("select t1.*,l.state,l.name as partyname from tbl_trans1 t1, m_ledger l  where t1.ledger_id=l.id and t1.id=".$id." and t1.company_id=".get_cookie("ae_company_id"));
+        $result=$query->result();
+        if($query->num_rows()>0)
+        {
+          foreach($result as $row)
+          {
+            $data = array(
+                "Message"=>"Success",
+                "id"=>$row->id,
+                "cdate"=>date('d-m-Y',strtotime($row->cdate)),
+                "builtyno"=>$row->builtyno,
+                 "truckno"=>$row->truckno,
+                "ledger_state"=>$row->state,
+                 "ledger_id"=>$row->ledger_id,
+                "ledger_mobno"=>$row->ledger_mobno,
+                "lr_no"=>$row->lr_no,
+                "transport"=>$row->transport,
+                "ref_details"=>$row->ref_details,
+                "sub_details"=>$row->sub_details,
+                "consignee_mobno"=>$row->pakking_forwerding,
+                "pakking_forwerding"=>$row->pakking_forwerding,
+                "delivery_period"=>$row->delivery_period,
+                "payment_terms"=>$row->payment_terms,
+                "warranty_guarantee"=>$row->warranty_guarantee,
+                "ld_clause"=>$row->ld_clause,
+                "lessadv"=>$row->lessadv,
+                "balfreight"=>$row->balfreight,
+                "lr_freight"=>$row->lr_freight,
+                "remark"=>$row->remark,
+                "loading_person_name"=>$row->loading_person_name,
+                "vtype"=>$row->vtype,
+                "previd"=>$previd,
+                "nextid"=>$nextid,
+                "transport_narration"=>$row->transport_narration,
+                "f1_amount"=>$row->f1_amount,
+                "f2_amount"=>$row->f2_amount,
+                "checked_by"=>$row->checked_by,
+                "dispatch_through"=>$row->dispatch_through,
+                "created_by"=>$row->created_by,
+                "modified_by"=>$row->modified_by,
+                "paid_build"=>$row->paid_build,
+                "lname"=>$row->partyname,
+                "file_name"=>$row->file_name,
+                "semi_formal"=>$row->semi_formal,
+                "header"=>$row->header,
+                "taxes"=>$row->taxes,
+                "scope_of_work"=>$row->scope_of_work,
+                "design_criteria"=>$row->design_criteria,
+                "validity_of_offer"=>$row->validity_of_offer,
+                "note"=>$row->note,
+                "performance_warranty"=>$row->performance_warranty,
+                "equipment_acceptance"=>$row->equipment_acceptance,
+                "supervision_commissioning"=>$row->supervision_commissioning,
+                "training"=>$row->training,
+                "general_safety"=>$row->general_safety,
+                "spare_parts"=>$row->spare_parts,
+                "chassis_equipment"=>$row->chassis_equipment,
+                "price"=>$row->price,
+                "gst_tax"=>$row->gst_tax,
+                "mobile_crane"=>$row->mobile_crane,
+                "scope_of_unloading"=>$row->scope_of_unloading,
+                "intrest_charge"=>$row->intrest_charge,
+                "cancellation"=>$row->cancellation,
+                "jurisdication"=>$row->jurisdication,
+                "documents_provided"=>$row->documents_provided,
+                "load_test"=>$row->load_test,
+                "quatation_selected"=>$row->quatation_selected,
+                "prepare_by"=>$row->prepare_by,
+                "prepared_name"=>$row->prepared_name,
+                "erection_period"=>$row->erection_period,
+                "scope_of_contract"=>$row->scope_of_contract,
+                "proposal_validity"=>$row->proposal_validity,
+                "erection_drw"=>$row->erection_drw,
+                "specification_changes"=>$row->specification_changes,
+                "change_in_scope"=>$row->change_in_scope,
+                "our_liablity"=>$row->our_liablity,
+                "ownership"=>$row->ownership,
+                "scope_of_client"=>$row->scope_of_client,
+                "assumptions_erection"=>$row->assumptions_erection,
+
+                
+              );
+          }
+
+          $query1=$this->db->query("select t1.* from q3_rest t1 where t1.billid=".$id." ");
+          $result1=$query1->result();
+
+          foreach($query1->result() as $row)
+          {
+            $data['building_no']=$row->building_no;
+            $data['building_desc']=$row->building_desc;
+            $data['building_area']=$row->building_area;
+            $data['building_set']=$row->building_set;
+            $data['basic_frame_type']=$row->basic_frame_type;
+            $data['basic_width']=$row->basic_width;
+            $data['basic_length']=$row->basic_length;
+            $data['basic_clear_height']=$row->basic_clear_height;
+            $data['basic_brick_wall']=$row->basic_brick_wall;
+            $data['basic_interior_column']=$row->basic_interior_column;
+            $data['basic_roof_slope']=$row->basic_roof_slope;
+            $data['basic_bay_spacing']=$row->basic_bay_spacing;
+            $data['basic_end_wall']=$row->basic_end_wall;
+            $data['basic_end_frames']=$row->basic_end_frames;
+            $data['basic_wind_bracing']=$row->basic_wind_bracing;
+            $data['basic_roof_cladding']=$row->basic_roof_cladding;
+            $data['basic_wall_cladding']=$row->basic_wall_cladding;
+            $data['basic_north_wall']=$row->basic_north_wall;
+            $data['basic_sorth_wall']=$row->basic_sorth_wall;
+            $data['basic_east_wall']=$row->basic_east_wall;
+            $data['basic_west_wall']=$row->basic_west_wall;
+            $data['basic_curved_eaves']=$row->basic_curved_eaves;
+            $data['basic_gutters']=$row->basic_gutters;
+            $data['basic_eave_trim']=$row->basic_eave_trim;
+            $data['basic_downspouts']=$row->basic_downspouts;
+            $data['standard_location']=$row->standard_location;
+            $data['standard_framed_openings']=$row->standard_framed_openings;
+            $data['steel_welding']=$row->steel_welding;
+            $data['steel_built_up']=$row->steel_built_up;
+            $data['steel_purlins']=$row->steel_purlins;
+            $data['steel_profile_sheets']=$row->steel_profile_sheets;
+            $data['design_dead_load']=$row->design_dead_load;
+            $data['design_live_load']=$row->design_live_load;
+            $data['design_collateral']=$row->design_collateral;
+            $data['design_wind_load']=$row->design_wind_load;
+            $data['design_seismic_load']=$row->design_seismic_load;
+
+          }
+
+        }
+        else{
+        $data = array(
+              "Message"=>"Failed"
+              );
+        }
+        echo json_encode($data);
+      }
+
 
        public function order_get()
       {
@@ -4609,6 +4836,15 @@ public function purchase_return_save()
           $result=$query->result();
           return $result;
         }
+
+
+        public function q3_get_item(){
+          $id = $this->input->get("id");
+          $query=$this->db->query('select t2.* from tbl_trans2 t2  where t2.billno='.$id . ' order by t2.id');
+          $result=$query->result();
+          return $result;
+        }
+
 
         public function invoices_get_item(){
           $id = $this->input->get("id");

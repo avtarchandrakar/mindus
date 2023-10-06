@@ -211,6 +211,9 @@
               window.open("<?php echo base_url();?>index.php/transactionController/q3format_print/"+ID,'_blank');
         }
 
+        function GetReporteye(ID) {
+	            window.open("<?php echo base_url();?>index.php/transactionController/q3format_printeye/"+ID,'_blank');
+		    }
 
 		function GetDownload(ID) {
             window.open("<?php echo base_url();?>index.php/transactionController/work_order_download/"+ID);

@@ -265,6 +265,9 @@ class transactionController extends CI_Controller {
                 echo '        <a class="btn btn-xs btn-info btn_modify" title="view" onclick="GetRecord(' . $row->id .');return false;">';
                 echo '          <i class="ace-icon fa fa-pencil bigger-120"></i>';
                 echo '        </a>';
+                echo '        <button class="btn btn-xs btn-info btn-print" title="View" onclick="GetReporteye(' . $row->id .');return false;">';
+                echo '          <i class="ace-icon fa fa-eye bigger-120"></i>';
+                echo '        </button>';
                 echo '        <button class="btn btn-xs btn-info btn-print" title="Print" onclick="GetReport(' . $row->id .');return false;">';
                 echo '          <i class="ace-icon fa fa-print bigger-120"></i>';
                 echo '        </button>';
@@ -316,6 +319,9 @@ class transactionController extends CI_Controller {
                 echo '        <a class="btn btn-xs btn-info btn_modify" title="view" onclick="GetRecord(' . $row->id .');return false;">';
                 echo '          <i class="ace-icon fa fa-pencil bigger-120"></i>';
                 echo '        </a>';
+                echo '        <button class="btn btn-xs btn-info btn-print" title="View" onclick="GetReporteye(' . $row->id .');return false;">';
+                echo '          <i class="ace-icon fa fa-eye bigger-120"></i>';
+                echo '        </button>';
                 echo '        <button class="btn btn-xs btn-info btn-print" title="Print" onclick="GetReport(' . $row->id .');return false;">';
                 echo '          <i class="ace-icon fa fa-print bigger-120"></i>';
                 echo '        </button>';
@@ -600,12 +606,30 @@ function sales_return_list(){
       $this->load->helper(array('dompdfA4', 'file'));
       $this->load->view('purchase_bill_print', $data);
     }
+
+    function purchase_bill_printeye($id){
+      $data=array(
+      'id'=>$id
+      );
+      $this->load->helper(array('dompdfA4', 'file'));
+      $this->load->view('purchase_bill_printeye', $data);
+    }
+
+
     function work_order_print($id){
       $data=array(
       'id'=>$id
       );
       $this->load->helper(array('dompdfA4', 'file'));
       $this->load->view('wo_print', $data);
+    }
+
+    function work_order_printeye($id){
+      $data=array(
+      'id'=>$id
+      );
+      $this->load->helper(array('dompdfA4', 'file'));
+      $this->load->view('wo_printeye', $data);
     }
 
     function q3format_print($id){
@@ -616,6 +640,14 @@ function sales_return_list(){
       $this->load->view('q3format_print', $data);
     }
 
+    function q3format_printeye($id){
+      $data=array(
+      'id'=>$id
+      );
+      $this->load->helper(array('dompdfA4', 'file'));
+      $this->load->view('q3format_printeye', $data);
+    }
+
     function voucher_print($id){
       $data=array(
       'id'=>$id
@@ -624,12 +656,29 @@ function sales_return_list(){
       $this->load->view('voucher_print', $data);
     }
 
+
+    function voucher_printeye($id){
+      $data=array(
+      'id'=>$id
+      );
+      $this->load->helper(array('dompdfA4', 'file'));
+      $this->load->view('voucher_printeye', $data);
+    }
+
     function invoices_bill_print($id){
       $data=array(
       'id'=>$id
       );
       $this->load->helper(array('dompdfA4', 'file'));
       $this->load->view('invoices_bill_print', $data);
+    }
+
+    function invoices_bill_printeye($id){
+      $data=array(
+      'id'=>$id
+      );
+      $this->load->helper(array('dompdfA4', 'file'));
+      $this->load->view('invoices_bill_printeye', $data);
     }
 
     function jobcard_bill_print($id){
@@ -656,12 +705,30 @@ function sales_return_list(){
       $this->load->view('job_bill_print', $data);
     }
 
+
+    function job_bill_printeye($id){
+      $data=array(
+      'id'=>$id
+      );
+      $this->load->helper(array('dompdfA4', 'file'));
+      $this->load->view('job_bill_printeye', $data);
+    }
+
     function requisition_bill_print($id){
       $data=array(
       'id'=>$id
       );
       $this->load->helper(array('dompdfA4', 'file'));
       $this->load->view('requisition_bill_print', $data);
+    }
+
+
+    function requisition_bill_printeye($id){
+      $data=array(
+      'id'=>$id
+      );
+      $this->load->helper(array('dompdfA4', 'file'));
+      $this->load->view('requisition_bill_printeye', $data);
     }
 
     function receipt_print($id){
@@ -1474,6 +1541,12 @@ function sales_return_list(){
     { 
         $this->load->model('transaction_model');
         $this->transaction_model->sales_get();
+    }
+
+    function q3_get()
+    { 
+        $this->load->model('transaction_model');
+        $this->transaction_model->q3_get();
     }
 
     function cpo_get()
@@ -2622,6 +2695,9 @@ function purchase_list(){
         echo '        <a class="btn btn-xs btn-info btn_modify" title="view" onclick="GetRecord(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-pencil bigger-120"></i>';
         echo '        </a>';
+        echo '        <button class="btn btn-xs btn-info btn-print" title="View" onclick="GetReporteye(' . $row->id .');return false;">';
+                echo '          <i class="ace-icon fa fa-eye bigger-120"></i>';
+                echo '        </button>';
         echo '        <button class="btn btn-xs btn-info" title="Print" onclick="GetReport(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-print bigger-120"></i>';
         echo '        </button>';
@@ -2684,6 +2760,9 @@ function purchase_list(){
         echo '        <a class="btn btn-xs btn-info btn_modify" title="view" onclick="GetRecord(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-pencil bigger-120"></i>';
         echo '        </a>';
+        echo '        <button class="btn btn-xs btn-info btn-print" title="View" onclick="GetReporteye(' . $row->id .');return false;">';
+                echo '          <i class="ace-icon fa fa-eye bigger-120"></i>';
+                echo '        </button>';
         echo '        <button class="btn btn-xs btn-info" title="Print" onclick="GetReport(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-print bigger-120"></i>';
         echo '        </button>';
@@ -2742,6 +2821,9 @@ function purchase_list(){
         echo '        <a class="btn btn-xs btn-info btn_modify" title="view" onclick="GetRecord(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-pencil bigger-120"></i>';
         echo '        </a>';
+        echo '        <button class="btn btn-xs btn-info btn-print" title="View" onclick="GetReporteye(' . $row->id .');return false;">';
+        echo '          <i class="ace-icon fa fa-eye bigger-120"></i>';
+        echo '        </button>';
         echo '        <button class="btn btn-xs btn-info" title="Print" onclick="GetReport(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-print bigger-120"></i>';
         echo '        </button>';
@@ -2804,6 +2886,9 @@ function purchase_list(){
         echo '        <a class="btn btn-xs btn-info btn_modify" title="view" onclick="GetRecord(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-pencil bigger-120"></i>';
         echo '        </a>';
+        echo '        <button class="btn btn-xs btn-info btn-print" title="View" onclick="GetReporteye(' . $row->id .');return false;">';
+        echo '          <i class="ace-icon fa fa-eye bigger-120"></i>';
+        echo '        </button>';
         echo '        <button class="btn btn-xs btn-info" title="Print" onclick="GetReport(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-print bigger-120"></i>';
         echo '        </button>';
@@ -2856,6 +2941,9 @@ function purchase_list(){
         echo '        <a class="btn btn-xs btn-info btn_modify" title="view" onclick="GetRecord(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-pencil bigger-120"></i>';
         echo '        </a>';
+        echo '        <button class="btn btn-xs btn-info btn-print" title="View" onclick="GetReporteye(' . $row->id .');return false;">';
+                echo '          <i class="ace-icon fa fa-eye bigger-120"></i>';
+                echo '        </button>';
         echo '        <button class="btn btn-xs btn-danger" title="Print" onclick="GetReport(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-print bigger-120"></i>';
         echo '        </button>';
@@ -3481,6 +3569,43 @@ function purchase_return_list(){
                  echo ' <td><input tabindex="'.$ti++.'" type="text" name="discountrs[]" id="txt_discountrs" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>';
                  echo ' <td><input tabindex="'.$ti++.'" type="text" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>';
                 echo ' <td><input tabindex="'.$ti++.'" type="text" name="freight[]" id="txt_freight" class="freight txt_cls" onblur="TolFreight();" /></td>';
+                echo ' <td><button tabindex="'.$ti++.'" type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>';
+                echo '</tr>';
+
+           }
+
+        }
+
+
+        function q3_get_item(){
+           $this->load->model('transaction_model');
+           $result=$this->transaction_model->q3_get_item();
+           $ti=9;
+           if(count($result)>0){
+               foreach($result as $row){
+               echo '<tr>';
+                echo ' <td><input tabindex="'.$ti++.'" value="'.$row->item_name.'" type="text" id="item_name" name="item_name[]" class="txt_item item" onkeyup="getItemAutoCompt(this);" list="0"/><input type="hidden" id="item_id" class="item_id" name="itemcode[]"/><input type="hidden" id="order_id" name="orderid_gen[]"/></td>';
+                // echo ' <td><input tabindex="'.$ti++.'" type="text" name="qtymt[]" id="txt_qtymt" class="qtymt txt_cls" onblur="GetQtyBag(this);return false;"/></td>';
+                echo ' <td><input value="'.$row->item_bld.'"  type="text" name="item_bld[]" id="item_bld" class="txt_cls" />';
+                echo ' <td><input value="'.$row->moc.'" tabindex="'.$ti++.'" type="text" name="moc[]" id="txt_unit" class="txt_cls" /><input  type="hidden" name="unit[]" id="txt_unit" class="txt_cls" /></td>';
+                // echo ' <td><input tabindex="'.$ti++.'" type="text" name="qtybag[]" id="txt_qtybag" class="qtybag txt_cls" readonly="true"/></td>           ';
+                echo ' <td><input  tabindex="'.$ti++.'" value="'.$row->rate.'" type="text" name="rate[]" id="txt_rate" class="txt_cls"/><input tabindex="'.$ti++.'" type="hidden" name="discountrs[]" id="txt_discountrs" class="txt_cls" onblur="CalcAmount(this);return false;"/><input tabindex="'.$ti++.'" type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>';
+                echo ' <td><input tabindex="'.$ti++.'" value="'.$row->item_remark.'" type="text" name="item_remark[]" id="txt_item_remark" class="item_remark txt_cls" /><input  type="hidden" name="freight[]" id="txt_freight" class="freight txt_cls" onblur="TolFreight();" /></td>';
+                echo ' <td><button tabindex="'.$ti++.'" type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>';
+                echo '</tr>';
+
+               }
+           }  
+           else
+           {
+                echo '<tr>';
+                echo ' <td><input tabindex="'.$ti++.'" value="'.$row->item_name.'" type="text" id="item_name" name="item_name[]"  class="txt_item item" onkeyup="getItemAutoCompt(this);" list="0"/><input type="hidden" id="item_id" class="item_id" name="itemcode[]"/><input type="hidden" id="order_id" name="orderid_gen[]"/></td>';
+                // echo ' <td><input tabindex="'.$ti++.'" type="text" name="qtymt[]" id="txt_qtymt" class="qtymt txt_cls" onblur="GetQtyBag(this);return false;"/></td>';
+                echo ' <td><input value="'.$row->item_bld.'"  type="text" name="item_bld[]" id="item_bld" class="txt_cls" />';
+                echo ' <td><input value="'.$row->moc.'" tabindex="'.$ti++.'" type="text" name="moc[]" id="txt_unit" class="txt_cls" /><input  type="hidden" name="unit[]" id="txt_unit" class="txt_cls" /></td>';
+                // echo ' <td><input tabindex="'.$ti++.'" type="text" name="qtybag[]" id="txt_qtybag" class="qtybag txt_cls" readonly="true"/></td>           ';
+                echo ' <td><input  tabindex="'.$ti++.'" value="'.$row->rate.'" type="text" name="rate[]" id="txt_rate" class="txt_cls"/><input tabindex="'.$ti++.'" type="hidden" name="discountrs[]" id="txt_discountrs" class="txt_cls" onblur="CalcAmount(this);return false;"/><input tabindex="'.$ti++.'" type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>';
+                echo ' <td><input tabindex="'.$ti++.'" value="'.$row->item_remark.'" type="text" name="item_remark[]" id="txt_item_remark" class="item_remark txt_cls" /><input  type="hidden" name="freight[]" id="txt_freight" class="freight txt_cls" onblur="TolFreight();" /></td>';
                 echo ' <td><button tabindex="'.$ti++.'" type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>';
                 echo '</tr>';
 

@@ -180,7 +180,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
 </div>
 
 <div class="footer">
-  <img src="<?php echo base_url();?>assets/images/footer.jpg" style="height:auto;width: 95%;">
+  <img src="<?php echo base_url();?>assets/images/footer.jpg" style="padding-left: 10px;height:auto;width: 92%;padding-bottom: 30px;">
 </div>
 
   <div class="container">

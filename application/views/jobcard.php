@@ -181,6 +181,10 @@
 	            window.open("<?php echo base_url();?>index.php/transactionController/job_bill_print/"+ID,'_blank');
 		    }
 
+		    function GetReporteye(ID) {
+	            window.open("<?php echo base_url();?>index.php/transactionController/job_bill_printeye/"+ID,'_blank');
+		    }
+
 //////////////////////
                function checkAction(status){
 	              if(status=='edit'){
