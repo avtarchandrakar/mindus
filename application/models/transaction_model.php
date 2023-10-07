@@ -1421,7 +1421,7 @@ public function GetState()
       //       }else{
       //         $maxsno1=$maxsno;
       //       }
-      //       $data['quatation_no']='MI/CO/'.substr(get_cookie("ae_fnyear_name"),8,2)."-".substr(get_cookie("ae_fnyear_name"),8,2)."/".$maxsno1;
+      //       $data['quatation_no']='MI/TCO/'.substr(get_cookie("ae_fnyear_name"),8,2)."-".substr(get_cookie("ae_fnyear_name"),8,2)."/".$maxsno1;
 
 
       //         $climit=0;
@@ -1621,7 +1621,7 @@ public function GetState()
             }else{
               $maxsno1=$maxsno;
             }
-            $data['quatation_no']='MI/CO/'.substr(get_cookie("ae_fnyear_name"),3,2)."-".substr(get_cookie("ae_fnyear_name"),8,2)."/".$maxsno1;
+            $data['quatation_no']='MI/TCO/'.substr(get_cookie("ae_fnyear_name"),3,2)."-".substr(get_cookie("ae_fnyear_name"),8,2)."/".$maxsno1;
 
               $climit=0;
               $query=$this->db->query("select climit from m_ledger where id=".$ledger_id."");
@@ -2250,7 +2250,7 @@ public function GetState()
             }else{
               $maxsno1=$maxsno;
             }
-            $data['quatation_no']='MI/CO/'.substr(get_cookie("ae_fnyear_name"),3,2)."-".substr(get_cookie("ae_fnyear_name"),8,2)."/".$maxsno1;
+            $data['quatation_no']='MI/TCO/'.substr(get_cookie("ae_fnyear_name"),3,2)."-".substr(get_cookie("ae_fnyear_name"),8,2)."/".$maxsno1;
 
               $climit=0;
               $query=$this->db->query("select climit from m_ledger where id=".$ledger_id."");
