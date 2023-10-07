@@ -91,12 +91,12 @@
 					<input type="text" tabindex="3" name="jobcard" id="jobcard" class="col-xs-10 col-sm-12" placeholder="Jobcard No" data-rule-required="true"/>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group ">
 			<div class="col-sm-5" id="cust_details"></div>
 
-			<label class="col-sm-2 control-label no-padding-right" for="form-field-1" > Work Order No.</label>
+			<label class="col-sm-2 control-label no-padding-right hidden" for="form-field-1" > Work Order No.</label>
 			
-			<div class="col-sm-3" >
+			<div class="col-sm-3 hidden" >
 					<input type="text" name="pon" id="pon" class="col-xs-10 col-sm-12" placeholder=" Work Order No." data-rule-required="true"/>
 			</div>
 		</div>
