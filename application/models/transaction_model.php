@@ -718,11 +718,11 @@ public function GetState()
 
       if($p_bdate==1)
       {
-        $query=$this->db->query('select t1.file_path,t1.quatation_no,t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name lname,t1.item_type,t1.ledger_id from tbl_trans1 t1, m_ledger l,tbl_trans2 t2 where t1.ledger_id=l.id and t1.id=t2.billno  and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'" and t1.quatation_selected="Q3" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") group by t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name,t1.item_type order by t1.id desc');
+        $query=$this->db->query('select t1.quatation_selected,t1.file_path,t1.quatation_no,t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name lname,t1.item_type,t1.ledger_id from tbl_trans1 t1, m_ledger l,tbl_trans2 t2 where t1.ledger_id=l.id and t1.id=t2.billno  and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'" and t1.quatation_selected="Q3" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") group by t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name,t1.item_type order by t1.id desc');
       }
       else
       {
-        $query=$this->db->query('select t1.file_path,t1.quatation_no,t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name lname,t1.item_type,t1.ledger_id from tbl_trans1 t1, m_ledger l,tbl_trans2 t2 where t1.ledger_id=l.id and t1.id=t2.billno and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'"  and t1.quatation_selected="Q3" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") group by t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name,t1.item_type order by t1.id desc');
+        $query=$this->db->query('select t1.quatation_selected,t1.file_path,t1.quatation_no,t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name lname,t1.item_type,t1.ledger_id from tbl_trans1 t1, m_ledger l,tbl_trans2 t2 where t1.ledger_id=l.id and t1.id=t2.billno and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'"  and t1.quatation_selected="Q3" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") group by t1.id,t1.cdate,t1.builtyno,ledger_mobno,l.name,t1.item_type order by t1.id desc');
       }
       // echo $this->db->last_query();die;
       return $query->result();

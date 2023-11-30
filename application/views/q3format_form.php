@@ -768,15 +768,31 @@ changes and improvements, in the continued development of the SELLER's product).
 			<div class="col-sm-4">
 				<input type="text"  name="dispatch_through" id="dispatch_through" placeholder="Dispatch Through" class="col-xs-11"/>
 			</div>	 
-			<label class="col-sm-2 control-label">Attach Document PDF/JPG</label>
+			<!-- <label class="col-sm-2 control-label">Attach Document PDF/JPG</label>
 			<div class="col-sm-3">
 				<input type='file' id='photo' name='photo' class='form-control' />
 				<input type="hidden" id="filepath" name="filepath" readonly="readonly"/>
-			 	<input type="hidden" id="filename" name="filename" readonly="readonly"/>
+			 	<input type="hidden" id="filename" name="filename" readonly="readonly"/> -->
 			 	 
-			</div>  
+			<!-- </div>   -->
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Upload Drawings</label>
+			<div class="col-sm-3">
+				<input type='file' data-rule-required="true" id='photo' name='photo' class='form-control  col-xs-10 col-sm-12' />
+				<input type="hidden" id="filepath" name="filepath"/>
+			 	<input type="hidden" id="filename" name="filename"/>
+			</div>
 		</div>
 
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Upload Other Documents</label>
+			<div class="col-sm-3">
+				<input type='file' data-rule-required="true" id='otherfile' name='otherfile' class='form-control  col-xs-10 col-sm-12' />
+				<input type="hidden" id="otherfilepath" name="otherfilepath"/>
+			 	<input type="hidden" id="otherfilename" name="otherfilename"/>
+			</div>
+		</div>
 		<div class="form-group" style="display:none;">
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> </label> 
 			<label class="col-sm-2 control-label uploaded">Upload Doc</label>

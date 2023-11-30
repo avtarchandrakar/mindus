@@ -1830,7 +1830,7 @@ function sales_return_list(){
 
       $id = $this->input->post('gid');
       // print_r($id);die();
-      $quotation_print = $this->input->post('quotation_print');
+      $quotation_print = $this->input->post('quatation_selected');
       $ledger_id = $this->input->post('ledger_id');
       $body = $this->input->post('body');
       // $quotation_print = $this->input->get('quotation_print');
@@ -1864,11 +1864,21 @@ function sales_return_list(){
       $data=array(
       'id'=>$id
       );
+      $html='';
       if ($quotation_print=='Q1') {
         $html = $this->load->view('quotation_print', $data, true);
-      }else{
+      }
+
+      if ($quotation_print=='Q2') {
         $html = $this->load->view('q21_bill_print1', $data, true);
       }
+
+      if ($quotation_print=='Q3') {
+        $html = $this->load->view('q3format_print', $data, true);
+      }
+
+      // echo $html;die();
+
       // $html = $this->load->view('quotation_print', $data, true);
       $this->load->helper('file');
       $filePath = FCPATH."/whatsapp/";
@@ -1880,29 +1890,23 @@ function sales_return_list(){
       $pdf->render();
       $output = $pdf->output();
       file_put_contents($filePath."Quotation".$id.".pdf", $output);
-      $mobile = $mobileno;
-      // $mobile = '7470632201';
+      $mobile = "91".$mobileno;
+      $mobile = '917470632201';
 
       $media = base_url()."whatsapp/Quotation".$id.".pdf";
+
       $msg =$body;
       $filename = "Quotation";
       $url = "https://techvakeservices.com/api/send?number=91".$mobile."&type=media&message=".$msg."&media_url=".$media."&filename=".$filename."&instance_id=".$ins."&access_token=".$api;
-      // $options = array(
-      // 'http' => array(
-      // 'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-      // 'method' => 'POST',
-      // )
-      // );
-      // $context = stream_context_create($options);
-      // $result = file_get_contents($url, false, $context);
       $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, $url);
-      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-      curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-      $data = curl_exec($ch);
-      // print_r($url);die();
-      // echo "<script>history.back();window.close();</script>";
+      $timeout = 5;
+      $curl = curl_init( 'https://techvakeservices.com/api/send' );
+      curl_setopt( $curl, CURLOPT_POST, true );
+      curl_setopt( $curl, CURLOPT_POSTFIELDS, array( 'number' => $mobile, 'type' => 'media', 'message' => $msg, 'media_url' => $media, 'instance_id' => $ins, 'access_token' => $api ) );
+      curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+      $response = curl_exec( $curl );
+      curl_close( $curl );
+      // print_r($response);
       echo "1";
     }
 
@@ -2158,7 +2162,7 @@ function sales_return_list(){
       $this->load->helper('path');
       $id = $this->input->post('gid');
       // print_r($id);die();
-      $quotation_print = $this->input->post('quotation_print');
+      $quotation_print = $this->input->post('quatation_selected');
       $ledger_id = $this->input->post('ledger_id');
       $mailbody = $this->input->post('mailbody');
       $subject = $this->input->post('subject');
@@ -2181,12 +2185,19 @@ function sales_return_list(){
       $data=array(
       'id'=>$id
       );
+      $html='';
       if ($quotation_print=='Q1') {
         $html = $this->load->view('quotation_print', $data, true);
-      }else{
+      }
+
+      if ($quotation_print=='Q2') {
         $html = $this->load->view('q21_bill_print1', $data, true);
       }
-      // $html = $this->load->view('quotation_print', $data, true);
+
+      if ($quotation_print=='Q3') {
+        $html = $this->load->view('q3format_print', $data, true);
+      }
+
       $this->load->helper('file');
       $filePath = FCPATH."/whatsapp/";
       require_once 'vendor/autoload.php';
@@ -2795,8 +2806,8 @@ function purchase_list(){
           echo '            <th>No</th>';
           echo '            <th>SNo</th>';
           echo '            <th>PartyName</th>';
-          echo '            <th>Document</th>';
-          echo '            <th   style="width:130px">Action</th>';
+          echo '            <th>Dwaring View  </th>';
+          echo '            <th   style="width:250px">Action</th>';
           echo '        </tr>';
           echo '    </thead>';
           echo '    <tbody>';
@@ -2827,15 +2838,18 @@ function purchase_list(){
         echo '        <button class="btn btn-xs btn-info" title="Print" onclick="GetReport(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-print bigger-120"></i>';
         echo '        </button>';
-        // echo '        <button class="btn btn-xs btn-danger btn-print" title="Download" onclick="GetDownload(' . $row->id .');return false;">';
+        // echo '        <button class="btn btn-xs btn-danger btn-print" title="Download" onclick="GetDownload(' . $row->id .',\'' . $row->quatation_selected .'\');return false;">';
         // echo '          <i class="ace-icon fa fa-download bigger-120"></i>';
         // echo '        </button>';
-        // echo '        <button class="btn btn-xs btn-info btn-print" title="Whatsapp" onclick="GetWhatsapp(' . $row->id .',' . $row->ledger_id .');return false;">';
-        // echo '          <i class="ace-icon fa fa-send bigger-120"></i>';
-        // echo '        </button>';
-        // echo '        <button class="btn btn-xs btn-danger btn-print" title="Mail" onclick="GetMail(' . $row->id .',' . $row->ledger_id .');return false;">';
-        // echo '          <i class="ace-icon fa fa-envelope bigger-120"></i>';
-        // echo '        </button>';
+        echo '        <button class="btn btn-xs btn-info btn-print" title="Whatsapp" onclick="GetWhatsapp(' . $row->id .',' . $row->ledger_id .',\'' . $row->quatation_selected .'\');return false;">';
+        echo '          <i class="ace-icon fa fa-send bigger-120"></i>';
+        echo '        </button>';
+        echo '        <button class="btn btn-xs btn-danger btn-print" title="Mail" onclick="GetMail(' . $row->id .',' . $row->ledger_id .',\'' . $row->quatation_selected .'\');return false;">';
+        echo '          <i class="ace-icon fa fa-envelope bigger-120"></i>';
+        echo '        </button>';
+        echo '        <button class="btn btn-xs btn-danger btn-print" title="CPO" onclick="GetCpoFormadd(' . $row->id .');return false;">';
+        echo '         CPO<!--- <i class="ace-icon fa fa-envelope bigger-120"></i>--->';
+        echo '        </button>';
         echo '      </div>';
                 echo '    </td>';
                 echo '</tr>';

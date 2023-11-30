@@ -377,6 +377,7 @@ class formController extends CI_Controller {
               'godownlist'=>godown_list(),
               'gid'=>$this->input->get('gid'),
               'ledger_id'=>$this->input->get('ledger_id'),
+              'quatation_selected'=>$this->input->get('quatation_selected'),
               'subject'=>'Metalite Industries',
               'mailbody'=>'Metalite Industries
               Dear Sir,
@@ -710,6 +711,7 @@ class formController extends CI_Controller {
               'godownlist'=>godown_list(),
               'gid'=>$this->input->get('gid'),
               'ledger_id'=>$this->input->get('ledger_id'),
+              'quatation_selected'=>$this->input->get('quatation_selected'),
               'subject'=>'Metalite Industries',
               'mailbody'=>'Metalite Industries
               Dear Sir,

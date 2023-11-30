@@ -219,12 +219,29 @@
             window.open("<?php echo base_url();?>index.php/transactionController/work_order_download/"+ID);
 	    }
 
-		    function GetWhatsapp(ID,ledger_id) {
-	           
-			            // url= "<?php echo base_url();?>index.php/transactionController/purchase_whatsapp";
+		    function GetWhatsapp(ID,ledger_id,quatation_selected) {
 	            $('#modal_form').modal('show');
 		        $.ajax({
-		            url: "<?php echo base_url();?>index.php/formController/workorder_form",
+		            url: "<?php echo base_url();?>index.php/formController/whatsapp_form",
+		            type: "GET",
+			        data: data+'&gid='+ID+'&ledger_id='+ledger_id+'&quatation_selected='+quatation_selected,
+		            cache: false,
+		            success: function (html) {
+		                $(".modal-body").html(html);
+				    	MoveTextBox('.form-input');
+				    	BlankForm();
+				    	$(".cdate").mask("99-99-9999");
+				    	$("#q_number").val(ID);
+					    $("[tabindex='1']").focus();
+		                $(".loading").hide();
+		            }
+		        });
+		    }
+
+		    function GetMail(ID,ledger_id,quatation_selected) {
+	            $('#modal_form').modal('show');
+		        $.ajax({
+		            url: "<?php echo base_url();?>index.php/formController/mail_form",
 		            type: "GET",
 			        data: data+'&gid='+ID+'&ledger_id='+ledger_id,
 		            cache: false,
@@ -237,17 +254,14 @@
 					    $("[tabindex='1']").focus();
 		                $(".loading").hide();
 		            }
-		        });    
+		        });
 		    }
 
-		    function GetMail(ID,ledger_id) {
-	            
-			            // url: "<?php echo base_url();?>index.php/transactionController/purchase_mail",
-		    	$('#modal_form').modal('show');
+		    function GetCpoFormadd(ID) {
+				$('#modal_form').modal('show');
 		        $.ajax({
-		            url: "<?php echo base_url();?>index.php/formController/workorder_form",
+		            url: "<?php echo base_url();?>index.php/formController/approval_form",
 		            type: "GET",
-			        data: data+'&gid='+ID+'&ledger_id='+ledger_id,
 		            cache: false,
 		            success: function (html) {
 		                $(".modal-body").html(html);
@@ -259,7 +273,6 @@
 					    $("[tabindex='1']").focus();
 		                $(".loading").hide();
 		            }
-		        });
-			           
+		        });				
 		    }
 </script>

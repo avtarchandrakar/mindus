@@ -30,6 +30,7 @@
         <form action="#" class="form-horizontal form-input" id="userform" method="post" role="form" enctype="multipart/form-data">
         <input type="hidden" value="0" name="previd" id="previd" class="form-control" />
         <input type="hidden" value="<?=$ledger_id?>"  name="ledger_id" id="ledger_id" class="form-control" />
+        <input type="hidden" value="<?=$quatation_selected?>"  name="quatation_selected" id="quatation_selected" class="form-control" />
         <input type="hidden" value="<?=$gid?>" name="gid" id="gid" class="form-control" />
 
         <input type="hidden" value="<?=$status?>" name="status" id="status" class="form-control" />
@@ -181,7 +182,7 @@
                 $("#userform").validationEngine();
 		        
 		    	status=$('#status').val();
-				checkAction(status);
+				// checkAction(status);
 
 			    
 			    $("#cdate").keyup(function(event){
