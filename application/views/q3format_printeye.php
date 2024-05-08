@@ -124,6 +124,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
       $scope_of_client='';
       $pakking_forwerding='';
       $assumptions_erection='';
+      $proposal_for='';
 
 
       foreach($query->result() as $row)
@@ -197,8 +198,46 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
         $scope_of_client=$row->scope_of_client;
         $pakking_forwerding=$row->pakking_forwerding;
         $assumptions_erection=$row->assumptions_erection;
+        $proposal_for=$row->proposal_for;
 
 
+
+      }
+
+
+      $query1=$this->db->query('select * from m_company where company_id='.get_cookie('ae_company_id').' ');
+      $gstn="";
+      $cin="";
+      $gmail="";
+      $website='';
+      $ac_holder="";
+      $bankname='';
+      $ac_no='';
+      $ifsccode='';
+      $ac_holder2="";
+      $bankname2='';
+      $ac_no2='';
+      $ifsccode2='';
+      $bank_address='';
+      $bank_address2='';
+
+      foreach($query1->result() as $row1)
+      {
+        $gstn=$row1->gstn;
+        $cin=$row1->cin;
+        $gmail=$row1->gmail;
+        $website=$row1->website;
+        $ac_holder=$row1->ac_holder;
+        $bankname=$row1->bankname;
+        $ac_no=$row1->ac_no;
+        $ifsccode=$row1->ifsccode;
+
+        $ac_holder2=$row1->ac_holder2;
+        $bankname2=$row1->bankname2;
+        $ac_no2=$row1->ac_no2;
+        $ifsccode2=$row1->ifsccode2;
+        $bank_address=$row1->bank_address;
+        $bank_address2=$row1->bank_address2;
 
       }
     ?>
@@ -310,9 +349,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
     <tr>
     <td  colspan="2" style="width:100%;text-align:left;font-size:22px;color: darkblue;border:2px solid green;background-color: #ccffeb;">
       
-      Proposal for Supply, Fabrication & Erection of Steel
-      structural members, Z-sections, C-sections, Profiled
-      sheeting & miscellaneous items for your PEB Shed 
+      <?=$proposal_for?>
 
     </td>
   </tr>
@@ -388,6 +425,9 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
 
 
 
+
+
+
           
         </pre>
       </div>
@@ -428,7 +468,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
   <table style="width:100%;" cellpadding="0" cellspacing="0">
     <thead>
     <tr>
-      <th colspan="6" style="border-left: 1px solid;border-right: 1px solid;border-top:1px solid black;width:100%;text-align:center;font-size:16px;font-weight: bold;">
+      <th colspan="8" style="border-left: 1px solid;border-right: 1px solid;border-top:1px solid black;width:100%;text-align:center;font-size:16px;font-weight: bold;">
         COMMERCIAL PRICE PART
       </th>
     </tr>
@@ -440,13 +480,19 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
         Description
       </th>
       <th style="border-top:1px solid black;border-left:1px solid;border-bottom:1px solid black;width:25%;text-align:center;font-size:15px;">
-        BLD
+         Size
+      </th>
+      <th style="border-top:1px solid black;border-left:1px solid;border-bottom:1px solid black;width:25%;text-align:center;font-size:15px;">
+         UOM
       </th>
       <th style="border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid;width:10%;text-align:center;font-size:15px;">
         Quantity
       </th>
+      <th style="border-top:1px solid black;border-left:1px solid;border-bottom:1px solid black;width:25%;text-align:center;font-size:15px;">
+         Rate
+      </th>
       <th style="border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid;width:10%;text-align:center;font-size:15px;">
-        Offer Amount- Rs 
+        Basic Amount 
       </th>
       <th style="border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid;width:10%;text-align:center;font-size:15px;border-right: 1px solid;">
         Remarks
@@ -455,7 +501,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
     </thead>
     <tbody>
     <? 
-      $query=$this->db->query('select t.item_name as item, t.qtymt, t.item_bld, t.item_remark, t.moc,t.rate, t.freight, t.percent,t.discount,t.remark,t.unit from tbl_trans2 t where  t.billno='.$id  . ' order by t.id');
+      $query=$this->db->query('select t.item_name as item, t.* from tbl_trans2 t where  t.billno='.$id  . ' order by t.id');
       $totqty=0;
       $totbox=0;
       $i=0;
@@ -472,10 +518,16 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
             <?php echo ucwords(strtolower($row->item_bld));?>
           </td>    
           <td style="border-bottom: 1px solid;border-left:1px solid;width:10%;text-align:left;font-size:15px;padding:5px;">
+            <?php echo ucwords(strtolower($row->unit));?>
+          </td>  
+          <td style="border-bottom: 1px solid;border-left:1px solid;width:10%;text-align:left;font-size:15px;padding:5px;">
             <?php echo ucwords(strtolower($row->moc));?>
           </td>                
           <td style="border-bottom: 1px solid;border-left:1px solid;width:10%;text-align:center;font-size:15px;padding:5px;">
             <?php echo number_format($row->rate,2);?>
+          </td>
+          <td style="border-bottom: 1px solid;border-left:1px solid;width:10%;text-align:center;font-size:15px;padding:5px;">
+            <?php echo number_format($row->basic_amt,2);?>
           </td>
           <td style="border-bottom: 1px solid;border-left:1px solid;width:10%;text-align:left;font-size:15px;padding:5px;border-right: 1px solid;">
             <?php echo ucwords(strtolower($row->item_remark));?>
@@ -485,15 +537,9 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
         
     <?$i++;
       }
-      if($i<8)
-      {
-        for($c=0;$c<8-$i;$c++)
-        {?>
-        <?}
-      }
     ?>
     <tr>
-      <td colspan="6" style="border-left: 1px solid;border-right: 1px solid;border-bottom:1px solid black;width:100%;text-align:left;font-size:16px;">
+      <td colspan="8" style="border-left: 1px solid;border-right: 1px solid;border-bottom:1px solid black;width:100%;text-align:left;font-size:16px;">
          Above mentioned rates are quoted on the basis of inputs received and designed accordingly.<br>
          The above quoted rates are including transportation and excluding GST @ 18%.<br>
          Weight may vary as per actual site conditions and requirement and ±5 on final design. <br>
@@ -502,6 +548,64 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
     </tr>
     </tbody>
     </table>
+
+
+    <h3 style="text-align:center;">Account Details & GST Number</h3>
+<table style="width:100%;border: 1px solid; margin-top: 20px;" cellpadding="0" cellspacing="0">
+  <thead>
+    
+  <tr>
+    <th style="width:40%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+      Account Holder 
+    </th>
+    <th style="width:60%;text-align:left;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+      : <?=$ac_holder?>
+    </th>
+  </tr>
+  <tr>
+    <th style="width:40%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+      Bank Name 
+    </th>
+    <th style="width:60%;text-align:left;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+     : <?=$bankname?>
+    </th>
+  </tr>
+  <tr>
+    <th style="width:40%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+      Account No. 
+    </th>
+    <th style="width:60%;text-align:left;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+     : <?=$ac_no?>
+    </th>
+  </tr>
+  <tr>
+    <th style="width:40%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+      IFSC Code 
+    </th>
+    <th style="width:60%;text-align:left;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+      : <?=$ifsccode?>
+    </th>
+  </tr>
+  <tr>
+    <th style="width:40%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+      Bank Address 
+    </th>
+    <th style="width:60%;text-align:left;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+      : <?=$bank_address?>
+    </th>
+  </tr>
+  <tr>
+    <th style="width:40%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+      GSTIN 
+    </th>
+    <th style="width:60%;text-align:left;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+      : <?=$gstn?>
+    </th>
+  </tr>
+</thead>
+</table>
+
+
   <h3 style="text-align:center;">COMMERCIAL TERMS & CONDITIONS</h3>
 <table style="width:100%;border: 1px solid; margin-top: 20px;" cellpadding="0" cellspacing="0">
   <thead>
@@ -773,7 +877,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
       $design_wind_load="";
       $design_seismic_load="";
 
-       foreach($query->result() as $row)
+      foreach($query->result() as $row)
       {
         $building_no=$row->building_no;
         $building_desc=$row->building_desc;
@@ -926,7 +1030,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
       DESCRIPTION 
     </th>
     <th style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;border-right: 0.1px solid grey;">
-      Canopy * Staircase
+      PEB SHED
     </th>
   </tr>
   </thead> 
@@ -958,7 +1062,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
       <?=$i?>
     </td>
     <td style="width:25%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
-      Width (M) 
+      Width  
     </td>
     <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($basic_width))?>
@@ -977,7 +1081,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
       <?=$i?>
     </td>
     <td style="width:25%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
-      Length (M) 
+      Length  
     </td>
     <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($basic_length))?>
@@ -996,7 +1100,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
       <?=$i?>
     </td>
     <td style="width:25%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
-      Clear Height (M) 
+      Clear Height  
     </td>
     <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($basic_clear_height))?>
@@ -1014,7 +1118,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
       <?=$i?>
     </td>
     <td style="width:25%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
-      Brick wall Height (M)  
+      Brick wall Height   
     </td>
     <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($basic_brick_wall))?>
@@ -1032,7 +1136,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
       <?=$i?>
     </td>
     <td style="width:25%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
-      Interior column spacing (m)
+      Interior column spacing 
     </td>
     <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($basic_interior_column))?>
@@ -1068,7 +1172,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
       <?=$i?>
     </td>
     <td style="width:25%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
-      Bay spacing (m)
+      Bay spacing 
     </td>
     <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($basic_bay_spacing))?>
@@ -1086,7 +1190,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
       <?=$i?>
     </td>
     <td style="width:25%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
-      End wall column Spacing (m)
+      End wall column Spacing 
     </td>
     <td style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;text-align: justify;text-justify: inter-word;">
       <?php echo ucwords(strtolower($basic_end_wall))?>
@@ -1599,7 +1703,7 @@ Steel Structural Member’s In General Building Construction “</p>
 the Metal Building Manufacturer Association (MBMA)of the USA.;” Low rise building systems Manual”. </p>
 
   <h3 style="text-align:center;">EXCLUSIONS</h3>
-<p>1. Supply of Insert plates/Shim plates/Embedded plates in Concrete </p>
+<p>1. Supply of Insert plates/Shim plates/Embedded plates/Hilti in Concrete </p>
 <p>2. Any Doors, Stainless steel works & Glazing works & supporting sub frame systems for
 Glazing, Civil work</p>
 
@@ -1818,13 +1922,34 @@ payment as per agreed terms whichever is later.</p>
   </tr>
 <?php } ?>
   </table> 
-
+  <h3 style="text-align:left;">Documents</h3> 
+  <?php $query22=$this->db->query('select t.* from tbl_docs t where t.parent_id='.$id);
+      $name="";
+      $file_path="";
+      $file_name=""; 
+      ?>
+<table class="table table-bordered" >
+<?php  foreach($query22->result() as $row22)
+      {
+        $name=$row22->name;
+        $file_path=$row22->file_path;
+        $file_name=$row22->file_name; ?>
+    <tr>
+      <td colspan="1" style="text-align:left;font-size:15px;text-align: justify;text-justify: inter-word;">
+        <?php echo $name;?>
+      </td>
+      <td colspan="1" style="text-align:left;font-size:15px;text-align: justify;text-justify: inter-word;">
+      :  <a href="<?php echo $file_path;?>" target="_blank"><img src="<?=base_url()?>/assets/img/logo2.png" style="height:30px;width:30px;" ></a>
+      </td>
+    </tr>
+    <?php } ?>
+  </table>
   <h3 style="text-align:center;">XXXXXXXXXX</h3> 
  
   </td></tr></tbody>
 <tfoot><tr><td>
   <div style="padding-top:70px;padding-left:50px;padding-right:50px;">
-    <img src="<?php echo base_url();?>assets/images/footer.jpg" style="height:auto;width: 88%;margin-left:50px;margin-right:50px;">
+    <img src="<?php echo base_url();?>assets/images/footer.jpg" style="height:auto;width: 85%;">
   </div>
 </td></tr></tfoot>
 </table>

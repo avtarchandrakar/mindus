@@ -587,11 +587,16 @@ public function GetState()
       $from=$this->input->get('from');
       $to=$this->input->get('to');
       $vtype=$this->input->get('vtype');
+      $invoice_type=$this->input->get('invoice_type');
       $usertype=get_cookie('ae_usertype');            
-     
+      
+      $search='';
+      if ($invoice_type!='All') {
+        $search = $search." and invoice_type='".$invoice_type."'";
+      }
       $user_id=get_cookie('ae_user_id');
 
-        $query=$this->db->query('select t1.*,l.name lname,t1.ledger_id from tbl_invoice1 t1, m_ledger l,tbl_invoice2 t2 where t1.ledger_id=l.id and t1.id=t2.billno and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") group by t1.id,t1.cdate,l.name order by t1.created_datetime,t1.id');
+        $query=$this->db->query('select t1.*,l.name lname,t1.ledger_id from tbl_invoice1 t1, m_ledger l,tbl_invoice2 t2 where t1.ledger_id=l.id and t1.id=t2.billno and t1.company_id='.get_cookie('ae_company_id').' and t1.vtype="'.$vtype.'" and (t1.cdate between "'.date('Y-m-d',strtotime($from)).'" and  "'.date('Y-m-d',strtotime($to)).'") '.$search.' group by t1.id,t1.cdate,l.name order by t1.created_datetime,t1.id');
         // echo $this->db->last_query();die;
       return $query->result();
 
@@ -696,6 +701,23 @@ public function GetState()
       
     }
 
+    public function getdoc_list()
+    {
+      $from=$this->input->get('from');
+      $to=$this->input->get('to');
+      $parent_id=$this->input->get('parent_id');
+      $vtype='quatation';
+      $usertype=get_cookie('ae_usertype');            
+     
+      $user_id=get_cookie('ae_user_id');
+
+      $p_bdate=0;
+      $query=$this->db->query('select * from tbl_docs where parent_id='.$parent_id.' ');
+       
+      // echo $this->db->last_query();die;
+      return $query->result();
+      
+    }
 
     public function q3format_list()
     {
@@ -1851,6 +1873,9 @@ public function GetState()
           $orderid_gen=$this->input->post("orderid_gen");
           $item_remark=$this->input->post("item_remark");
           $unit=$this->input->post("unit");
+          $qtykg=$this->input->post("qtykg");
+          $item_make=$this->input->post("item_make");
+          $item_desc=$this->input->post("item_desc");
           $ledger_id=$this->input->post("ledger_id");
 
 
@@ -1912,7 +1937,7 @@ public function GetState()
             $this->db->insert($tableName1,$data); // insert trans1
             $id=$this->db->insert_id();
 
-            $zipped = array_map(null,$itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit);
+            $zipped = array_map(null,$itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit,$qtykg,$item_make,$item_desc);
             foreach($zipped as $tuple) {
             if($tuple[0]!='' && ($tuple[1]!=0 || $tuple[1]!=''))
             {
@@ -1928,6 +1953,9 @@ public function GetState()
                 "orderid_gen"=>$tuple[5],
                 "remark"=>$tuple[7],
                 "unit"=>$tuple[8],
+                "qtykg"=>$tuple[9],
+                "item_make"=>$tuple[10],
+                "item_desc"=>$tuple[11],
                 "company_id"=>get_cookie('ae_company_id')
                 );
               $this->db->insert($tableName2,$data2);
@@ -1954,7 +1982,9 @@ public function GetState()
 
           $this->db->where('billno',$id);
           $this->db->delete($tableName2); // delete trans 2
-          $zipped = array_map(null, $itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit);
+          // print_r($itemcode);print_r($qtymt);print_r($rate);print_r($discountrs);print_r($freight);print_r($orderid_gen);print_r($discountper);print_r($item_remark);print_r($unit);print_r($qtykg);print_r($item_make);print_r($item_desc);die();
+          // print_r($discountper);die();
+          $zipped = array_map(null, $itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit,$qtykg,$item_make,$item_desc);
           foreach($zipped as $tuple) {
               $data2=array(
                 "billno"=>$id,
@@ -1966,8 +1996,11 @@ public function GetState()
                 "freight"=>$tuple[4],
                 "cat_id"=>$cat_id,
                 "orderid_gen"=>$tuple[5],
-                 "remark"=>$tuple[7],
-                 "unit"=>$tuple[8],
+                "remark"=>$tuple[7],
+                "unit"=>$tuple[8],
+                "qtykg"=>$tuple[9],
+                "item_make"=>$tuple[10],
+                "item_desc"=>$tuple[11],
                 "company_id"=>get_cookie('ae_company_id')            
                 );
               $this->db->insert($tableName2,$data2);
@@ -2168,7 +2201,7 @@ public function GetState()
           $tableName2='tbl_trans2';
           $tableName3='tbl_order_bal';
           $tableName4='q3_rest';
-
+          // print_r($this->input->post("proposal_for"));die();
           $status = $this->input->post("status");
           $fields = $this->db->field_data($tableName1);
 
@@ -2216,8 +2249,7 @@ public function GetState()
           $orderid_gen=$this->input->post("orderid_gen");
           $item_remark=$this->input->post("item_remark");
           $remark=$this->input->post("item_bld");
-          
-
+          $basic_amt=$this->input->post("basic_amt");
           $unit=$this->input->post("unit");
           $ledger_id=$this->input->post("ledger_id");
 
@@ -2284,7 +2316,7 @@ public function GetState()
 
           // print_r($remark);die();
 
-            $zipped = array_map(null,$itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$remark,$unit,$item_name,$item_remark);
+            $zipped = array_map(null,$itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$remark,$unit,$item_name,$item_remark,$basic_amt);
             foreach($zipped as $tuple) {
             
               $data2=array(
@@ -2301,6 +2333,7 @@ public function GetState()
                 "unit"=>$tuple[8],
                 "item_name"=>$tuple[9],
                 "item_remark"=>$tuple[10],
+                "basic_amt"=>$tuple[11],
                 "company_id"=>get_cookie('ae_company_id')
                 );
               // print_r($tuple[9]);die();
@@ -2351,7 +2384,7 @@ public function GetState()
           // Array ( [0] => [1] => [2] => ) Array ( [0] => 454 [1] => 6565 [2] => 454656 ) Array ( [0] => 345.00 [1] => 6756.00 [2] => 465 ) Array ( [0] => [1] => [2] => ) Array ( [0] => [1] => [2] => ) Array ( [0] => [1] => [2] => ) Array ( [0] => [1] => [2] => ) Array ( [0] => hjgkhgfd [1] => ghgfhg [2] => rdfhj ) Array ( [0] => [1] => [2] => ) Array ( [0] => gbbgbnmvnhgh [1] => gjdfhdf [2] => 6 )
 
           // print_r($remark);die();
-          $zipped = array_map(null, $itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$remark,$unit,$item_name,$item_remark);
+          $zipped = array_map(null, $itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$remark,$unit,$item_name,$item_remark,$basic_amt);
           foreach($zipped as $tuple) {
               $data2=array(
                 "billno"=>$id,
@@ -2367,7 +2400,7 @@ public function GetState()
                  "unit"=>$tuple[8],
                 "item_name"=>$tuple[9],
                 "item_remark"=>$tuple[10],
-
+                "basic_amt"=>$tuple[11],
                 "company_id"=>get_cookie('ae_company_id')            
                 );
               // print_r($tuple[9]);die();
@@ -2399,6 +2432,7 @@ public function GetState()
 
           $tableName1='tbl_invoice1';
           $tableName2='tbl_invoice2';
+          $tableName4='tbl_invoice2_sub';
           $tableName3='tbl_order_bal';
           $status = $this->input->post("status");
           $fields = $this->db->field_data($tableName1);
@@ -2419,7 +2453,7 @@ public function GetState()
           $data['company_id'] = get_cookie("ae_company_id");
           $itemcode=$this->input->post("itemcode");
           $qtymt=$this->input->post("qtymt");
-          // $specification=$this->input->post("specification");
+          $qtykg=$this->input->post("qtykg");
           $rate=$this->input->post("rate");
           $discountrs=$this->input->post("discountrs");
           $discountper=$this->input->post("discountper");
@@ -2431,12 +2465,17 @@ public function GetState()
           $item_name=$this->input->post("item_name");
           $persentage=$this->input->post("persentage");
           $hson_no=$this->input->post("hson_no");
+          $parent_id=$this->input->post("parent_id");
 
 
           $data['file_name']=$file_name;
           $data['file_path']=$full_path;
 
-     
+          //tbl_invoice2_sub
+          $sub_parent_id=$this->input->post("sub_parent_id");
+          $subname=$this->input->post("subname");
+
+
           if($status=="add")
             {
             try{
@@ -2461,6 +2500,7 @@ public function GetState()
               $maxsno1=$maxsno;
             }
             $data['invoice_no']='INV/'.substr(get_cookie("ae_fnyear_name"),3,2)."-".substr(get_cookie("ae_fnyear_name"),8,2)."/".$maxsno1;
+            $data['proforma_no']='PINV/'.substr(get_cookie("ae_fnyear_name"),3,2)."-".substr(get_cookie("ae_fnyear_name"),8,2)."/".$maxsno1;
 
               $climit=0;
               $query=$this->db->query("select climit from m_ledger where id=".$ledger_id."");
@@ -2479,9 +2519,10 @@ public function GetState()
             $this->db->trans_begin();
             $this->db->insert($tableName1,$data); // insert trans1
             $id=$this->db->insert_id();
-
-            $zipped = array_map(null,$itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit,$item_name,$persentage,$hson_no);
+            
+            $zipped = array_map(null,$itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit,$item_name,$persentage,$hson_no,$qtykg,$parent_id);
             foreach($zipped as $tuple) {
+              $sub_id=0;
               $data2=array(
                 "billno"=>$id,
                 "itemcode"=>$tuple[0],
@@ -2496,9 +2537,28 @@ public function GetState()
                 "item_name"=>$tuple[9],
                 "persentage"=>$tuple[10],
                 "hson_no"=>$tuple[11],
+                "qtykg"=>$tuple[12],
                 "company_id"=>get_cookie('ae_company_id')
                 );
               $this->db->insert($tableName2,$data2);
+              $sub_id = $this->db->insert_id();
+              
+              if($subname!='' && $sub_parent_id!=''){
+                 $zipped_sub = array_map(null,$sub_parent_id,$subname);
+                  foreach($zipped_sub as $tuplesub) {
+                    if($tuple[13]==$tuplesub[0]){
+                      $datasub=array(
+                        "billno"=>$id,
+                        "parent_id"=>$sub_id,
+                        "sub_parent_id"=>$tuplesub[0],
+                        "subname"=>$tuplesub[1],
+                      );
+                      $this->db->insert($tableName4,$datasub);
+                    }
+                    
+                  } 
+              }
+              
           }
           $this->db->trans_commit();
           echo $id;       
@@ -2522,7 +2582,11 @@ public function GetState()
 
           $this->db->where('billno',$id);
           $this->db->delete($tableName2); // delete trans 2
-          $zipped = array_map(null,$itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit,$item_name,$persentage,$hson_no);
+
+          
+          $this->db->where('billno',$id);
+          $this->db->delete($tableName4); // delete tableName4
+          $zipped = array_map(null,$itemcode,$qtymt,$rate,$discountrs,$freight,$orderid_gen,$discountper,$item_remark,$unit,$item_name,$persentage,$hson_no,$qtykg,$parent_id);
             foreach($zipped as $tuple) {
               $data2=array(
                 "billno"=>$id,
@@ -2538,9 +2602,30 @@ public function GetState()
                 "item_name"=>$tuple[9],
                 "persentage"=>$tuple[10],
                 "hson_no"=>$tuple[11],
+                "qtykg"=>$tuple[12],
                 "company_id"=>get_cookie('ae_company_id')
                 );
               $this->db->insert($tableName2,$data2);
+              $sub_id = $this->db->insert_id();
+    
+                if($subname!='' && $sub_parent_id!=''){
+                $zipped_sub = array_map(null,$sub_parent_id,$subname);
+                  foreach($zipped_sub as $tuplesub) {
+                    // echo $tuple[13]."<br>";
+                    // echo $tuplesub[0];die();
+                    if($tuple[13]==$tuplesub[0]){
+                      $datasub=array(
+                        "billno"=>$id,
+                        "parent_id"=>$sub_id,
+                        "sub_parent_id"=>$tuplesub[0],
+                        "subname"=>$tuplesub[1],
+                      );
+                      $this->db->insert($tableName4,$datasub);
+                    }
+                    
+                  } 
+              }
+              
           }
           $this->db->trans_commit();
           echo $id;       
@@ -4386,6 +4471,7 @@ public function purchase_return_save()
                 "ownership"=>$row->ownership,
                 "scope_of_client"=>$row->scope_of_client,
                 "assumptions_erection"=>$row->assumptions_erection,
+                "proposal_for"=>$row->proposal_for,
 
                 
               );
@@ -4919,6 +5005,7 @@ public function purchase_return_save()
                 "company_id"=>$row->company_id,
                 "file_name"=>$row->file_name,
                 "acc_details"=>$row->acc_details,
+                "invoice_type"=>$row->invoice_type,
                 "file_path"=>$row->file_path
               );
           }
@@ -5847,5 +5934,31 @@ public function trans_get()
         }
 
 
+        public function uploaddocs_save($tableName,$data,$id,$full_path,$file_name)
+        {
+          date_default_timezone_set('Asia/Kolkata');
+          $tableName1='tbl_trans1';
+          $tableName2='tbl_docs';
+          $tableName3='tbl_order_bal';
+          $tableName4='q3_rest';
+
+          $status = $this->input->post("status");
+          $parent_id = $this->input->post("gid");
+          $data['file_name']=$file_name;
+          $data['file_path']=$full_path;
+          $data['parent_id']=$parent_id;
+          $data['name']=$this->input->post("docs_name");
+
+          try{
+            $this->db->trans_begin();
+
+            $this->db->insert($tableName2,$data);
+            $this->db->trans_commit();
+            echo "1";
+        }catch(Exception $e){
+            $this->db->trans_rollback();
+            echo "2";
+        }
+      }
 
 }

@@ -272,4 +272,29 @@
 	              	GetRecord(id);
 	              } 
 				}
+
+
+			function DeleteRecord(ID,tbl1,tbl2) {
+		    	var r = confirm("Do You Want to Delete");
+		        if (r == true) {
+		            $('.loading').show();
+						var data = '';
+				        $.ajax({
+				            url: "<?php echo base_url();?>index.php/master_general/delete_reccords_with_table",
+				            type: "POST",
+				            data: data+'&id='+ID+'&tbl1='+tbl1+'&tbl2='+tbl2,
+				            cache: false,
+				            success: function (html) {
+				               if (html==1) {
+				               	alert("Deleted Successfully");
+				               	$('.loading').hide();
+				               	GetList();
+				               }else{
+				               	alert("Unable to Delete, Please Check and Try Again Later");
+				               }
+				            }
+				        });		
+				}		
+		    }
+
 </script>

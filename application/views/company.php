@@ -172,6 +172,13 @@
 				<input  type="text"  name="ifsccode" id="ifsccode" data-rule-required="true"  placeholder=" IFSC Code" class="col-xs-10 col-sm-12" />
 			</div>
 		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Bank Address 1</label>
+
+			<div class="col-sm-8">
+				<input  type="text" name="bank_address" id="bank_address"  placeholder="Bank Address" class="col-xs-10 col-sm-12" />
+			</div>
+		</div>
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Account Holder 2</label>
@@ -199,7 +206,13 @@
 				<input  type="text"  name="ifsccode2" id="ifsccode2" data-rule-required="true"  placeholder=" IFSC Code" class="col-xs-10 col-sm-12" />
 			</div>
 		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Bank Address 2</label>
 
+			<div class="col-sm-8">
+				<input  type="text" name="bank_address2" id="bank_address2"  placeholder="Bank Address" class="col-xs-10 col-sm-12" />
+			</div>
+		</div>
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Terms & Condition</label>
@@ -435,6 +448,8 @@
 		                $("#bankname2").val(report_obj.bankname2);
 		                $("#ac_no2").val(report_obj.ac_no2);
 		                $("#ifsccode2").val(report_obj.ifsccode2);
+		                $("#bank_address2").val(report_obj.bank_address2);
+		                $("#bank_address").val(report_obj.bank_address);
 		                
 		                $("#sno").val(report_obj.id);
 		                $("#status").val("edit");

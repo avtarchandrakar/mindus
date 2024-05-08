@@ -111,10 +111,17 @@
 			</div>
 		</div>
 
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1">Description</label>
+			<div class="col-sm-3">
+				<input tabindex="9" type="text"  name="description" id="description" data-rule-required="true"  placeholder="Description" class="col-xs-10 col-sm-12" />
+			</div>
+		</div>
+
 		<div class="space-4"></div>
 		<div class="clearfix form-actions">
 			<div class="col-md-offset-3 col-md-9">
-				<button  tabindex="9" class="btn btn-info" type="button" id="newsubmit" >
+				<button  tabindex="10" class="btn btn-info" type="button" id="newsubmit" >
 					<i class="ace-icon fa fa-check bigger-110"></i>
 					Submit
 				</button>
@@ -306,7 +313,7 @@
 		                $("#unittype").val(report_obj.unittype);
 		                $("#specification").val(report_obj.specification);
 		                $("#opn_bal").val(report_obj.opn_bal);
-
+		                $("#description").val(report_obj.description);
 		                $("#status").val("edit");
 		                ShowForm();
 		            }

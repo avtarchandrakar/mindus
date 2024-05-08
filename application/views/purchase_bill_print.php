@@ -16,7 +16,7 @@
 </head>
 <body style="padding-left:50px;padding-right:50px;padding-bottom:50px;">
     <?php 
-      $query=$this->db->query('select t.cdate,l.name as lname,t.ledger_mobno,t.jobcard,t.id,t.tol_freight,t.builtyno,t.purchase_no,t.loading_person_name,t.remark,t.lr_freight,t.paid_build,t.checked_by,t.dispatch_through,t.ref_details,t.sub_details,t.pakking_forwerding,t.delivery_period,t.payment_terms,t.warranty_guarantee,t.ld_clause,t.designation,t.file_path,t.prepared_name from tbl_trans1 t inner join m_ledger l on t.ledger_id=l.id  where t.company_id='.get_cookie('ae_company_id').' and t.id='.$id);
+      $query=$this->db->query('select t.dispatch,t.purchase_manager,t.taxes,t.cdate,l.name as lname,t.ledger_mobno,t.jobcard,t.id,t.tol_freight,t.builtyno,t.purchase_no,t.loading_person_name,t.remark,t.lr_freight,t.paid_build,t.checked_by,t.dispatch_through,t.ref_details,t.sub_details,t.pakking_forwerding,t.delivery_period,t.payment_terms,t.warranty_guarantee,t.ld_clause,t.designation,t.file_path,t.prepared_name from tbl_trans1 t inner join m_ledger l on t.ledger_id=l.id  where t.company_id='.get_cookie('ae_company_id').' and t.id='.$id);
       $partyname="";
       $cdate="";
       $tol_freight=0;
@@ -40,6 +40,9 @@
       $file_path='';
       $designation='';
       $prepared_name='';
+      $dispatch='';
+      $purchase_manager='';
+      $taxes='';
 
       foreach($query->result() as $row)
       {
@@ -67,7 +70,9 @@
         $file_path=$row->file_path;
         $designation=$row->designation;
         $prepared_name=$row->prepared_name;
-
+        $dispatch=$row->dispatch;
+        $purchase_manager=$row->purchase_manager;
+        $taxes=$row->taxes;
 
       }
     ?>
@@ -158,11 +163,20 @@
                     Item
                   </th>
                   <th style="border-top:1px solid black;border-left:1px solid;border-bottom:1px solid black;width:50%;text-align:center;font-size:13px;">
+                    Description
+                  </th>
+                  <th style="border-top:1px solid black;border-left:1px solid;border-bottom:1px solid black;width:50%;text-align:center;font-size:13px;">
                     Specification
                   </th>
-                  <th style="border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid;width:11%;text-align:center;font-size:13px;">
-                    Quantity
+                  <th style="border-top:1px solid black;border-left:1px solid;border-bottom:1px solid black;width:50%;text-align:center;font-size:13px;">
+                    Make
                   </th>
+                  <th style="border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid;width:11%;text-align:center;font-size:13px;">
+                    Qty
+                  </th>
+                  <!-- <th style="border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid;width:11%;text-align:center;font-size:13px;">
+                    Qty(in KG)
+                  </th> -->
                   <th style="border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid;width:11%;text-align:center;font-size:13px;">
                     UOM
                   </th>
@@ -174,7 +188,7 @@
                   </th>
                 </tr>
                 <? 
-                  $query=$this->db->query('select i.name as item, t.qtymt,m.vat pkg,t.rate,t.freight,t.percent,t.discount,t.remark,t.unit from tbl_trans2 t inner join m_item i on t.itemcode=i.id inner join m_master m on i.group_id=m.id  where  t.billno='.$id  . ' order by t.id');
+                  $query=$this->db->query('select i.name as item, t.qtymt,m.vat pkg,t.rate,t.freight,t.percent,t.discount,t.remark,t.unit,t.item_desc,t.item_make,t.qtykg from tbl_trans2 t inner join m_item i on t.itemcode=i.id inner join m_master m on i.group_id=m.id  where  t.billno='.$id  . ' order by t.id');
                   $totqty=0;
                   $totbox=0;
                   $i=0;
@@ -188,8 +202,14 @@
                         <? echo $row->item;?>
                       </td>
                       <td style="border-left:1px solid;width:50%;text-align:left;font-size:13px;padding:5px;">
+                        <? echo $row->item_desc;?>
+                      </td> 
+                      <td style="border-left:1px solid;width:50%;text-align:left;font-size:13px;padding:5px;">
                         <? echo $row->remark;?>
-                      </td>                      
+                      </td>  
+                      <td style="border-left:1px solid;width:50%;text-align:left;font-size:13px;padding:5px;">
+                        <? echo $row->item_make;?>
+                      </td>                    
                       <td style="border-left:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
                         <? echo number_format($row->qtymt,0);?>
                         <?
@@ -207,6 +227,9 @@
                           }
                         ?>
                       </td>
+                      <!-- <td style="border-left:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
+                        <? echo number_format($row->qtykg,0);?>
+                      </td> -->
                       <td style="border-left:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
                         <? echo $row->unit;?>
                       </td>
@@ -234,11 +257,21 @@
                         <td style="border-left:1px solid;width:50%;text-align:left;font-size:13px;padding:5px;">
                           &nbsp;
                         </td>
-                        <td style="border-left:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;"> &nbsp;
-                      </td>
-                      <td style="border-left:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
+                        <td style="border-left:1px solid;width:50%;text-align:left;font-size:13px;padding:5px;">
                           &nbsp;
                         </td>
+
+                        <td style="border-left:1px solid;width:50%;text-align:left;font-size:13px;padding:5px;">
+                          &nbsp;
+                        </td>
+                        <td style="border-left:1px solid;width:50%;text-align:left;font-size:13px;padding:5px;">
+                          &nbsp;
+                        </td>
+                        <td style="border-left:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;"> &nbsp;
+                      </td>
+                      <!-- <td style="border-left:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
+                          &nbsp;
+                        </td> -->
                       <td style="border-left:1px solid;width:17%;text-align:center;font-size:13px;padding:5px;">
                           &nbsp;
                         </td>
@@ -264,6 +297,24 @@
                   <td style="border-top:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
                     &nbsp;
                   </td>
+                  <td style="border-top:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
+                    &nbsp;
+                  </td>
+                  <td style="border-top:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
+                    &nbsp;
+                  </td>
+                  <td style="border-top:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
+                    &nbsp;
+                  </td>
+                  <td style="border-top:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
+                    &nbsp;
+                  </td>
+                  <td style="border-top:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
+                    &nbsp;
+                  </td>
+                  <!-- <td style="border-top:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
+                    &nbsp;
+                  </td> -->
                   <td style="border-top:1px solid;width:17%;text-align:center;font-size:13px;padding:5px;">
                     Freight :
                   </td>
@@ -282,15 +333,15 @@
 
                 ?>
                 <tr>
-                  <td colspan="3" style="border-top:1px solid;width:5%;text-align:left;font-size:13px;padding:5px;">
+                  <td colspan="5" style="border-top:1px solid;width:5%;text-align:left;font-size:13px;padding:5px;">
                     &nbsp;
                   </td>
                   <td style="border-top:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
                     &nbsp;
                   </td>
-                  <td style="border-top:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
+                  <!-- <td style="border-top:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
                     &nbsp;
-                  </td>
+                  </td> -->
                   <td style="border-top:1px solid;width:17%;text-align:center;font-size:13px;padding:5px;">
                     Paid Builty :
                   </td>
@@ -303,18 +354,21 @@
                   }
                 ?>
                 <tr>
-                  <td colspan="3" style="border-top:1px solid;width:5%;text-align:left;font-size:13px;padding:5px;">
+                  <td colspan="5" style="border-top:1px solid;width:5%;text-align:left;font-size:13px;padding:5px;">
                     <? echo $i ." Items ";?>
                   </td>
                   <td style="border-top:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
-                    <? echo number_format($totqty,0);?>
-                    <?
+                    <?php  //number_format($totqty,0);?>
+                    <?php 
                         // echo "/ ".$totbox;
                     ?>
                   </td>
                   <td style="border-top:1px solid;width:11%;text-align:center;font-size:13px;padding:5px;">
                     &nbsp;
                   </td>
+                  <!-- <td style="border-top:1px solid;width:17%;text-align:center;font-size:13px;padding:5px;">
+                    &nbsp;
+                  </td> -->
                   <td style="border-top:1px solid;width:17%;text-align:center;font-size:13px;padding:5px;">
                     &nbsp;
                   </td>
@@ -323,13 +377,31 @@
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="7" style="border-top:1px solid;width:5%;text-align:left;padding:5px;font-size:13px;">
-                    Packing & Forwarding  : <? echo $pakking_forwerding;?><br>
-                    Freight :  <? echo $lr_freight;?><br>
-                    Delivery Period :  <? echo $delivery_period;?><br>
-                    Payment Terms :  <? echo $payment_terms;?><br>
-                    Warranty / Guarantee :  <? echo $warranty_guarantee;?><br>
-                    LD Clause :  <? echo $ld_clause;?><br>
+                  <td colspan="10" style="border-top:1px solid;width:5%;text-align:left;padding:5px;font-size:13px;">
+                    <?php if ($pakking_forwerding!='') { ?>
+                    Packing  : <? echo $pakking_forwerding;?><br>
+                    <?php } ?>
+                    <?php if ($lr_freight!='') { ?>
+                    Freight  : <? echo $lr_freight;?><br>
+                    <?php } ?>
+                    <?php if ($delivery_period!='') { ?>
+                    Delivery Period  : <? echo $delivery_period;?><br>
+                    <?php } ?>
+                    <?php if ($dispatch!='') { ?>
+                    Dispatch  : <? echo $dispatch;?><br>
+                    <?php } ?>
+                    <?php if ($delivery_period!='') { ?>
+                    Payment Terms  : <? echo $payment_terms;?><br>
+                    <?php } ?>
+                    <?php if ($taxes!='') { ?>
+                      Taxes  :  <? echo $taxes;?><br>
+                    <?php } ?>
+                    <?php if ($warranty_guarantee!='') { ?>
+                      Warranty / Guarantee  :  <? echo $warranty_guarantee;?><br>
+                    <?php } ?>
+                    <?php if ($ld_clause!='') { ?>
+                      LD Clause  :  <? echo $ld_clause;?><br>
+                    <?php } ?>
                   </td>
                 </tr>
                 <tr>  
@@ -344,7 +416,7 @@
                 <tr>  
                   <td colspan="4" style="font-size:13px;text-align:left;padding:5px;">
                   </td>
-                  <td colspan="3" style="font-size:13px;text-align:left;padding:5px;">
+                  <td colspan="5" style="font-size:13px;text-align:left;padding:5px;">
                     Authorised Signatory
                   </td>
                 </tr>
@@ -352,7 +424,7 @@
                   <tr>  
                   <td colspan="4" style="font-size:13px;text-align:left;padding:5px;">
                   </td>
-                  <td colspan="3" style="font-size:13px;text-align:left;padding:5px;">
+                  <td colspan="5" style="font-size:13px;text-align:left;padding:5px;">
                     <img src="<?=$file_path?>" style="height: 90px;width: 90px;">
                   </td>
                 </tr>
@@ -360,25 +432,25 @@
                 <tr>  
                   <td colspan="4" style="font-size:13px;text-align:left;padding:5px;">&nbsp;
                   </td>
-                  <td colspan="3" style="font-size:13px;text-align:left;padding:5px;">&nbsp;
+                  <td colspan="5" style="font-size:13px;text-align:left;padding:5px;">&nbsp;
                   </td>
                 </tr>
                 <tr>  
                   <td colspan="4" style="font-size:13px;text-align:left;padding:5px;">&nbsp;
                   </td>
-                  <td colspan="3" style="font-size:13px;text-align:left;padding:5px;">&nbsp;
+                  <td colspan="5" style="font-size:13px;text-align:left;padding:5px;">&nbsp;
                   </td>
                 </tr>
                 <tr>  
                   <td colspan="4" style="font-size:13px;text-align:left;padding:5px;">&nbsp;
                   </td>
-                  <td colspan="3" style="font-size:13px;text-align:left;padding:5px;">&nbsp;
+                  <td colspan="5" style="font-size:13px;text-align:left;padding:5px;">&nbsp;
                   </td>
                 </tr>
                 <tr>  
                   <td colspan="4" style="font-size:13px;text-align:left;padding:5px;">&nbsp;
                   </td>
-                  <td colspan="3" style="font-size:13px;text-align:left;padding:5px;">&nbsp;
+                  <td colspan="5" style="font-size:13px;text-align:left;padding:5px;">&nbsp;
                   </td>
                 </tr>
               <?php } ?>
@@ -386,7 +458,7 @@
                   <td colspan="4" style="font-size:13px;text-align:left;padding:5px;">
                   
                   </td>
-                  <td colspan="3" style="font-size:13px;text-align:left;padding:5px;">
+                  <td colspan="5" style="font-size:13px;text-align:left;padding:5px;">
                     <?=$prepared_name?>,<?=$designation?><br>
                     Procurement Manager
                   </td>

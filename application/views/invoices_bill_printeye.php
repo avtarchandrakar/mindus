@@ -75,6 +75,8 @@ th, td {
       $round_off_amt='';
       $file_path='';
       $acc_details='';
+      $invoice_type='';
+      $proforma_no='';
 
 
 
@@ -109,6 +111,8 @@ th, td {
         $quatation_no=$row->quatation;
         $file_path=$row->file_path;
         $acc_details=$row->acc_details;
+        $invoice_type=$row->invoice_type;
+        $proforma_no=$row->proforma_no;
 
       }
     ?>
@@ -128,6 +132,8 @@ th, td {
       $bankname2='';
       $ac_no2='';
       $ifsccode2='';
+      $bank_address2='';
+      $bank_address='';
 
       foreach($query1->result() as $row1)
       {
@@ -144,6 +150,8 @@ th, td {
         $bankname2=$row1->bankname2;
         $ac_no2=$row1->ac_no2;
         $ifsccode2=$row1->ifsccode2;
+        $bank_address2=$row1->bank_address2;
+        $bank_address=$row1->bank_address;
 
       }
       ?>
@@ -161,12 +169,15 @@ th, td {
   </header>
 </th></tr></thead>
 <tbody><tr><td>
-
-
 <table border="0" style="width:100%;" cellpadding="0" cellspacing="0">
   <tr>
     <td colspan="3" style="width:100%;text-align:center;font-size:15px;font-weight:bold;border-left: 1px solid;border-top:1px solid black;border-right: 1px solid;">
-      TAX INVOICE
+      <?php if ($invoice_type=='Proforma Invoice') {
+        echo "PROFORMA INVOICE";
+      } ?>
+      <?php if ($invoice_type=='Invoice') {
+        echo "TAX INVOICE";
+      } ?>
     </td>
   </tr>
 
@@ -178,7 +189,12 @@ th, td {
       Company GSTIN : <span style="font-weight: normal;"> <?=$gstn?></span>
     </td>
     <td style="width:34%;text-align:left;font-size:12px;font-weight:bold;border-right: 1px solid;border-top:1px solid black;">
-      Invoice No : <span style="font-weight: normal;"><?=$invoice_no?></span>
+      <?php if ($invoice_type=='Proforma Invoice') { ?>
+        Proforma Invoice No : <span style="font-weight: normal;"><?=$proforma_no?></span>
+      <?php } ?>
+      <?php if ($invoice_type=='Invoice') { ?>
+        Invoice No : <span style="font-weight: normal;"><?=$invoice_no?></span>
+      <?php } ?>
     </td>
   </tr>
   <tr>
@@ -264,10 +280,16 @@ th, td {
       HSN Code
     </th>
     <th style="border-top:1px solid black;border-left:1px solid;border-bottom:1px solid black;width:10%;text-align:left;font-size:13px;">
-      QTY.
+      QTY.(in NOS)
+    </th>
+    <th style="border-top:1px solid black;border-left:1px solid;border-bottom:1px solid black;width:10%;text-align:left;font-size:13px;">
+      QTY.(in KG)
     </th>
     <th style="border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid;width:10%;text-align:left;font-size:13px;">
-      Rate 
+      UOM 
+    </th>
+    <th style="border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid;width:10%;text-align:left;font-size:13px;">
+      Unit Rate 
     </th>
     <!-- <th style="border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid;width:10%;text-align:left;font-size:13px;">
       %age
@@ -279,7 +301,7 @@ th, td {
   </thead>
   <tbody>
   <? 
-    $query=$this->db->query('select t.item_name as item,t.persentage, t.qtymt,t.hson_no, t.moc,t.rate, t.freight, t.percent,t.discount,t.remark,t.unit from tbl_invoice2 t where  t.billno='.$id.' order by t.id');
+    $query=$this->db->query('select t.item_name as item,t.persentage, t.qtymt,t.hson_no, t.moc,t.rate, t.freight, t.percent,t.discount,t.remark,t.unit,t.qtykg from tbl_invoice2 t where  t.billno='.$id.' order by t.id');
     $totqty=0;
     $totbox=0;
     $totamt=0;
@@ -287,29 +309,6 @@ th, td {
     $i=0;
     foreach($query->result() as $row)
     {?>
-      <tr>
-        <td style="border-left: 1px solid;width:5%;text-align:left;font-size:13px;padding:2px;">
-          &nbsp;
-        </td>
-        <td style="border-left:1px solid;width:55%;text-align:left;font-size:13px;padding:2px;">
-          &nbsp;
-        </td>
-        <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
-          &nbsp;
-        </td>
-        <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
-          &nbsp;
-        </td>
-        <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
-          &nbsp;
-        </td>
-        <!-- <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
-          &nbsp;
-        </td> -->
-        <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;border-right: 1px solid;">
-          &nbsp;
-        </td>
-      </tr>
       <tr>
         <td style="border-left: 1px solid;width:5%;text-align:left;font-size:13px;padding:2px;">
           <?php echo $i+1;?>
@@ -321,8 +320,14 @@ th, td {
           <?php echo ucwords(strtolower($row->hson_no));?>
         </td>    
         <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
-          <?php echo number_format($row->qtymt,0);?>
+          <?php echo $row->qtymt;?>
         </td>                
+        <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
+          <?php echo $row->qtykg;?>
+        </td>
+        <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
+          <?php echo $row->unit;?>
+        </td>
         <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
           <?php echo number_format($row->rate,2);?>
         </td>
@@ -356,6 +361,12 @@ th, td {
           <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
             &nbsp;
           </td>
+          <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
+            &nbsp;
+          </td>
+          <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
+            &nbsp;
+          </td>
           <!-- <td style="border-left:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
             &nbsp;
           </td> -->
@@ -370,7 +381,7 @@ th, td {
           <!-- <td colspan="5" style="border-top:1px solid;width:80%;text-align:left;font-size:13px;padding:2px;">
             &nbsp;
           </td> -->
-          <td  colspan="5" style="border-top:1px solid;border-left:1px solid;border-left:1px solid;width:90%;text-align:right;font-size:13px;padding:2px;">
+          <td  colspan="7" style="border-top:1px solid;border-left:1px solid;border-left:1px solid;width:90%;text-align:right;font-size:13px;padding:2px;">
             Total Amount in (INR)
           </td>
           <td style="border-top:1px solid;border-left:1px solid;border-right:1px solid;width:10%;text-align:left;font-size:13px;padding:2px;">
@@ -379,7 +390,7 @@ th, td {
         </tr>
 
         <tr>
-          <td colspan="2" rowspan="2" style="border-top:1px solid;border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+          <td colspan="4" rowspan="2" style="border-top:1px solid;border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             &nbsp;
           </td>
           <td  colspan="3" style="border-top:1px solid;border-left:1px solid;width:30%;text-align:right;font-size:13px;padding:2px;">
@@ -399,7 +410,7 @@ th, td {
         </tr>
 
         <tr>
-          <td colspan="2" style="border-top:1px solid;border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+          <td colspan="4" style="border-top:1px solid;border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             <b>Bank Details :</b>
           </td>
           <td  colspan="3" style="border-top:1px solid;border-left:1px solid;width:30%;text-align:right;font-size:13px;padding:2px;">
@@ -412,11 +423,11 @@ th, td {
 
         <tr>
         <?php if ($acc_details==2) { ?>
-          <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+          <td colspan="4" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             Account Holder : <?=$ac_holder2?>
           </td>
         <?php }else{  ?>
-          <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+          <td colspan="4" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             Account Holder : <?=$ac_holder?>
           </td>
         <?php } ?>
@@ -430,11 +441,11 @@ th, td {
 
         <tr>
           <?php if ($acc_details==2) { ?>
-          <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+          <td colspan="4" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             Bank Name : <?=$bankname2?>
           </td>
         <?php }else{  ?>
-          <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+          <td colspan="4" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             Bank Name : <?=$bankname?>
           </td>
         <?php } ?>
@@ -449,11 +460,11 @@ th, td {
 
         <tr>
           <?php if ($acc_details==2) { ?>
-          <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+          <td colspan="4" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             Account No. : <?=$ac_no2?>
           </td>
         <?php }else{  ?>
-          <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+          <td colspan="4" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             Account No. : <?=$ac_no?>
           </td>
         <?php } ?>
@@ -468,11 +479,11 @@ th, td {
 
         <tr>
           <?php if ($acc_details==2) { ?>
-          <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+          <td colspan="4" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             IFSC Code : <?=$ifsccode2?>
           </td>
         <?php }else{  ?>
-          <td colspan="2" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+          <td colspan="4" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
             IFSC Code : <?=$ifsccode?>
           </td>
         <?php } ?>
@@ -485,9 +496,25 @@ th, td {
           </td>
         </tr>
 
+        <tr>
+          <?php if ($acc_details==2) { ?>
+          <td colspan="4" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+            Bank Address : <?=$bank_address?>
+          </td>
+        <?php }else{  ?>
+          <td colspan="4" style="border-left:1px solid;width:60%;text-align:left;font-size:13px;padding:2px;">
+            Bank Address : <?=$bank_address2?>
+          </td>
+        <?php } ?>
+          
+          <td  colspan="4" style="border-top:1px solid;border-right:1px solid;border-left:1px solid;width:30%;text-align:right;font-size:13px;padding:2px;">
+                                   
+          </td>
+        </tr>
+
         <?php if ($file_path!='') { ?>
         <tr>
-        <td colspan="3" style="border-top:1px solid;border-left:1px solid;width:5%;text-align:left;font-size:13px;padding:2px;">
+        <td colspan="5" style="border-top:1px solid;border-left:1px solid;width:5%;text-align:left;font-size:13px;padding:2px;">
           
         </td>
         <td colspan="3" style="border-top:1px solid;border-right:1px solid;width:30%;text-align:centert;font-size:11px;padding:2px;">
@@ -496,7 +523,7 @@ th, td {
       </tr>
       <?php }else{ ?>
         <tr>
-        <td colspan="3" style="border-top:1px solid;border-left:1px solid;width:5%;text-align:left;font-size:13px;padding:2px;">
+        <td colspan="5" style="border-top:1px solid;border-left:1px solid;width:5%;text-align:left;font-size:13px;padding:2px;">
           <br><br><br><br><br>  
         </td>
         <td colspan="3" style="border-top:1px solid;border-right:1px solid;width:30%;text-align:centert;font-size:11px;padding:2px;">
@@ -506,7 +533,7 @@ th, td {
       <?php } ?>
 
       <tr>
-        <td colspan="3" style="border-bottom:1px solid;border-left:1px solid;width:5%;text-align:left;font-size:13px;padding:2px;">
+        <td colspan="5" style="border-bottom:1px solid;border-left:1px solid;width:5%;text-align:left;font-size:13px;padding:2px;">
                 
         </td>
         <td colspan="3" style="border-bottom:1px solid;border-right:1px solid;width:30%;text-align:centert;font-size:11px;padding:2px;">
@@ -520,7 +547,7 @@ th, td {
 </td></tr></tbody>
 <tfoot><tr><td>
   <div style="padding-top:70px;padding-left:50px;padding-right:50px;">
-    <img src="<?php echo base_url();?>assets/images/footer.jpg" style="height:auto;width: 88%;margin-left:50px;margin-right:50px;">
+    <img src="<?php echo base_url();?>assets/images/footer.jpg" style="height:auto;width: 88%;margin-bottom: 20px;margin-top: 5px;position: fixed;left: 0;bottom: 0;margin-top:50px;margin-left:50px;margin-right:50px;">
   </div>
 </td></tr></tfoot>
 </table>

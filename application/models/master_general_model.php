@@ -707,6 +707,7 @@
 		    				"specification"=>$row->specification,
 		    				"unittype"=>$row->unittype,
 		    				"unitrate"=>$row->unitrate,
+		    				"description"=>$row->description,
 
 		    			);
 	    		}
@@ -1136,6 +1137,8 @@
 	    	$bankname2 = $this->input->post("bankname2");
 	    	$ac_no2 = $this->input->post("ac_no2");
 	    	$ifsccode2 = $this->input->post("ifsccode2");
+	    	$bank_address2 = $this->input->post("bank_address2");
+	    	$bank_address = $this->input->post("bank_address");
 
 	    	$data=array(
 	    				'company_name'=>$company_name,
@@ -1168,6 +1171,8 @@
 	    				'bankname2'=>$bankname2,
 	    				'ac_no2'=>$ac_no2,
 	    				'ifsccode2'=>$ifsccode2,
+	    				'bank_address'=>$bank_address,
+	    				'bank_address2'=>$bank_address2,
 	    				
 	    				);
 
@@ -1245,6 +1250,8 @@
 		    				"bankname2"=>$row->bankname2,
 		    				"ac_no2"=>$row->ac_no2,
 		    				"ifsccode2"=>$row->ifsccode2,
+		    				"bank_address2"=>$row->bank_address2,
+		    				"bank_address"=>$row->bank_address,
 
 		    			);
 	    		}

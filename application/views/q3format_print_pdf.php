@@ -218,8 +218,6 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
       $bankname2='';
       $ac_no2='';
       $ifsccode2='';
-      $bank_address2='';
-      $bank_address='';
 
       foreach($query1->result() as $row1)
       {
@@ -236,12 +234,10 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
         $bankname2=$row1->bankname2;
         $ac_no2=$row1->ac_no2;
         $ifsccode2=$row1->ifsccode2;
-        $bank_address2=$row1->bank_address2;
-        $bank_address=$row1->bank_address;
 
       }
     ?>
-
+<!-- 
 
 <table style="width:100%;">
 <thead><tr><th>
@@ -255,7 +251,11 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
   </table>
   </header>
 </th></tr></thead>
-<tbody><tr><td>
+<tbody><tr><td> -->
+
+  <header style="margin-top:20px;margin-bottom: 30;">
+    <img src="<?php echo base_url();?>assets/images/header.jpg" style="height:auto;width: 100%;">
+  </header>
   <table border="0" style="width:100%;" cellpadding="0" cellspacing="0">
     <tr>
       <td style="width:3%;text-align:left;font-size:15px;">
@@ -356,23 +356,12 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
   <tr>
       <td colspan="2" style="width:100%;text-align:left;font-size:15px;">
         <pre>
-                
-
-
-
-
-
-
+              
         </pre>
         <span style="color:black;font-size: 17px;font-weight: bold;margin-top: 100px;"><u>Prepared & Submitted By</u> </span><br>
         <?php echo $prepared_by;?>
        <pre>
                 
-
-
-
-
-
 
 
 
@@ -471,7 +460,15 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
   </tr>
 <?php } ?>
   </table>  
-<div style="page-break-after: always;">
+
+  <pre>
+    
+
+
+
+    
+  </pre>
+<div style="margin-top: 10px;page-break-after: always;">
   <table style="width:100%;" cellpadding="0" cellspacing="0">
     <thead>
     <tr>
@@ -555,8 +552,9 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
     </tr>
     </tbody>
     </table>
-</div>
-<div style="page-break-after: always;">
+  </div>
+<div style="margin-top: 10px;page-break-after: always;">
+
     <h3 style="text-align:center;">Account Details & GST Number</h3>
 <table style="width:100%;border: 1px solid; margin-top: 20px;" cellpadding="0" cellspacing="0">
   <thead>
@@ -595,14 +593,6 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
   </tr>
   <tr>
     <th style="width:40%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
-      Bank Address 
-    </th>
-    <th style="width:60%;text-align:left;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
-      : <?=$bank_address?>
-    </th>
-  </tr>
-  <tr>
-    <th style="width:40%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
       GSTIN 
     </th>
     <th style="width:60%;text-align:left;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
@@ -611,6 +601,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
   </tr>
 </thead>
 </table>
+
 
   <h3 style="text-align:center;">COMMERCIAL TERMS & CONDITIONS</h3>
 <table style="width:100%;border: 1px solid; margin-top: 20px;" cellpadding="0" cellspacing="0">
@@ -843,6 +834,7 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
 
   </tbody>
 </table>
+
 <?php 
       $query=$this->db->query('select t.* from q3_rest t where t.billid='.$id);
       $building_no="";
@@ -929,6 +921,20 @@ footer {bottom: 0px; position: fixed;padding-left:50px;padding-right:50px;paddin
  <h3 style="text-align:center;">SCOPE OF SUPPLY</h3>
  <h4>BRIEF DETAILS</h4>
 <table style="width:100%;border: 1px solid; margin-top: 20px;" cellpadding="0" cellspacing="0">
+  <!-- <thead>
+    
+  <tr>
+    <th style="width:5%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+      S. N.
+    </th>
+    <th style="width:25%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;">
+      Item
+    </th>
+    <th style="width:70%;text-align:center;padding:5px;border: 0.1px solid grey;border-right: 0.1px solid grey;font-size:15px;margin-top: 30px;border-right: 0.1px solid grey;">
+      Commercial Terms & Conditions
+    </th>
+  </tr>
+  </thead> -->
   <tbody>
   <?php $i=1;
 
@@ -1913,6 +1919,7 @@ payment as per agreed terms whichever is later.</p>
   </tr>
 <?php } ?>
   </table> 
+
   <h3 style="text-align:left;">Documents</h3> 
   <?php $query22=$this->db->query('select t.* from tbl_docs t where t.parent_id='.$id);
       $name="";
@@ -1930,32 +1937,24 @@ payment as per agreed terms whichever is later.</p>
         <?php echo $name;?>
       </td>
       <td colspan="1" style="text-align:left;font-size:15px;text-align: justify;text-justify: inter-word;">
-       : <a href="<?php echo $file_path;?>" target="_blank"><img src="<?=base_url()?>/assets/img/logo2.png" style="height:30px;width:30px;" ></a>
+      :  <a href="<?php echo $file_path;?>" target="_blank"><img src="<?=base_url()?>/assets/img/logo2.png" style="height:30px;width:30px;" ></a>
       </td>
     </tr>
     <?php } ?>
   </table>
+
   <h3 style="text-align:center;">XXXXXXXXXX</h3> 
  
-</div>
-  </td></tr></tbody>
+<!--   </td></tr></tbody>
 <tfoot><tr><td>
   <div style="padding-top:70px;padding-left:50px;padding-right:50px;">
     <img src="<?php echo base_url();?>assets/images/footer.jpg" style="height:auto;width: 85%;margin-bottom: 20px;margin-top: 5px;position: fixed;left: 0;bottom: 0;margin-top:50px;margin-left:60px;margin-right:50px;padding-left: 20px;">
   </div>
 </td></tr></tfoot>
-</table>
+</table> -->
 <!--   <div style="padding-top:50px;padding-left:50px;padding-right:50px;">
     <img src="<?php echo base_url();?>assets/images/footer.jpg" style="height:auto;width: 100%;margin-bottom: 0px;position: fixed;left: 0;bottom: 0;">
   </div> -->
-    <script type="text/javascript">
-        window.jQuery || document.write("<script src='<?php echo base_url();?>assets/js/jquery.min.js'>" + "<" + "/script>");
-    </script>
-
-      <script type="text/javascript">
-        $(document).ready(function(){
-          window.print();
-        });
-      </script>
+  <img src="<?php echo base_url();?>assets/images/footer.jpg" style="height:auto;width: 85%;margin-bottom: 20px;margin-top: 5px;position: fixed;left: 0;bottom: 0;margin-top:50px;margin-left:60px;margin-right:50px;padding-left: 20px;">
 </body>
 </html>

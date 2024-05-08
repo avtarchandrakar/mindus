@@ -213,9 +213,9 @@
                     </tr>
                 <?$i++;
                   }
-                  if($i<8)
+                  if($i<3)
                   {
-                    for($c=0;$c<8-$i;$c++)
+                    for($c=0;$c<3-$i;$c++)
                     {?>
                       <tr>
                         <td style="width:5%;text-align:left;font-size:13px;padding:5px;">

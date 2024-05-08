@@ -306,7 +306,48 @@
 	              } 
 				}
 
- 
+
+			function DeleteRecord(ID,tbl1,tbl2) {
+		    	var r = confirm("Do You Want to Delete");
+		        if (r == true) {
+		            $('.loading').show();
+						var data = '';
+				        $.ajax({
+				            url: "<?php echo base_url();?>index.php/master_general/delete_reccords_with_table",
+				            type: "POST",
+				            data: data+'&id='+ID+'&tbl1='+tbl1+'&tbl2='+tbl2,
+				            cache: false,
+				            success: function (html) {
+				               if (html==1) {
+				               	alert("Deleted Successfully");
+				               	$('.loading').hide();
+				               	GetList();
+				               }else{
+				               	alert("Unable to Delete, Please Check and Try Again Later");
+				               }
+				            }
+				        });		
+				}		
+		    }
+
+ 	function uploaddocs(ID,ledger_id,quatation_selected) {
+            $('#modal_form').modal('show');
+	        $.ajax({
+	            url: "<?php echo base_url();?>index.php/formController/uploaddocs_form",
+	            type: "GET",
+		        data: data+'&gid='+ID+'&ledger_id='+ledger_id+'&quatation_selected='+quatation_selected,
+	            cache: false,
+	            success: function (html) {
+	                $(".modal-body").html(html);
+			    	MoveTextBox('.form-input');
+			    	BlankForm();
+			    	$(".cdate").mask("99-99-9999");
+			    	$("#q_number").val(ID);
+				    $("[tabindex='1']").focus();
+	                $(".loading").hide();
+	            }
+	        });
+	    }
         	
         </script>
 

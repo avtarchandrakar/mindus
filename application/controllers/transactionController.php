@@ -94,7 +94,7 @@ class transactionController extends CI_Controller {
           echo '            <th style="width:30%;">PartyName</th>';
 
           echo '            <th style="width:10%;">CPO Approve</th>';
-          echo '            <th style="width:10%;">Dwaring View</th>';
+          // echo '            <th style="width:10%;">Dwaring View</th>';
 
           echo '            <th   style="width:20%">Action</th>';
           echo '        </tr>';
@@ -115,7 +115,7 @@ class transactionController extends CI_Controller {
                 echo '    <td>' . $row->quatation_no . '</td>';
                 echo '    <td>' . $row->lname . '</td>';
                 echo '    <td>' . $if_approve . '</td>';           
-                echo '    <td><a href="' .$row->file_path . '" target="_blank">View</a></td>';           
+                // echo '    <td><a href="' .$row->file_path . '" target="_blank">View</a></td>';           
 
               echo '    <td>';
         echo '      <div class="   btn-group">';  
@@ -133,6 +133,9 @@ class transactionController extends CI_Controller {
         // echo '        </button>';
         echo '        <button class="btn btn-xs btn-info btn-print" title="View" onclick="GetReport5(' . $row->id .',\'' . $row->quatation_selected .'\');return false;">';
         echo '         <i class="ace-icon fa fa-eye bigger-120"></i> ';
+        echo '        </button>';
+        echo '        <button class="btn btn-xs btn-danger btn-print" title="Upload" onclick="uploaddocs(' . $row->id .',' . $row->ledger_id .',\'' . $row->quatation_selected .'\');return false;">';
+        echo '          <i class="ace-icon fa fa-edit bigger-120"></i>';
         echo '        </button>';
         echo '        <button class="btn btn-xs btn-danger btn-print" title="Download" onclick="GetDownload(' . $row->id .',\'' . $row->quatation_selected .'\');return false;">';
         echo '          <i class="ace-icon fa fa-download bigger-120"></i>';
@@ -154,7 +157,9 @@ class transactionController extends CI_Controller {
         echo '         CPO<!--- <i class="ace-icon fa fa-envelope bigger-120"></i>--->';
         echo '        </button>';
             // }
-        
+        echo '        <button class="btn btn-xs btn-danger btn-print" title="Delete" onclick="DeleteRecord(' . $row->id .',\'tbl_trans1\',\'tbl_trans2\');return false;">';
+        echo '          <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+        echo '        </button>';
 
         echo '      </div>';
                 echo '    </td>';
@@ -1874,7 +1879,7 @@ function sales_return_list(){
       }
 
       if ($quotation_print=='Q3') {
-        $html = $this->load->view('q3format_print', $data, true);
+        $html = $this->load->view('q3format_print_pdf', $data, true);
       }
 
       // echo $html;die();
@@ -1883,6 +1888,7 @@ function sales_return_list(){
       $this->load->helper('file');
       $filePath = FCPATH."/whatsapp/";
       require_once 'vendor/autoload.php';
+      // require_once 'vendor/pdf/vendor/autoload.php';
       $pdf = new DOMPDF();
       $pdf->set_option('isRemoteEnabled', TRUE);
       $pdf->loadHtml($html);
@@ -1891,13 +1897,15 @@ function sales_return_list(){
       $output = $pdf->output();
       file_put_contents($filePath."Quotation".$id.".pdf", $output);
       $mobile = "91".$mobileno;
-      $mobile = '917470632201';
+      // $mobile = '917470632201';
 
       $media = base_url()."whatsapp/Quotation".$id.".pdf";
-
+      // $
       $msg =$body;
       $filename = "Quotation";
       $url = "https://techvakeservices.com/api/send?number=91".$mobile."&type=media&message=".$msg."&media_url=".$media."&filename=".$filename."&instance_id=".$ins."&access_token=".$api;
+
+      // echo $url;die();
       $ch = curl_init();
       $timeout = 5;
       $curl = curl_init( 'https://techvakeservices.com/api/send' );
@@ -2003,7 +2011,7 @@ function sales_return_list(){
       'id'=>$id
       );
       $html = $this->load->view('q21_bill_print1', $data, true);
-      $this->load->helper('file');
+      // $this->load->helper('file');
       $filePath = FCPATH."/whatsapp/";
       require_once 'vendor/autoload.php';
       $pdf = new DOMPDF();
@@ -2195,7 +2203,7 @@ function sales_return_list(){
       }
 
       if ($quotation_print=='Q3') {
-        $html = $this->load->view('q3format_print', $data, true);
+        $html = $this->load->view('q3format_print_pdf', $data, true);
       }
 
       $this->load->helper('file');
@@ -2721,6 +2729,9 @@ function purchase_list(){
         echo '        <button class="btn btn-xs btn-danger btn-print" title="Mail" onclick="GetMail(' . $row->id .',' . $row->ledger_id .');return false;">';
         echo '          <i class="ace-icon fa fa-envelope bigger-120"></i>';
         echo '        </button>';
+        echo '        <button class="btn btn-xs btn-danger btn-print" title="Delete" onclick="DeleteRecord(' . $row->id .',\'tbl_trans1\',\'tbl_trans2\');return false;">';
+        echo '          <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+        echo '        </button>';
         echo '      </div>';
                 echo '    </td>';
                 echo '</tr>';
@@ -2786,7 +2797,42 @@ function purchase_list(){
         echo '        <button class="btn btn-xs btn-danger btn-print" title="Mail" onclick="GetMail(' . $row->id .',' . $row->ledger_id .');return false;">';
         echo '          <i class="ace-icon fa fa-envelope bigger-120"></i>';
         echo '        </button>';
+        echo '        <button class="btn btn-xs btn-danger btn-print" title="Delete" onclick="DeleteRecord(' . $row->id .',\'tbl_trans1\',\'tbl_trans2\');return false;">';
+        echo '          <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+        echo '        </button>';
         echo '      </div>';
+        echo '    </td>';
+                echo '</tr>';
+          }
+      }
+    }
+
+
+    function getdoc_list(){
+      $this->load->model('transaction_model');
+      $result=$this->transaction_model->getdoc_list();
+      if(count($result)>0)
+      {
+          echo '<table id="TblList" class="table table-striped table-bordered table-hover" style="width:500px;">';
+          echo '    <thead>';
+          echo '        <tr>';
+          echo '            <th>Name</th>';
+          echo '            <th>Docs</th>';
+          echo '            <th style="width:250px">Action</th>';
+          echo '        </tr>';
+          echo '    </thead>';
+          echo '    <tbody>';
+
+          foreach($result as $row)
+          {
+                echo '<tr class="">';
+                echo '    <td>' . $row->name . '</td>';
+                echo '    <td><a href="' . $row->file_path . '" target="_blank"><img src="'.base_url().'/assets/img/logo2.png" style="height:30px;width:30px;" ></a></td>';
+                echo '    <td>';
+        echo '      <div class="   btn-group">';  
+        echo '        <button class="btn btn-xs btn-danger btn-print" title="Delete" onclick="DeleteRecordDocs(' . $row->id .',' . $row->parent_id .');return false;">';
+        echo '          <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+        echo '        </button>';
                 echo '    </td>';
                 echo '</tr>';
           }
@@ -2806,7 +2852,7 @@ function purchase_list(){
           echo '            <th>No</th>';
           echo '            <th>SNo</th>';
           echo '            <th>PartyName</th>';
-          echo '            <th>Dwaring View  </th>';
+          // echo '            <th>Dwaring View  </th>';
           echo '            <th   style="width:250px">Action</th>';
           echo '        </tr>';
           echo '    </thead>';
@@ -2819,14 +2865,14 @@ function purchase_list(){
                 echo '    <td>' . $row->builtyno . '</td>';
                 echo '    <td>' . $row->quatation_no . '</td>';
                 echo '    <td>' . $row->lname . '</td>'; 
-                if ($row->file_path!='') 
-              {                
-                echo '    <td> <a href="' . $row->file_path . '" target="_blank">View</a></td>';    
-              }
-              else
-              {
-                echo '    <td> No Docs</td>';   
-              }                    
+              //   if ($row->file_path!='') 
+              // {                
+              //   echo '    <td> <a href="' . $row->file_path . '" target="_blank">View</a></td>';    
+              // }
+              // else
+              // {
+              //   echo '    <td> No Docs</td>';   
+              // }                    
                 echo '    <td>';
         echo '      <div class="   btn-group">';  
         echo '        <a class="btn btn-xs btn-info btn_modify" title="view" onclick="GetRecord(' . $row->id .');return false;">';
@@ -2837,6 +2883,9 @@ function purchase_list(){
         echo '        </button>';
         echo '        <button class="btn btn-xs btn-info" title="Print" onclick="GetReport(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-print bigger-120"></i>';
+        echo '        </button>';
+        echo '        <button class="btn btn-xs btn-danger btn-print" title="Upload" onclick="uploaddocs(' . $row->id .',' . $row->ledger_id .',\'' . $row->quatation_selected .'\');return false;">';
+        echo '          <i class="ace-icon fa fa-edit bigger-120"></i>';
         echo '        </button>';
         // echo '        <button class="btn btn-xs btn-danger btn-print" title="Download" onclick="GetDownload(' . $row->id .',\'' . $row->quatation_selected .'\');return false;">';
         // echo '          <i class="ace-icon fa fa-download bigger-120"></i>';
@@ -2851,6 +2900,9 @@ function purchase_list(){
         echo '         CPO<!--- <i class="ace-icon fa fa-envelope bigger-120"></i>--->';
         echo '        </button>';
         echo '      </div>';
+        echo '        <button class="btn btn-xs btn-danger btn-print" title="Delete" onclick="DeleteRecord(' . $row->id .',\'tbl_trans1\',\'tbl_trans2\');return false;">';
+        echo '          <i class="ace-icon fa fa-trash-o bigger-120"></i>';
+        echo '        </button>';
                 echo '    </td>';
                 echo '</tr>';
           }
@@ -2934,7 +2986,8 @@ function purchase_list(){
           echo '        <tr>';
           // echo '            <th>Category</th>';
           echo '            <th>Date</th>';
-          echo '            <th>INVOICE NO</th>';
+          echo '            <th>Invoice Type</th>';
+          echo '            <th>REF NO</th>';
           echo '            <th>Quatation</th>';
           echo '            <th>PartyName</th>';
           echo '            <th   style="width:130px">Action</th>';
@@ -2947,7 +3000,14 @@ function purchase_list(){
                 echo '<tr class="">';
                 // echo '    <td>' . $row->catname . '</td>';
                 echo '    <td>' . date('d-m-Y',strtotime($row->cdate)) . '</td>';
-                echo '    <td>' . $row->invoice_no . '</td>';
+                echo '    <td>' . $row->invoice_type . '</td>';
+                if ($row->invoice_type=='Proforma Invoice') {
+                  echo '    <td>' . $row->proforma_no . '</td>';
+                }elseif ($row->invoice_type=='Invoice'){
+                  echo '    <td>' . $row->invoice_no . '</td>';
+                }else{
+                  echo '    <td>-</td>';
+                }
                 echo '    <td>' . $row->quatation . '</td>';
                 echo '    <td>' . $row->lname . '</td>';
                 echo '    <td>';
@@ -2958,6 +3018,12 @@ function purchase_list(){
         echo '        <button class="btn btn-xs btn-info btn-print" title="View" onclick="GetReporteye(' . $row->id .');return false;">';
                 echo '          <i class="ace-icon fa fa-eye bigger-120"></i>';
                 echo '        </button>';
+        if ($row->invoice_type=='Proforma Invoice') {
+        echo '        <button class="btn btn-xs btn-danger" title="Convert To INVOICE" onclick="Converttoinv(' . $row->id .');return false;">';
+        echo '          <i class="ace-icon fa fa-exchange bigger-120"></i>';
+        echo '        </button>';
+        
+        }
         echo '        <button class="btn btn-xs btn-danger" title="Print" onclick="GetReport(' . $row->id .');return false;">';
         echo '          <i class="ace-icon fa fa-print bigger-120"></i>';
         echo '        </button>';
@@ -3249,12 +3315,14 @@ function purchase_return_list(){
           <input type="hidden" id="order_id" name="orderid_gen[]"/>
                   </td>';
 
-                
+                echo '<td style="width:150px;"><input  type="text" placeholder="" name="item_desc[]" value="'.$row->item_desc.'" tabindex="'.$ti++.'" id="item_desc" placeholder="Description"  class="txt_cls"/></td>';
+                echo '<td style="width:150px;"><input  type="text" placeholder="" name="item_remark[]" value="'.$row->remark.'" tabindex="'.$ti++.'" id="item_remark" placeholder="specification"  class="txt_cls"/></td>';
+                echo '<td style="width:150px;"><input  type="text" placeholder="" name="item_make[]" value="'.$row->item_make.'" tabindex="'.$ti++.'" id="item_make" placeholder="Make"  class="txt_cls"/></td>';
+                echo ' <td style="width:150px;"><input value="'.$row->qtymt.'" tabindex="'.$ti++.'" type="text" name="qtymt[]" id="txt_qtymt"  onkeyup="CalcAmount(this)" onblur="CalcAmount(this)" class="qtymt txt_cls" onblur="GetQtyBag(this);return false;"/><input  type="hidden" placeholder="" name="qtykg[]" value="'.$row->qtykg.'"  id="qtykg" placeholder="KG"  class="txt_cls"/></td>';
 
-                echo ' <td><input value="'.$row->qtymt.'" tabindex="'.$ti++.'" type="text" name="qtymt[]" id="txt_qtymt" class="qtymt txt_cls" onblur="GetQtyBag(this);return false;"/></td>';
-                
-                echo ' <td><input value="'.$row->rate.'" tabindex="'.$ti++.'" type="text" name="rate[]" id="txt_rate" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>';
-                echo ' <td><input value="'.$row->freight.'" tabindex="'.$ti++.'" type="text" name="freight[]" id="txt_freight" class="freight txt_cls" onblur="TolFreight();" /></td>';
+                echo ' <td style="width:150px;"><input value="'.$row->unit.'" tabindex="'.$ti++.'" type="text" name="unit[]" id="txt_unit" class="txt_cls" /></td>';
+                echo ' <td style="width:150px;"><input value="'.$row->rate.'"  onkeyup="CalcAmount(this)" onblur="CalcAmount(this)" tabindex="'.$ti++.'" type="text" name="rate[]" id="txt_rate" class="txt_cls" /><input  type="hidden"  name="discountrs[]" id="txt_discountrs" class="txt_cls" placeholder="Rate in RS." /><input  type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" placeholder="Rate in RS." /></td>';
+                echo ' <td style="width:150px;"><input value="'.$row->freight.'" tabindex="'.$ti++.'" type="text" name="freight[]" id="txt_freight" class="freight txt_cls" onblur="TolFreight();" /></td>';
                 echo ' <td><button tabindex="'.$ti++.'" type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>';
                 echo '</tr>';
                }
@@ -3601,8 +3669,9 @@ function purchase_return_list(){
                 echo ' <td><input tabindex="'.$ti++.'" value="'.$row->item_name.'" type="text" id="item_name" name="item_name[]" class="txt_item item" onkeyup="getItemAutoCompt(this);" list="0"/><input type="hidden" id="item_id" class="item_id" name="itemcode[]"/><input type="hidden" id="order_id" name="orderid_gen[]"/></td>';
                 // echo ' <td><input tabindex="'.$ti++.'" type="text" name="qtymt[]" id="txt_qtymt" class="qtymt txt_cls" onblur="GetQtyBag(this);return false;"/></td>';
                 echo ' <td><input value="'.$row->item_bld.'"  type="text" name="item_bld[]" id="item_bld" class="txt_cls" />';
-                echo ' <td><input value="'.$row->moc.'" tabindex="'.$ti++.'" type="text" name="moc[]" id="txt_unit" class="txt_cls" /><input  type="hidden" name="unit[]" id="txt_unit" class="txt_cls" /></td>';
-                // echo ' <td><input tabindex="'.$ti++.'" type="text" name="qtybag[]" id="txt_qtybag" class="qtybag txt_cls" readonly="true"/></td>           ';
+                echo ' <td><input value="'.$row->moc.'" tabindex="'.$ti++.'" type="text" name="moc[]" id="txt_unit" class="txt_cls" /></td>';
+                echo ' <td><input  type="text" name="unit[]" id="txt_unit" class="txt_cls" tabindex="'.$ti++.'" value="'.$row->unit.'" /></td>           ';
+                echo ' <td><input  type="text" name="basic_amt[]" id="txt_unit" class="txt_cls" tabindex="'.$ti++.'" value="'.$row->basic_amt.'" /></td>           ';
                 echo ' <td><input  tabindex="'.$ti++.'" value="'.$row->rate.'" type="text" name="rate[]" id="txt_rate" class="txt_cls"/><input tabindex="'.$ti++.'" type="hidden" name="discountrs[]" id="txt_discountrs" class="txt_cls" onblur="CalcAmount(this);return false;"/><input tabindex="'.$ti++.'" type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>';
                 echo ' <td><input tabindex="'.$ti++.'" value="'.$row->item_remark.'" type="text" name="item_remark[]" id="txt_item_remark" class="item_remark txt_cls" /><input  type="hidden" name="freight[]" id="txt_freight" class="freight txt_cls" onblur="TolFreight();" /></td>';
                 echo ' <td><button tabindex="'.$ti++.'" type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>';
@@ -3688,6 +3757,8 @@ function purchase_return_list(){
            $this->load->model('transaction_model');
            $result=$this->transaction_model->invoices_get_item();
            $ti=9;
+           $tival=1;
+           $j=1;
            if(count($result)>0){
                foreach($result as $row){
                 echo '<tr>';
@@ -3696,20 +3767,27 @@ function purchase_return_list(){
                     <input type="hidden" value="'.$row->itemcode.'" tabindex="'.$ti++.'"  id="itemcode" name="itemcode[]"/>
                     <input type="hidden" value="'.$row->order_id.'" tabindex="'.$ti++.'"  id="order_id" name="orderid_gen[]"/>
                     <input type="hidden" value="'.$row->item_remark.'" tabindex="'.$ti++.'"  id="item_remark" name="item_remark[]"/>
+                    <input type="hidden" id="parent_id" class="mainparent_id" name="parent_id[]" value="'.$tival++.'" />
                   </td>';
 
                 echo ' <td><input value="'.$row->hson_no.'" tabindex="'.$ti++.'" type="text" name="hson_no[]" id="hson_no" class="txt_cls" /></td>';
                 
-                echo ' <td><input value="'.$row->qtymt.'" tabindex="'.$ti++.'" type="text" name="qtymt[]" id="txt_qtymt" class="qtymt txt_cls" onblur="CalcAmount(this);return false;"/></td>';
+                echo ' <td><input value="'.$row->qtymt.'" tabindex="'.$ti++.'" type="text" name="qtymt[]" id="txt_qtymt" class="qtymt txt_cls" onblur="CalcAmount(this);return false;"/><input  type="hidden" name="qtykg[]" id="txt_qtykg" class="qtymt txt_cls" onblur="CalcAmount(this);return false;"/></td>';
                 echo ' <td><input value="'.$row->unit.'" tabindex="'.$ti++.'" type="text" name="unit[]" id="txt_unit"  class="txt_cls" /></td>';
                 echo ' <td><input  value="'.$row->rate.'" tabindex="'.$ti++.'"  type="text" name="rate[]" id="txt_rate" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>';
               
                 echo ' <input value="'.$row->discount.'" type="hidden" name="discountrs[]" id="txt_discountrs" class="txt_cls" onblur="CalcAmount(this);return false;"/>';
-                 echo ' <input value="'.$row->percent.'" type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>';
-                 echo ' <td><input  value="'.$row->persentage.'" tabindex="'.$ti++.'"  type="text" name="persentage[]" id="txt_persentage" class="txt_cls" onblur="CalcAmount(this);return false;" /></td>';
+                 echo ' <input value="'.$row->percent.'" type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/><input  value="'.$row->persentage.'"  type="hidden" name="persentage[]" id="txt_persentage" class="txt_cls" onblur="CalcAmount(this);return false;" /></td>';
                 echo ' <td><input value="'.$row->freight.'" tabindex="'.$ti++.'" type="text" name="freight[]" id="txt_freight" class="freight txt_cls" onblur="TolFreight();" /></td>';
-                echo ' <td><button tabindex="'.$ti++.'" type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>';
+                echo ' <td><button tabindex="'.$ti++.'" type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button><button type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNewSub(this);return false;"><i class="ace-icon fa fa-add bigger-120"></i>C</button></td>';
                 echo '</tr>';
+
+                  $querysub=$this->db->query('select * from tbl_invoice2_sub t where billno='.$row->billno.' and parent_id='.$row->id.' order by id');
+                  foreach($querysub->result() as $rowsub)
+                  {
+                    echo "<tr><td><input type='text' id='sub_parent_id' name='sub_parent_id[]' value='".$j."'/></td><td colspan='5'><input type='text' name='subname[]' class='form-input form-control' value='".$rowsub->subname."'></td><td><button type='button' id='btn_del' class='btn btn-xs btn-danger' onclick='deleteRow(this);return false;'><i class='ace-icon fa fa-trash-o bigger-120'></i></button></td></tr>";
+                  }
+                $j++;
                }
            }  
            else
@@ -12296,129 +12374,67 @@ function daily_report_checking(){
   }
 
 
-  // function pending_order_report()
-  //   {
-  //     $search_by=$this->input->get('search_by');
 
-  //     if($search_by=='Party')
-  //     {      
-  //         echo '<br>';
-  //         echo '<center>
-  //         <button type="button" id="btn_print" class="btn btn-success" onclick="ShowPrint();return false;"><i class="ace-icon fa fa-print bigger-120"></i>Print</button>
-  //           <button class="btn btn-primary" onClick ="exportExcel();">
-  //             <i class="fa fa-file-excel-o"></i>&nbsp;&nbsp;Excel
-  //           </button>
-
-  //         </center>';
-  //         echo '<br>';
-  //         echo '<table id="TblList" style="border:1px solid black;" cellspacing="0">';
-  //         echo '    <thead>';
-  //         echo '        <tr>';
-  //         echo '            <th style="border:1px solid black;padding:5px;">S.no.</th>';      
-  //         echo '            <th style="border:1px solid black;padding:5px;">Party Name</th>';  
-  //         echo '            <th style="border:1px solid black;padding:5px;">Item Name</th>';
-  //         echo '            <th style="border:1px solid black;padding:5px;">Order Qty</th>';
-  //         echo '            <th style="border:1px solid black;padding:5px;">Dispatch</th>';   
-  //         echo '            <th style="border:1px solid black;padding:5px;">Balance Qty</th>';
-  //         echo '        </tr>';
-  //         echo '    </thead>';
-  //         echo '    <tbody>';
-
-  //         $totat_order_qty=0;
-  //         $order_qty=0;
-  //         $bal_qty=0;
-  //         $itemname='';
-  //         $query=$this->db->query('select sum(t2.qtymt) as order_qty,i.name as itemname, i.id as itemcode, m.name as party_name,m.id as ledger_id from tbl_order2 t2, tbl_order1 t1, m_item i, m_ledger m where t1.id=t2.billno and t2.itemcode=i.id  and t1.company_id='. get_cookie('ae_company_id') .' and  t1.ledger_id=m.id and t1.vtype="order" group by t1.ledger_id,t2.itemcode order by m.name'); 
-  //         $j=1;
-  //         foreach($query->result() as $row)
-  //         {                
-
-  //               echo '<tr class="">';
-  //               echo '    <td style="border:1px solid black;padding:5px;">'.$j++.'</td>';
-  //               echo '    <td style="border:1px solid black;padding:5px;">'.$row->party_name.'</td>';
-                
-                
-
-  //               echo '    <td style="border:1px solid black;padding:5px;">'.$row->itemname.'</td>';
-  //               $totat_dis_qty=0;
-  //               $dis_qty=0;
-  //               $query2=$this->db->query('select sum(t2.qtymt) as dis_qty,i.name as itemname from tbl_trans2 t2, tbl_trans1 t1, m_item i where t1.id=t2.billno and t2.itemcode=i.id  and t1.company_id='. get_cookie('ae_company_id') .' and  t1.ledger_id='.$row->ledger_id .' and t2.itemcode='.$row->itemcode.' and t1.vtype="sales" group by t2.itemcode');
-  //               //echo $this->db->last_query();die;
-  //               if(count($result)>0)
-  //               {
-  //                 foreach($query2->result() as $row2)
-  //                 {
-  //                   $dis_qty=$row2->dis_qty;
-  //                   $totat_dis_qty+=$dis_qty;
-  //                 }
-  //               }
-
-  //               $bal_qty=$row->order_qty-$dis_qty;
-  //               echo ' <td style="border:1px solid black;padding:5px;">'  . $row->order_qty.'</td>';
-  //               echo ' <td style="border:1px solid black;padding:5px;">'  . $dis_qty.'</td>';
-  //               echo ' <td style="border:1px solid black;padding:5px;text-align:right;">'  . number_format($bal_qty,2,'.','').'</td>';
-  //               echo '</tr>';
-  //         }
-  //         echo '</tbody>';
-  //         echo '</table>';
-  //     }
-  //     if($search_by=='Item')
-  //     {      
-  //         echo '<br>';
-  //         echo '<center>
-  //         <button type="button" id="btn_print" class="btn btn-success" onclick="ShowPrint();return false;"><i class="ace-icon fa fa-print bigger-120"></i>Print</button>
-  //           <button class="btn btn-primary" onClick ="exportExcel();">
-  //             <i class="fa fa-file-excel-o"></i>&nbsp;&nbsp;Excel
-  //           </button>
-
-  //         </center>';
-  //         echo '<br>';
-  //         echo '<table id="TblList" style="border:1px solid black;" cellspacing="0">';
-  //         echo '    <thead>';
-  //         echo '        <tr>';
-  //         echo '            <th style="border:1px solid black;padding:5px;">S.no.</th>';      
-  //         echo '            <th style="border:1px solid black;padding:5px;">Item Name</th>';
-  //         echo '            <th style="border:1px solid black;padding:5px;">Order Qty</th>';
-  //         echo '            <th style="border:1px solid black;padding:5px;">Dispatch</th>';   
-  //         echo '            <th style="border:1px solid black;padding:5px;">Balance Qty</th>';
-  //         echo '        </tr>';
-  //         echo '    </thead>';
-  //         echo '    <tbody>';
-
-  //         $totat_order_qty=0;
-  //         $order_qty=0;
-  //         $bal_qty=0;
-  //         $itemname='';
-  //         $query=$this->db->query('select sum(t2.qtymt) as order_qty,i.name as itemname,i.id as itemcode from tbl_order2 t2, tbl_order1 t1, m_item i where t1.id=t2.billno and t2.itemcode=i.id  and t1.company_id='. get_cookie('ae_company_id').' and t1.vtype="order" group by t2.itemcode order by i.name ');
-  //         $j=1;
-  //         foreach($query->result() as $row)
-  //         {           
-
-  //               echo '<tr class="">';
-  //               echo '    <td style="border:1px solid black;padding:5px;">'.$j++.'</td>';
-  //               echo '    <td style="border:1px solid black;padding:5px;">'.$row->itemname.'</td>'; 
-
-  //               $dis_qty=0;
-  //               $query2=$this->db->query('select sum(t2.qtymt) as dis_qty,i.name as itemname from tbl_trans2 t2, tbl_trans1 t1, m_item i where t1.id=t2.billno and t2.itemcode=i.id  and t1.company_id='. get_cookie('ae_company_id') .' and  t2.itemcode='.$row->itemcode .' and t1.vtype="sales" group by t2.itemcode'); 
-  //               if(count($result)>0)
-  //               {
-  //                 foreach($query2->result() as $row2)
-  //                 {
-  //                   $dis_qty=$row2->dis_qty;                   
-  //                 }
-  //               }
-
-  //               $bal_qty=$row->order_qty-$dis_qty;
-  //               echo ' <td style="border:1px solid black;padding:5px;">'  . $row->order_qty.'</td>';
-  //               echo ' <td style="border:1px solid black;padding:5px;">'  . $dis_qty.'</td>';
-  //               echo ' <td style="border:1px solid black;padding:5px;text-align:right;">'  . number_format($bal_qty,2,'.','').'</td>';
-  //               echo '</tr>';
-  //         }
-  //         echo '</tbody>';
-  //         echo '</table>';
-  //     }
-  // }
+  public function Converttoinv(){
+          $id=$this->input->get('id');
+          $query=$this->db->query('UPDATE tbl_invoice1 SET invoice_type="Invoice" WHERE id="'.$id.'"');
+          echo "1";
+  }
   
+
+  function uploaddocs_data($tableName,$id)
+    {
+        $opt=$this->input->post('status');
+        $this->load->model('transaction_model');
+        $file_ext='';
+        $rename_file_name='';
+        
+        $i=1;
+        $path="./uploads";
+        if(is_dir($path)==false)
+        {
+            $structure = $path;
+    
+            if(!mkdir($structure, 0, true)) {
+    
+            }
+        }
+
+        try{
+          if(!empty($_FILES['photo']["name"]))
+          {
+              $temp_file_name = $_FILES['photo']['name'];
+              $r=date('d-m-Y-H-i-s');
+              $file_ext = substr(strrchr($temp_file_name,'.'),1);
+              $file_name=preg_replace('/[\s_-]/', '', strchr($temp_file_name,'.',true).$r.strchr($temp_file_name,'.'));
+              $config['upload_path'] = $path;
+              $config['allowed_types'] = '*';
+              $config['file_name'] = $file_name;
+
+              $this->load->library('upload');
+              $this->upload->initialize($config);
+              $path=$path."/".$file_name;
+              if (!$this->upload->do_upload('photo')) // put the name tag value inside i.e UnderImage
+              {
+                  $error = array('error' => $this->upload->display_errors());
+      
+                  foreach ($error as $d){
+                      echo $d;
+                  }
+              }
+              else
+              {
+                  $data = $this->upload->data();
+                  $full_path=base_url().'uploads/'.$data['file_name'];
+                  $status = $this->transaction_model->uploaddocs_save($tableName, null, $id,$full_path,$data['file_name']);
+              }
+          }
+        }
+        catch(Exception $e){
+            $this->db->trans_rollback();
+            echo "2";  
+        }
+      }
 
 
   }

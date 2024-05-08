@@ -4886,14 +4886,16 @@
 			
 	        $rate = '';
 	        $unit='';
+	        $description='';
 	        $specification='';
-	        $queryu=$this->db->query(" select unit,specification from m_item where id='".$item_id."'");
+	        $queryu=$this->db->query(" select * from m_item where id='".$item_id."'");
 	        if ($queryu->num_rows()>0) 
 	        {
 	        	foreach ($queryu->result() as $rowu)
 	        	{
 	        		$unit=$rowu->unit;
 	        		$specification=$rowu->specification;
+	        		$description=$rowu->description;
 	        	}
 	        }
 
@@ -4902,7 +4904,8 @@
 	        $data = array(
 	                "rate"=>$rate,
 	                "unit" => $unit,
-	                "specification" => $specification
+	                "specification" => $specification,
+	                "description" => $description
 	              );
 
 	        echo json_encode($data);
@@ -6477,6 +6480,51 @@ function emp_attan_save()
           echo '<br>';
 
 	    	}
+	    }
+
+
+
+
+	    function delete_reccords_with_table()
+	    {
+			$id=$this->input->post('id');
+			$tbl1=$this->input->post("tbl1");
+			$tbl2=$this->input->post("tbl2");
+
+            try
+            {
+				$this->db->trans_begin();
+
+		        $query=$this->db->query("delete from ".$tbl1." where id=".$id." ");
+		        $query=$this->db->query("delete from ".$tbl2." where billno=".$id." ");
+				$this->db->trans_commit();
+				echo "1";       
+            }
+            catch(Exception $e)
+            {
+	            $this->db->trans_rollback();
+	            echo "2";       
+            }
+	    }
+
+
+	    function delete_docs()
+	    {
+			$id=$this->input->post('id');
+
+            try
+            {
+				$this->db->trans_begin();
+
+		        $query=$this->db->query("delete from tbl_docs where id=".$id." ");
+				$this->db->trans_commit();
+				echo "1";       
+            }
+            catch(Exception $e)
+            {
+	            $this->db->trans_rollback();
+	            echo "2";       
+            }
 	    }
 
 	}

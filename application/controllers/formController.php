@@ -598,6 +598,61 @@ class formController extends CI_Controller {
     }
 
 
+    function uploaddocs_form(){
+          $user_id=get_cookie('ae_user_id');
+          $back_date=get_cookie('ae_back_date');
+          $action=$this->input->get('action');
+          if($action=="edit")
+          {
+            $q=$this->input->get('q');
+            $data=array(
+              'title'=>'Upload Docs Modify',
+              'vtype'=>'Upload Docs',
+              'poslist'=>pos_list(),
+              'status'=>'edit',
+              'id'=>$this->input->get('id'),
+              'orderno'=>0,
+              'sourcelist'=>source_list(),
+              'partylist'=>ledger_list(),
+              'q'=>$q,
+              'subdealerlist'=>sub_dealer_list(),
+              'transporterlist'=>transporter_list(),
+              'consigneelist'=>consignee_list(),
+              'destinationlist'=>destination_list(),
+              'categorylist'=>category_list(),
+              'itemlist'=>item_list(),
+              'godownlist'=>godown_list(),
+              );
+          }
+          else
+          {
+            $data=array(
+              'title'=>'Upload Docs',
+              'vtype'=>'Upload Docs',
+              'orderno'=>0,
+              'status'=>'add',
+              'id'=>0,
+              'poslist'=>pos_list(),
+              'sourcelist'=>source_list(),
+              'q'=>0,
+              'partylist'=>ledger_list(),
+              'subdealerlist'=>sub_dealer_list(),
+              'transporterlist'=>transporter_list(),
+              'consigneelist'=>consignee_list(),
+              'destinationlist'=>destination_list(),
+              'categorylist'=>category_list(),
+              'itemlist'=>item_list(),
+              'godownlist'=>godown_list(),
+              'gid'=>$this->input->get('gid'),
+              'ledger_id'=>$this->input->get('ledger_id'),
+              'subject'=>'Metalite Industries',
+              'mailbody'=>'',
+              );
+          }
+          $this->load->view('uploaddocs_form',$data);
+    }
+
+
     function invoice_whatsapp_form(){
           $user_id=get_cookie('ae_user_id');
           $back_date=get_cookie('ae_back_date');

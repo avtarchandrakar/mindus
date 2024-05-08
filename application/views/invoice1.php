@@ -44,6 +44,13 @@
          <tr>
           <td>&nbsp;From</td><td><input type="text"  name="from" id="from" placeholder="From" class="cdateago col-xs-6 col-sm-6" value="<?=date('d-m-Y', strtotime('-1 month'))?>" list="0"/></td>
           <td>To</td><td><input type="text"  name="to" id="to" placeholder="To" class="cdate col-xs-6 col-sm-6" list="0"/></td>
+          <td>Invoice Type</td><td>
+          			<select name="invoice_type" id="invoice_type" autocomplete="off" class="col-xs-10 col-sm-12" data-rule-required="true">
+          				<option value="All">All</option>
+						<option value="Proforma Invoice">Proforma Invoice</option>
+						<option value="Invoice">Invoice</option>
+					</select>
+				</td>
           <td><button type="button" id="btn_show" class="btn btn-primary" onclick="GetList();">Show</button></td>
          </tr>
         </table>
@@ -158,8 +165,9 @@
  		    function GetList() {
                 from=$('#from').val();
                 to=$('#to').val();
+                invoice_type=$('#invoice_type').val();
                 // alert(to);
-                data ="from="+from+'&to='+to;
+                data ="from="+from+'&to='+to+'&invoice_type='+invoice_type;
 		        vtype=$('#vtype').val();
 		        p_modify=$('#p_modify').val();
 		        $(".loading").show();
@@ -217,6 +225,23 @@
 
 		    function GetReport(id){
 		    	window.open("<?php echo base_url();?>index.php/transactionController/invoices_bill_print/"+id,'_blank');
+		    }
+
+		    function Converttoinv (id){
+		    	var r = confirm("Do You Want to Convert to Invoice");
+				if(r==true)
+				{
+			    	data = '';
+			        $.ajax({
+			            url: "<?php echo base_url();?>index.php/transactionController/Converttoinv",
+			            type: "GET",
+			            data: data+'&id='+id,
+			            cache: false,
+			            success: function (html) {
+			            	GetList();
+			            }
+			        });
+			    }
 		    }
 
 		    function GetReporteye(id){

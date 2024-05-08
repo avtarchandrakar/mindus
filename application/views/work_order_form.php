@@ -128,7 +128,7 @@
 		 <thead>
 		  <tr>
 		   <th class="txt_item">Item Name</th>
-		   <th>Specificatio</th>
+		   <th>Specification</th>
 		   <th>Qty</th>
 		   <th>UOM</th>
 		   <th>Unit Rate (In Rs.)</th>

@@ -733,6 +733,29 @@
   </tr>
   </tbody>
 </table>
+  <h3 style="text-align:left;">Documents</h3> 
+  <?php $query22=$this->db->query('select t.* from tbl_docs t where t.parent_id='.$id);
+      $name="";
+      $file_path="";
+      $file_name=""; 
+      ?>
+<table class="table table-bordered" style="border:1px solid grey;">
+<?php  foreach($query22->result() as $row22)
+      {
+        $name=$row22->name;
+        $file_path=$row22->file_path;
+        $file_name=$row22->file_name; ?>
+    <tr>
+      <td colspan="1" style="text-align:left;font-size:15px;text-align: justify;text-justify: inter-word;">
+        <?php echo $name;?>
+      </td>
+      <td colspan="1" style="text-align:left;font-size:15px;text-align: justify;text-justify: inter-word;">
+      :  <a href="<?php echo $file_path;?>" target="_blank"><img src="<?=base_url()?>/assets/img/logo2.png" style="height:30px;width:30px;" ></a>
+      </td>
+    </tr>
+    <?php } ?>
+  </table>
+  <h3 style="text-align:center;">XXXXXXXXXX</h3> 
   <div style="padding-top:50px;padding-left:50px;padding-right:50px;">
     <img src="<?php echo base_url();?>assets/images/footer.jpg" style="height:auto;width: 100%;margin-bottom: 0px;position: fixed;left: 0;bottom: 0;">
   </div>

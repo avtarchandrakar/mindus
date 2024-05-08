@@ -59,6 +59,7 @@
         <input type="hidden" value="<?=$id?>" name="sno" id="sno" class="form-control" />
         <input type="hidden" value="<?=$orderno?>" name="orderno" id="orderno" class="form-control" />
         <input type="hidden" value="<?=$vtype?>" name="vtype" id="vtype" class="form-control" />
+		
 		<div class="form-group">
 		   
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Date</label>
@@ -76,10 +77,18 @@
 				?>
 
 			</div>
-			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Invoice No</label>
+			<!-- <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Invoice No</label>
 
 			<div class="col-sm-4">
 				<input type="text"  name="invoice_no" id="invoice_no" autocomplete="off" placeholder="Invoice No" class="col-xs-10 col-sm-12" list="0" />
+			</div> -->
+			<label class="col-sm-2 control-label no-padding-right" for="form-field-1" > Invoice Type</label>
+			
+			<div class="col-sm-4" >
+					<select name="invoice_type" id="invoice_type" autocomplete="off" class="col-xs-10 col-sm-12" data-rule-required="true">
+						<option value="Proforma Invoice">Proforma Invoice</option>
+						<option value="Invoice">Invoice</option>
+					</select>
 			</div>
 		</div>
 		
@@ -142,9 +151,10 @@
 		  <tr>
 		   <th class="txt_item">Descreption</th>
 		   <th>HSN No.</th>
-		   <th>Qty</th>
+		   <th>Qty </th>
+		   <!-- <th>Qty (in KG)</th> -->
 		   <th>UOM</th>
-		   <th>Rate</th>
+		   <th>Unit Rate</th>
 		   <!-- <th>%age</th> -->
 		   <th>Total Amount</th>
 		   <th style="width:100px;">Action</th>
@@ -153,37 +163,32 @@
 		 <tbody id="TblRptBody">
 		  <tr>
            <td>
-			   <!-- <select name="itemcode[]" id="item_id" onchange="GetRate(this);return false;" class="col-xs-10 col-sm-12 " >
-			    <option value="0">Select Item Name</option>
-			    <? foreach($itemlist as $row){ ?>
-			     <option value="<?=$row->id?>"><?=$row->name?></option>
-			     <? } ?>
-			    </select>
-				<input type="hidden" id="order_id" name="orderid_gen[]"/> -->
 				<input type="text" id="item_name" name="item_name[]" class="txt_cls" placeholder="Item Name"/>
 			    <input type="hidden" id="itemcode" name="itemcode[]"/>
 				<input type="hidden" id="order_id" name="orderid_gen[]"/>
 				<input type="hidden" id="item_remark" name="item_remark[]"/>
+				<input type="hidden" id="parent_id" class="mainparent_id" name="parent_id[]" value="1" />
 				
            </td>
            <td style="width:150px;"><input  type="text" placeholder="" name="hson_no[]" id="hson_no" placeholder="HSN No" class="txt_cls"/></td>
-           <td style="width:150px;"><input  type="text" name="qtymt[]" id="txt_qtymt" class="qtymt txt_cls" onblur="CalcAmount(this);return false;"/></td>
+           <td style="width:150px;"><input  type="text" name="qtymt[]"  onkeyup="CalcAmount(this)" onblur="CalcAmount(this)" id="txt_qtymt" class="qtymt txt_cls" /><input  type="hidden" name="qtykg[]" id="txt_qtykg" class="qtykg txt_cls" /></td>
            <td style="width:150px;"><input  type="text" name="unit[]" id="txt_unit"  class="txt_cls" /></td>
                     
-           <td style="width:150px;"><input  type="text" name="rate[]" id="txt_rate" class="txt_cls" onblur="CalcAmount(this);return false;"/>
-			<input  type="hidden"  name="discountrs[]" id="txt_discountrs" class="txt_cls" onblur="CalcAmount(this);return false;"/>
-			<input  type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/><input  type="hidden" name="persentage[]" id="txt_persentage" class="txt_cls"/></td>
+           <td style="width:150px;"><input  type="text"  onkeyup="CalcAmount(this)" onblur="CalcAmount(this)" name="rate[]" id="txt_rate" class="txt_cls" />
+			<input  type="hidden"  name="discountrs[]" id="txt_discountrs" class="txt_cls" />
+			<input  type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" /><input  type="hidden" name="persentage[]" id="txt_persentage" class="txt_cls"/></td>
            
-           <td style="width:150px;"><input  type="text" name="freight[]" id="txt_freight" class="freight txt_cls" readonly="true" onblur="TolFreight();" /></td>
-           <td><button type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>
+           <td style="width:150px;"><input  type="text" name="freight[]" id="txt_freight" class="freight txt_cls" onblur="TolFreight();" /></td>
+           <td><button type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button><button type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNewSub(this);return false;"><i class="ace-icon fa fa-add bigger-120"></i>C</button></td>
 		  </tr>
 		 </tbody>
 		 <tfoot>
 		 <tr>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <th><input type="text" id="tol_qtymt" name="tol_qtymt" readonly="true" class="txt_cls" /></th>
+		   <th><input type="hidden" id="tol_qtymt" name="tol_qtymt" readonly="true" class="txt_cls" /></th>
 		   <!-- <th>&nbsp;</th> -->
+		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th><input type="hidden" id="tol_qtybag" name="tol_qtybag" readonly="true" class="txt_cls" />Total Amount</th>
 		   <th><input type="text" id="tol_freight" name="tol_freight" readonly="true" class="txt_cls" /></th>
@@ -193,6 +198,7 @@
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <!-- <th>&nbsp;</th> -->
+		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th>Total Amount Before Tax :</th>
@@ -205,6 +211,8 @@
 		   <th>&nbsp;</th>
 		   <th>Add CGST % :</th>
 		   <th><input type="text" id="cgst_per" onblur="tolamount();return false;"  name="cgst_per" class="txt_cls" /></th>
+		   <th>&nbsp;</th>
+
 		   <th>CGST Amount :</th>
 		   <th><input type="text" id="cgst_amt" readonly='true' onblur="tolamount();return false;"  name="cgst_amt" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
@@ -215,6 +223,8 @@
 		   <th>&nbsp;</th>
 		   <th>Add SGST % :</th>
 		   <th><input type="text" id="sgst_per" onblur="tolamount();return false;"  name="sgst_per" class="txt_cls" /></th>
+		   <th>&nbsp;</th>
+
 		   <th>CGST Amount :</th>
 		   <th><input type="text" id="sgst_amt" readonly='true'  onblur="tolamount();return false;"  name="sgst_amt" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
@@ -226,6 +236,8 @@
 		   <!-- <th>&nbsp;</th> -->
 		   <th>Add IGST % :</th>
 		   <th><input type="text" id="igst_per" onblur="tolamount();return false;"  name="igst_per" class="txt_cls" /></th>
+		   <th>&nbsp;</th>
+
 		   <th>CGST Amount :</th>
 		   <th><input type="text" id="igst_amt" readonly='true'  onblur="tolamount();return false;"  name="igst_amt" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
@@ -237,7 +249,7 @@
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <!-- <th>&nbsp;</th> -->
+		   <th>&nbsp;</th>
 		   <th>Total GST(1+2+3):</th>
 		   <th><input type="text" id="total_gst" readonly="true" onblur="tolamount();return false;"  name="total_gst" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
@@ -247,7 +259,7 @@
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <!-- <th>&nbsp;</th> -->
+		   <th>&nbsp;</th>
 		   <th>Grand Total:</th>
 		   <th><input type="text" id="grand_total" readonly="true" onblur="tolamount();return false;"  name="grand_total" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
@@ -257,7 +269,7 @@
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <!-- <th>&nbsp;</th> -->
+		   <th>&nbsp;</th>
 		   <th>Round Off Amt:</th>
 		   <th><input type="text" id="round_off_amt" readonly="true" name="round_off_amt" onblur="tolamount();return false;"  class="txt_cls" /><input type="hidden" id="round_off" name="round_off" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
@@ -267,7 +279,7 @@
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <!-- <th>&nbsp;</th> -->
-		   <!-- <th>&nbsp;</th> -->
+		   <th>&nbsp;</th>
 		   <th colspan="2" style="text-align: right;">Select Bank Account Details:</th>
 		   <th colspan="2">
 		   	<select type="text" id="acc_details" name="acc_details"   class="txt_cls col-xs-10 col-sm-12">
@@ -644,7 +656,7 @@
 						$('#tol_qtymt,#tol_qtybag').val('');
 						GetItemList(report_obj.id);
 		                $("#sno").val(report_obj.id);
-		                $("#status").val("add");
+		                $("#status").val("edit");
 		                $("#filepath").val(report_obj.file_path);
 						$("#filename").val(report_obj.file_name);	
 						if (report_obj.file_path!='') 
@@ -1031,15 +1043,18 @@
 			    	////////////
 			  function ItemAddNew(currentRow){
 			  	 var x=document.getElementById('TblRptBody');
-			  	 // alert(x);
+			  	 cRow=$(currentRow).parent().parent();
+			  	 var mainparent_id = $(cRow).find('#parent_id').val() || 0;
+			  	 mainparent_id = parseFloat(mainparent_id)+1;
+			  	 // console.log(mainparent_id);
 			  	 var new_row = x.rows[0].cloneNode(true);
 			  	 var lastrow=x.rows.length-1;
 			  	 var ti=0;
 			  	 // console.log(currentRow);
-			  	 if(currentRow.parentNode.parentNode.rowIndex-1!=lastrow)
-			  	 {
-			  	 	return;
-			  	 }
+			  	 // if(currentRow.parentNode.parentNode.rowIndex-1!=lastrow)
+			  	 // {
+			  	 // 	return;
+			  	 // }
 			  	 // console.log(lastrow);
 			  	 // console.log(x.rows[lastrow].innerHTML);
 			  	 // ti = x.rows[lastrow].cells[8].getElementsByTagName('button')[0].tabIndex;
@@ -1100,7 +1115,7 @@
                 tolamount();
 		    	MoveTextBoxRefresh('.form-input');
 		    	// $('.chosen-select').chosen({width: "100%"});
-				// x.rows[x.rows.length-1].cells[0].getElementsByTagName('select')[0].focus();
+				x.rows[x.rows.length-1].cells[0].getElementsByClassName('mainparent_id')[0].value=mainparent_id;
 
 			  }
 			  /////////////////
@@ -1154,4 +1169,16 @@
         $(document).ready(function() {
             // $('.chosen-select').chosen({width: "100%"});
 		});
+
+
+		function ItemAddNewSub(currentRow){
+			  	 cRow=$(currentRow).parent().parent();
+			  	 var mainparent_id = $(cRow).find('#parent_id').val() || 0;
+			  	 var x=document.getElementById('TblRptBody');
+			  	 new_row = "<tr><td><input type='text' id='sub_parent_id' name='sub_parent_id[]' value='"+mainparent_id+"'/></td><td colspan='5'><input type='text' name='subname[]' class='form-input form-control'></td><td><button type='button' id='btn_del' class='btn btn-xs btn-danger' onclick='deleteRow(this);return false;'><i class='ace-icon fa fa-trash-o bigger-120'></i></button></td></tr>";
+			  	 // x.appendChild( new_row );
+			  	 // console.log(x);
+			  	 $('#TblRptBody').append(new_row);
+		    	MoveTextBoxRefresh('.form-input');
+			  }
 </script>

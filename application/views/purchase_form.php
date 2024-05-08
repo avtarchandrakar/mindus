@@ -128,8 +128,11 @@
 		 <thead>
 		  <tr>
 		   <th class="txt_item">Item Name</th>
-		   <th>Specificatio</th>
+		   <th>Description</th>
+		   <th>Specification</th>
+		   <th>Make</th>
 		   <th>Qty</th>
+		   <!-- <th>Qty(in KG)</th> -->
 		   <th>UOM</th>
 		   <th>Unit Rate (In Rs.)</th>
 		   <th>Total Amount (In Rs.)</th>
@@ -147,15 +150,24 @@
 			    </select>
 				<input type="hidden" id="order_id" name="orderid_gen[]"/>
            </td>
+           <td style="width:150px;"><input  type="text" placeholder="" name="item_desc[]" id="item_desc" placeholder="Description" class="txt_cls"/></td>
            <td style="width:150px;"><input  type="text" placeholder="" name="item_remark[]" id="item_remark" placeholder="Specification" class="txt_cls"/></td>
-           <td style="width:150px;"><input  type="text" name="qtymt[]" id="txt_qtymt" class="qtymt txt_cls" onblur="GetQtyBag(this);return false;"/></td>
-           <td style="width:150px;"><input  type="text" name="unit[]" id="txt_unit"  class="txt_cls"/></td>
+           <td style="width:150px;"><input  type="text" placeholder="" name="item_make[]" id="item_make" placeholder="Make" class="txt_cls"/></td>
+           <td style="width:150px;"><input  type="text" name="qtymt[]" id="txt_qtymt" class=" txt_cls" placeholder=""  onkeyup="CalcAmount(this)" onblur="CalcAmount(this)"></td>
+           <td style="width:150px;">
+           	<input  type="hidden" name="qtykg[]" id="txt_qtykg" class=" txt_cls" placeholder="in KG" />
+           	<select name="unit[]" id="txt_unit"  class="txt_cls">
+           		<option value="KGS">KGS</option>
+           		<option value="NOS">NOS</option>
+           		<option value="MTR">MTR</option>
+           	</select>
+           </td>
                     
-           <td style="width:150px;"><input  type="text" name="rate[]" id="txt_rate" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>
-			<input  type="hidden"  name="discountrs[]" id="txt_discountrs" class="txt_cls" onblur="CalcAmount(this);return false;"/>
-			<input  type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/>
+           <td style="width:150px;"><input  type="text"  onkeyup="CalcAmount(this)" onblur="CalcAmount(this)" name="rate[]" id="txt_rate" class="txt_cls" placeholder="Rate in RS." /></td>
+			<input  type="hidden"  name="discountrs[]" id="txt_discountrs" class="txt_cls" placeholder="Rate in RS." />
+			<input  type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" placeholder="Rate in RS." />
            
-           <td style="width:150px;"><input  type="text" name="freight[]" id="txt_freight" class="freight txt_cls" readonly="true" onblur="TolFreight();" /></td>
+           <td style="width:150px;"><input  type="text" name="freight[]" id="txt_freight" class="freight txt_cls" onblur="TolFreight();" /></td>
            <td><button type="button" id="btn_add" class="btn btn-xs btn-info" onclick="ItemAddNew(this);return false;"><i class="ace-icon fa fa-plus bigger-120"></i></button><button type="button" id="btn_del" class="btn btn-xs btn-danger" onclick="deleteRow(this);return false;"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>
 		  </tr>
 		 </tbody>
@@ -163,64 +175,77 @@
 		 <tr>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
-		   <th><input type="text" id="tol_qtymt" name="tol_qtymt" readonly="true" class="txt_cls" /></th>
+		   <th><input type="hidden" id="tol_qtymt" name="tol_qtymt" readonly="true" class="txt_cls" /></th>
+		   <th>&nbsp;</th>
+		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th>&nbsp;</th>
 		   <th><input type="hidden" id="tol_qtybag" name="tol_qtybag" readonly="true" class="txt_cls" />Total Amount</th>
 		   <th><input type="text" id="tol_freight" name="tol_freight" readonly="true" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
+		   <th>&nbsp;</th>
 		  </tr>	
 		 <tr>
-		   <th>Packing & Forwarding :</th>
-		   <th colspan="6"><input type="text" id="pakking_forwerding" name="pakking_forwerding" class="txt_cls" /></th>
+		   <th>Packing :</th>
+		   <th colspan="9"><input type="text" id="pakking_forwerding" name="pakking_forwerding" class="txt_cls" placeholder="Packing" /></th>
 		   <th>&nbsp;</th>
 		  </tr>
 		  <tr>
 		   <th>Freight</th>
-		   <th colspan="6"><input type="text" id="lr_freight" name="lr_freight" class="txt_cls"  /></th>
+		   <th colspan="9"><input type="text" id="lr_freight" name="lr_freight" class="txt_cls" placeholder="Freight" /></th>
 		   <!-- onblur="TolFreight();" onkeyup="TolFreight();" -->
 		   <th>&nbsp;</th>
 		  </tr>
 
 		  <tr>
 		   <th>Delivery Period : </th>
-		   <th colspan="6"><input type="text" id="delivery_period" name="delivery_period" class="txt_cls"  /></th>
+		   <th colspan="9"><input type="text" id="delivery_period" name="delivery_period" class="txt_cls" placeholder="Delivery Period" /></th>
+		   <th>&nbsp;</th>
+		  </tr> 
+		  <tr>
+		   <th>Dispatch : </th>
+		   <th colspan="9"><input type="text" id="delivery_period" name="delivery_period" class="txt_cls"  placeholder="Dispatch" /></th>
 		   <th>&nbsp;</th>
 		  </tr> 
 		  <tr>
 		   <th>Payment Terms : </th>
-		   <th colspan="6"> <input type="text" id="payment_terms" name="payment_terms" class="txt_cls"  /></th>
+		   <th colspan="9"> <input type="text" id="payment_terms" name="payment_terms" class="txt_cls" placeholder="Payment Terms" /></th>
+		   <th>&nbsp;</th>
+		  </tr> 
+		  <tr>
+		   <th>Taxes : </th>
+		   <th colspan="9"> <input type="text" id="taxes" name="taxes" class="txt_cls" placeholder="Taxes" /></th>
 		   <th>&nbsp;</th>
 		  </tr> 
 		  <tr>
 		   <th >Warranty / Guarantee  : </th>
-		   <th colspan="6"><input type="text" id="warranty_guarantee" name="warranty_guarantee" class="txt_cls"  /></th>
+		   <th colspan="9"><input type="text" id="warranty_guarantee" name="warranty_guarantee" class="txt_cls" placeholder="Warranty / Guarantee" /></th>
 		   <th>&nbsp;</th>
 		  </tr> 
 		  <tr>
 		   <th >LD Clause   : </th>
-		   <th colspan="6"><input type="text" id="ld_clause" name="ld_clause" class="txt_cls"  /></th>
+		   <th colspan="9"><input type="text" id="ld_clause" name="ld_clause" class="txt_cls" placeholder="LD Clause" /></th>
 		   <th>&nbsp;</th>
 		  </tr> 
 		  <tr>
 		   <th >Note  : </th>
-		   <th colspan="6"><input type="text" id="remark" name="remark" class="txt_cls"  /></th>
+		   <th colspan="9"><input type="text" id="remark" name="remark" class="txt_cls" placeholder="Note" /></th>
 		   <th>&nbsp;</th>
 		  </tr> 
 		  <tr>
 		   <th >Purchase Manager Name  : </th>
-		   <th colspan="6"><input type="text" id="designation" name="designation" class="txt_cls"  /></th>
+		   <th colspan="9"><input type="text" id="purchase_manager" name="purchase_manager" class="txt_cls" placeholder="Purchase Manager Name" /></th>
 		   <th>&nbsp;</th>
 		  </tr>
 
 		  <tr>
 		   <th >Prepared By  : </th>
-		   <th colspan="6"><input type="text" id="prepared_name" name="prepared_name" class="txt_cls"  /></th>
+		   <th colspan="9"><input type="text" id="prepared_name" name="prepared_name" class="txt_cls" placeholder="Prepared By" /></th>
 		   <th>&nbsp;</th>
 		  </tr>
 		  <tr>
 		   <th >Designation  : </th>
-		   <th colspan="6"><input type="text" id="designation" name="designation" class="txt_cls"  /></th>
+		   <th colspan="9"><input type="text" id="designation" name="designation" class="txt_cls"  /></th>
 		   <th>&nbsp;</th>
 		  </tr>
 
@@ -349,7 +374,7 @@
 		        data = "list=list";
 		        $(".loading").show();
 		        $.ajax({
-		            url: "<?php echo base_url();?>index.php/transactionController/sales_get_item",
+		            url: "<?php echo base_url();?>index.php/transactionController/purchase_get_item",
 		            type: "GET",
 		            data: data+'&vtype='+$('#vtype').val()+'&id='+ID,
 		            cache: false,
@@ -740,6 +765,7 @@
 						$(cRow).find('#txt_rate').val(report_obj.rate);
 						$(cRow).find('#txt_unit').val(report_obj.unit);
 						$(cRow).find('#item_remark').val(report_obj.specification);
+						$(cRow).find('#item_desc').val(report_obj.description);
 						
 									
 						CalcAmount(param);					

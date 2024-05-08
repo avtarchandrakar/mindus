@@ -383,7 +383,7 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group" style="display: none;">
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Upload Drawings</label>
 			<div class="col-sm-3">
 				<input type='file' data-rule-required="true" id='photo' name='photo' class='form-control  col-xs-10 col-sm-12' />
@@ -392,7 +392,7 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group" style="display: none;">
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Upload Other Documents</label>
 			<div class="col-sm-3">
 				<input type='file' data-rule-required="true" id='otherfile' name='otherfile' class='form-control  col-xs-10 col-sm-12' />

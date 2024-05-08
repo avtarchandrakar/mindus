@@ -108,10 +108,11 @@
 		 <thead>
 		  <tr>
 		   <th class="txt_item">Description</th>
-		   <th>BLD</th>
+		   <th>Building Size</th>
+		   <th>UOM</th>
 		   <th>Quantity</th>
-		   <!-- <th>UOM</th> -->
-		   <th>Offer Amount (In Rs.) </th>
+		   <th>Rate (In Rs.)</th>
+		   <th>Basic Amount (In Rs.) </th>
 		   <th>Remark</th>
 		   <th style="width:100px;">Action</th>
 		  </tr>
@@ -124,12 +125,16 @@
 				<input type="hidden" id="order_id" name="orderid_gen[]"/>
            </td>
            <td style="width:150px;"><input  type="text" placeholder="" name="item_bld[]" id="item_bld" placeholder="" class="txt_cls"/></td>
+           
+           <td style="width:150px;">
+           	<input  type="text" name="unit[]" id="txt_unit"  class="txt_cls"/>
+           </td>
            <td style="width:150px;"><input  type="text" name="moc[]" id="txt_moc" class="moc txt_cls" onblur="GetQtyBag(this);return false;"/></td>
-           <!-- <td style="width:150px;"> -->
-           	<input  type="hidden" name="unit[]" id="txt_unit"  class="txt_cls"/>
-           <!-- </td> -->
+           <td style="width:150px;">
+           	<input  type="text" name="rate[]" id="txt_rate" class="txt_cls" onblur="CalcAmount(this);return false;"  class="txt_cls"/>
+           </td>
                     
-           <td style="width:150px;"><input  type="text" name="rate[]" id="txt_rate" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>
+           <td style="width:150px;"><input  type="text" name="basic_amt[]" id="basic_amt" class="txt_cls" onblur="CalcAmount(this);return false;"/></td>
 			<input  type="hidden"  name="discountrs[]" id="txt_discountrs" class="txt_cls" onblur="CalcAmount(this);return false;"/>
 			<input  type="hidden" name="discountper[]" id="txt_discountper" class="txt_cls" onblur="CalcAmount(this);return false;"/>
            
@@ -150,6 +155,11 @@
 		   <th class="hidden"><input type="text" id="tol_freight" name="tol_freight" readonly="true" class="txt_cls" /></th>
 		   <th>&nbsp;</th>
 		  </tr>	
+		  <tr>
+		   <th>Proposal for : </th>
+		   <th colspan="6"><input type="text" id="proposal_for" name="proposal_for" class="txt_cls" value="Proposal for Supply, Fabrication & Erection of Steel structural members, Z-sections, C-sections, Profiled sheeting & miscellaneous items for your PEB Shed" /></th>
+		   <th>&nbsp;</th>
+		  </tr > 
 		  <tr>
 		   <th>Assumptions made for Erection : </th>
 		   <th colspan="6"><input type="text" id="assumptions_erection" name="assumptions_erection" class="txt_cls" value="<br>1. Anchor Bolt Supply & Periodic Supervision is in our Scope. Casting of Anchor bolt is in Civil Contractor’s Scope.<br>
@@ -201,10 +211,11 @@
 
 			<div class="col-sm-10">
 				<textarea  type="text" name="payment_terms" id="payment_terms" autocomplete="off" placeholder="Sub:" class=" col-xs-10 col-sm-12" list="0">SUPPLY & ERECTION<br>
-&nbsp;&nbsp;1. 60% advance along with P.O/ Signed contract.<br>
-&nbsp;&nbsp;2. 30% before of dispatch of material after inspection at our factory or with PI.<br>
-&nbsp;&nbsp;3. 5% on structure on progress<br>
-&nbsp;&nbsp;4. 5% on Successfully handing over of the building.</textarea>
+&nbsp;&nbsp;1. 30% Advance Along With P.o/ Signed Contract.<br>
+&nbsp;&nbsp;2. 30% on GA drawing Approval or shop, drawimng approval.<br>
+&nbsp;&nbsp;3. 30% after your inspection and before of dispatch.<br>
+&nbsp;&nbsp;4. 5% On Structure On Progress.<br>
+&nbsp;&nbsp;5. 5% On Successfully Handing Over Of The Building.</textarea>
 			</div>
 		</div>
 
@@ -348,7 +359,7 @@ changes and improvements, in the continued development of the SELLER's product).
             	<label class="control-label no-padding-right " for="form-field-1"> DESCRIPTION</label>            </td>
             <td style="width:75%;text-align:center;font-size:10px;">
               <!-- <input type="text" id="building_no" name="building_no" class="txt_cls" placeholder="BUILDING NO." value="1" /> -->
-              <label class="control-label no-padding-right " for="form-field-1"> Canopy * Staircase</label>
+              <label class="control-label no-padding-right " for="form-field-1"> PEB SHED</label>
             </td>
           </tr>
 
@@ -366,9 +377,9 @@ changes and improvements, in the continued development of the SELLER's product).
             <td style="width:5%;text-align:center;font-size:10px;">
             	<label class="control-label no-padding-right " for="form-field-1"> 2</label>            </td>
             <td style="width:20%;text-align:left;font-size:10px;">
-            	<label class="control-label no-padding-right " for="form-field-1"> Width (M) </label>            </td>
+            	<label class="control-label no-padding-right " for="form-field-1"> Width  </label>            </td>
             <td style="width:75%;text-align:center;font-size:10px;">
-              <input type="text" id="basic_width" name="basic_width" class="txt_cls" placeholder="Width (M)" value="15" />
+              <input type="text" id="basic_width" name="basic_width" class="txt_cls" placeholder="Width " value="15" />
             </td>
           </tr>
 
@@ -376,9 +387,9 @@ changes and improvements, in the continued development of the SELLER's product).
             <td style="width:5%;text-align:center;font-size:10px;">
             	<label class="control-label no-padding-right " for="form-field-1"> 3</label>            </td>
             <td style="width:20%;text-align:left;font-size:10px;">
-            	<label class="control-label no-padding-right " for="form-field-1"> Length (M) </label>            </td>
+            	<label class="control-label no-padding-right " for="form-field-1"> Length  </label>            </td>
             <td style="width:75%;text-align:center;font-size:10px;">
-              <input type="text" id="basic_length" name="basic_length" class="txt_cls" placeholder="Length (M)" value="20" />
+              <input type="text" id="basic_length" name="basic_length" class="txt_cls" placeholder="Length " value="20" />
             </td>
           </tr>
 
@@ -386,9 +397,9 @@ changes and improvements, in the continued development of the SELLER's product).
             <td style="width:5%;text-align:center;font-size:10px;">
             	<label class="control-label no-padding-right " for="form-field-1"> 4</label>            </td>
             <td style="width:20%;text-align:left;font-size:10px;">
-            	<label class="control-label no-padding-right " for="form-field-1"> Clear Height (M)  </label>            </td>
+            	<label class="control-label no-padding-right " for="form-field-1"> Clear Height   </label>            </td>
             <td style="width:75%;text-align:center;font-size:10px;">
-              <input type="text" id="basic_clear_height" name="basic_clear_height" class="txt_cls" placeholder="Clear Height (M) " value="8" />
+              <input type="text" id="basic_clear_height" name="basic_clear_height" class="txt_cls" placeholder="Clear Height  " value="8" />
             </td>
           </tr>
 
@@ -396,9 +407,9 @@ changes and improvements, in the continued development of the SELLER's product).
             <td style="width:5%;text-align:center;font-size:10px;">
             	<label class="control-label no-padding-right " for="form-field-1"> 5</label>            </td>
             <td style="width:20%;text-align:left;font-size:10px;">
-            	<label class="control-label no-padding-right " for="form-field-1"> Brick wall Height (M)   </label>            </td>
+            	<label class="control-label no-padding-right " for="form-field-1"> Brick wall Height    </label>            </td>
             <td style="width:75%;text-align:center;font-size:10px;">
-              <input type="text" id="basic_brick_wall" name="basic_brick_wall" class="txt_cls" placeholder="Brick wall Height (M)  " value="3" />
+              <input type="text" id="basic_brick_wall" name="basic_brick_wall" class="txt_cls" placeholder="Brick wall Height   " value="3" />
             </td>
           </tr>
 
@@ -406,9 +417,9 @@ changes and improvements, in the continued development of the SELLER's product).
             <td style="width:5%;text-align:center;font-size:10px;">
             	<label class="control-label no-padding-right " for="form-field-1"> 6</label>            </td>
             <td style="width:20%;text-align:left;font-size:10px;">
-            	<label class="control-label no-padding-right " for="form-field-1"> Interior column spacing (m) </label>            </td>
+            	<label class="control-label no-padding-right " for="form-field-1"> Interior column spacing  </label>            </td>
             <td style="width:75%;text-align:center;font-size:10px;">
-              <input type="text" id="basic_interior_column" name="basic_interior_column" class="txt_cls" placeholder="Interior column spacing (m)" value="As per your GA drawing" />
+              <input type="text" id="basic_interior_column" name="basic_interior_column" class="txt_cls" placeholder="Interior column spacing " value="As per your GA drawing" />
             </td>
           </tr>
 
@@ -426,9 +437,9 @@ changes and improvements, in the continued development of the SELLER's product).
             <td style="width:5%;text-align:center;font-size:10px;">
             	<label class="control-label no-padding-right " for="form-field-1"> 8</label>            </td>
             <td style="width:20%;text-align:left;font-size:10px;">
-            	<label class="control-label no-padding-right " for="form-field-1"> Bay spacing (m) </label>            </td>
+            	<label class="control-label no-padding-right " for="form-field-1"> Bay spacing  </label>            </td>
             <td style="width:75%;text-align:center;font-size:10px;">
-              <input type="text" id="basic_bay_spacing" name="basic_bay_spacing" class="txt_cls" placeholder="Bay spacing (m)" value="As per Layout" />
+              <input type="text" id="basic_bay_spacing" name="basic_bay_spacing" class="txt_cls" placeholder="Bay spacing " value="As per Layout" />
             </td>
           </tr>
 
@@ -436,9 +447,9 @@ changes and improvements, in the continued development of the SELLER's product).
             <td style="width:5%;text-align:center;font-size:10px;">
             	<label class="control-label no-padding-right " for="form-field-1"> 9</label>            </td>
             <td style="width:20%;text-align:left;font-size:10px;">
-            	<label class="control-label no-padding-right " for="form-field-1"> End wall column Spacing (m) </label>            </td>
+            	<label class="control-label no-padding-right " for="form-field-1"> End wall column Spacing  </label>            </td>
             <td style="width:75%;text-align:center;font-size:10px;">
-              <input type="text" id="basic_end_wall" name="basic_end_wall" class="txt_cls" placeholder="End wall column Spacing (m)" value="As per Layout" />
+              <input type="text" id="basic_end_wall" name="basic_end_wall" class="txt_cls" placeholder="End wall column Spacing " value="As per Layout" />
             </td>
           </tr>
 
@@ -776,7 +787,7 @@ changes and improvements, in the continued development of the SELLER's product).
 			 	 
 			<!-- </div>   -->
 		</div>
-		<div class="form-group">
+		<div class="form-group" style="display: none;">
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Upload Drawings</label>
 			<div class="col-sm-3">
 				<input type='file' data-rule-required="true" id='photo' name='photo' class='form-control  col-xs-10 col-sm-12' />
@@ -785,7 +796,7 @@ changes and improvements, in the continued development of the SELLER's product).
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group" style="display: none;">
 			<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Upload Other Documents</label>
 			<div class="col-sm-3">
 				<input type='file' data-rule-required="true" id='otherfile' name='otherfile' class='form-control  col-xs-10 col-sm-12' />
@@ -887,7 +898,7 @@ changes and improvements, in the continued development of the SELLER's product).
 					  	 var lastrow=x.rows.length-1;
 					  	 var ti=0;
 
-					  	 ti = x.rows[lastrow].cells[8].getElementsByTagName('button')[0].tabIndex;
+					  	 ti = x.rows[lastrow].cells[9].getElementsByTagName('button')[0].tabIndex;
 
 					  		ti++;
 					  	 //$("#lessadv").attr("tabindex",ti);
@@ -926,7 +937,7 @@ changes and improvements, in the continued development of the SELLER's product).
 					  	 var lastrow=x.rows.length-1;
 					  	 var ti=0;
 
-					  	 ti = x.rows[lastrow].cells[7].getElementsByTagName('button')[0].tabIndex;
+					  	 ti = x.rows[lastrow].cells[9].getElementsByTagName('button')[0].tabIndex;
 
 					  	 ti++;
 					  	 // $("#lessadv").attr("tabindex",ti);

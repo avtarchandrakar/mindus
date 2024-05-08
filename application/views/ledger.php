@@ -405,59 +405,7 @@
 
 
 
-		        //if submit button is clicked
-		        $('#newsubmit').click(function () {
-		            $("#userform").validate();
-		            var mobileno = $('#mobileno').val().length;
-		            var mobileno2 = $('#mobileno2').val().length;
-
-		            if (mobileno=!10) {
-		            	alert("Please Enter Only 10 Digit Mobile No");return;
-		            }
-		            // if (mobileno2=='') {
-		            // 	alert("Please Enter Only 10 Digit Mobile No");return;
-		            // }
-		            if ($("#userform").valid() == true) {
-		                var status = $('input[name=status]');
-		                var data = $("#userform").serialize();
-		                $('.loading').show();
-		                $.ajax({
-		                    url: "<?php echo base_url();?>index.php/helperController/m_insert_ledger/m_ledger/id",
-		                    type: "POST",
-		                    data: data,
-		                    cache: false,
-		                    success: function (html) {
-		                    	// alert(html);
-		                        $('.loading').hide();
-		                        if (html == 1) {
-		                        	ShowList();
-		                            $("html, body").animate({ scrollTop: 0 }, "slow");
-		                            if (status.val() == "edit") {
-		                                ShowList();
-		                                GetList();
-		                            }
-		                            else {
-
-		                            }
-		                            $('#userform').find('input:text').val('');
-		                            $('#userform').find('input:password').val('');
-		                            $('#Name').focus();
-		                            $('.done').html("<h4>Record Saved.</h4>");
-		                            $('.done').fadeIn('slow', function () { });
-		                            $('.done').delay(600).fadeOut('slow', function () { });
-		                        } else {
-		                            if (html == 2) {
-		                                alert('Already Exists');
-		                            } else {
-		                                alert('Sorry, unexpected error. Please try again later.');
-		                            }
-		                        }
-		                    }
-		                });
-		                return false;
-
-		            }
-		        });
+		        
 
 
 		    });
@@ -573,5 +521,58 @@
 		                return false;
 		        }
 		      }
+		      //if submit button is clicked
+		        $('#newsubmit').click(function () {
+		        	// alert("hii");
+		            $("#userform").validate();
+		            var mobileno = $('#mobileno').val().length;
+		            var mobileno2 = $('#mobileno2').val().length;
 
+		            if (mobileno=!10) {
+		            	alert("Please Enter Only 10 Digit Mobile No");return;
+		            }
+		            // if (mobileno2=='') {
+		            // 	alert("Please Enter Only 10 Digit Mobile No");return;
+		            // }
+		            // if ($("#userform").valid() == true) {
+		                var status = $('input[name=status]');
+		                var data = $("#userform").serialize();
+		                $('.loading').show();
+		                $.ajax({
+		                    url: "<?php echo base_url();?>index.php/helperController/m_insert_ledger/m_ledger/id",
+		                    type: "POST",
+		                    data: data,
+		                    cache: false,
+		                    success: function (html) {
+		                    	// alert(html);
+		                        $('.loading').hide();
+		                        if (html == 1) {
+		                        	ShowList();
+		                            $("html, body").animate({ scrollTop: 0 }, "slow");
+		                            if (status.val() == "edit") {
+		                                ShowList();
+		                                GetList();
+		                            }
+		                            else {
+
+		                            }
+		                            $('#userform').find('input:text').val('');
+		                            $('#userform').find('input:password').val('');
+		                            $('#Name').focus();
+		                            $('.done').html("<h4>Record Saved.</h4>");
+		                            $('.done').fadeIn('slow', function () { });
+		                            $('.done').delay(600).fadeOut('slow', function () { });
+		                        } else {
+		                            if (html == 2) {
+		                                alert('Already Exists');
+		                            } else {
+		                                alert('Sorry, unexpected error. Please try again later.');
+		                            }
+		                        }
+		                    }
+		                });
+		                return false;
+
+		            // }
+		        });
 				</script>
